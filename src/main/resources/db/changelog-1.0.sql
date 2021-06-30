@@ -13,7 +13,8 @@ CREATE TABLE IF NOT EXISTS device (
     id SERIAL PRIMARY KEY,
     name TEXT,
     verification_expire TIMESTAMP,
-    taken BOOLEAN
+    taken BOOLEAN,
+    employee_id INT REFERENCES employee(id)
 );
 
 CREATE TABLE IF NOT EXISTS device_movement (

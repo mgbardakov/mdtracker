@@ -62,20 +62,8 @@ public class JpaDeviceRegisterService implements DeviceRegisterService {
     public List<Record> registerDevices(Employee employee, List<Device> devices,
                                         Date takenDate) {
         var recordList = new ArrayList<Record>();
-        var savedEmployee = employeeRepository
-                .findById(employee.getId()).orElse(null);
-
-        if (savedEmployee == null) {
-            return null;
-        }
-        devices.forEach(device -> {
-            var savedDevice = deviceRepository
-                    .findById(device.getId()).orElse(null);
-            var record = new Record();
-            record.setEmployee(savedEmployee);
-            record.setDevice(savedDevice);
-            record.setTaken(takenDate);
-            recordList.add(recordRepository.save(record));
+        devices.forEach(x -> {
+            recordList.add(registerDevice(employee, x, takenDate));
         });
         return recordList;
     }

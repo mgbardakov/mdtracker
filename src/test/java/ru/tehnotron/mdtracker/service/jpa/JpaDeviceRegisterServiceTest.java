@@ -4,6 +4,12 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
+import ru.tehnotron.mdtracker.api.dto.DeviceDTO;
+import ru.tehnotron.mdtracker.api.dto.EmployeeDTO;
+import ru.tehnotron.mdtracker.api.dto.RecordDTO;
+import ru.tehnotron.mdtracker.api.mapper.DeviceMapper;
+import ru.tehnotron.mdtracker.api.mapper.EmployeeMapper;
+import ru.tehnotron.mdtracker.api.mapper.RecordMapper;
 import ru.tehnotron.mdtracker.domain.Device;
 import ru.tehnotron.mdtracker.domain.Employee;
 import ru.tehnotron.mdtracker.domain.Record;
@@ -32,20 +38,25 @@ class JpaDeviceRegisterServiceTest {
     public void setUp() {
         MockitoAnnotations.openMocks(this);
         service = new JpaDeviceRegisterService(recordRepository,
-                employeeRepository, deviceRepository);
+                employeeRepository, deviceRepository, RecordMapper.INSTANCE,
+                EmployeeMapper.INSTANCE, DeviceMapper.INSTANCE);
     }
 
     @Test
     public void whenRegisterDevice() {
+        var employeeDTO = new EmployeeDTO();
+        employeeDTO.setId(1L);
+        var deviceDTO = new DeviceDTO();
+        deviceDTO.setId(1L);
         var employee = new Employee();
         employee.setId(1L);
         var device = new Device();
-        device.setId(1L);
+        deviceDTO.setId(1L);
 
         when(employeeRepository.findById(any())).thenReturn(Optional.of(employee));
         when(deviceRepository.findById(any())).thenReturn(Optional.of(device));
 
-        service.registerDevice(employee, device, any());
+        service.registerDevice(employeeDTO, deviceDTO, any());
 
         verify(employeeRepository, times(1)).findById(any());
         verify(deviceRepository, times(1)).findById(any());
@@ -67,10 +78,13 @@ class JpaDeviceRegisterServiceTest {
         record.setEmployee(employee);
         record.setDevice(device);
 
+        var recordDTO = new RecordDTO();
+        recordDTO.setId(1L);
+
         when(recordRepository.findById(any())).thenReturn(Optional.of(record));
         when(employeeRepository.findById(any())).thenReturn(Optional.of(employee));
 
-        service.closeRecord(record, any());
+        service.closeRecord(recordDTO, any());
 
         verify(recordRepository, times(1)).findById(any());
         verify(employeeRepository, times(1)).save(any());
@@ -96,10 +110,13 @@ class JpaDeviceRegisterServiceTest {
         record.setDevice(device2);
         var records = List.of(record, record2);
 
+        var employeeDTO = new EmployeeDTO();
+        employeeDTO.setId(1L);
+
         when(employeeRepository.findById(any())).thenReturn(Optional.of(employee));
         when(recordRepository.findAllByEmployee(employee)).thenReturn(records);
 
-        service.closeRecordsByEmployee(employee, any());
+        service.closeRecordsByEmployee(employeeDTO, any());
 
         verify(recordRepository, times(1)).findAllByEmployee(any());
         verify(employeeRepository, times(1)).save(any());

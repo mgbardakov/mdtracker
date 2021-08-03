@@ -1,8 +1,8 @@
 package ru.tehnotron.mdtracker.service;
 
-import ru.tehnotron.mdtracker.domain.Device;
+import ru.tehnotron.mdtracker.api.dto.DeviceDTO;
 
 
-public interface DeviceService extends CrudService<Device> {
-    void validateDevice(Device device) throws Exception;
+public interface DeviceService extends CrudService<DeviceDTO> {
+    void validateDevice(DeviceDTO deviceDTO) throws Exception;
 }

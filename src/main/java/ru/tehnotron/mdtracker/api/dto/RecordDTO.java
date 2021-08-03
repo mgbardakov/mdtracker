@@ -7,7 +7,7 @@ import lombok.ToString;
 @Setter
 @Getter
 @ToString
-public class RecordDTO {
+public class RecordDTO extends BaseDTO {
     private String taken;
     private String returned;
     private DeviceDTO deviceDTO;

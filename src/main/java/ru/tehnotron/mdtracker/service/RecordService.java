@@ -1,12 +1,12 @@
 package ru.tehnotron.mdtracker.service;
 
-import ru.tehnotron.mdtracker.domain.Device;
-import ru.tehnotron.mdtracker.domain.Record;
+import ru.tehnotron.mdtracker.api.dto.DeviceDTO;
+import ru.tehnotron.mdtracker.api.dto.RecordDTO;
 
 import java.util.Date;
 import java.util.List;
 
-public interface RecordService extends CrudService<Record> {
-        List<Record> findRecordsInDateInterval(Date start, Date end);
-        List<Record> findRecordsByDevice(Device device);
+public interface RecordService extends CrudService<RecordDTO> {
+        List<RecordDTO> findRecordsInDateInterval(Date start, Date end);
+        List<RecordDTO> findRecordsByDevice(DeviceDTO deviceDTO);
 }

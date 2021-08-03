@@ -1,13 +1,14 @@
 package ru.tehnotron.mdtracker.service.jpa;
 
 import org.springframework.data.repository.CrudRepository;
+import ru.tehnotron.mdtracker.api.dto.BaseDTO;
 import ru.tehnotron.mdtracker.domain.BaseEntity;
 import ru.tehnotron.mdtracker.service.CrudService;
 
 import java.util.ArrayList;
 import java.util.List;
 
-public abstract class JpaCrudService<T extends BaseEntity, R extends CrudRepository<T, Long>> implements CrudService<T> {
+public abstract class JpaCrudService<T extends BaseDTO, R extends CrudRepository<T, Long>> implements CrudService<T> {
 
     protected final R repository;
 

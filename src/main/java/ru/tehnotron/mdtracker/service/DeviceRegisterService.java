@@ -1,15 +1,16 @@
 package ru.tehnotron.mdtracker.service;
 
-import ru.tehnotron.mdtracker.domain.Device;
-import ru.tehnotron.mdtracker.domain.Employee;
-import ru.tehnotron.mdtracker.domain.Record;
+import ru.tehnotron.mdtracker.api.dto.DeviceDTO;
+import ru.tehnotron.mdtracker.api.dto.EmployeeDTO;
+import ru.tehnotron.mdtracker.api.dto.RecordDTO;
+
 
 import java.util.Date;
 import java.util.List;
 
 public interface DeviceRegisterService {
-    Record registerDevice(Employee employee, Device device, Date takenDate);
-    List<Record> registerDevices(Employee employee, List<Device> devices, Date takenDate);
-    void closeRecord(Record record, Date returnedDate);
-    void closeRecordsByEmployee(Employee employee, Date returnedDate);
+    RecordDTO registerDevice(EmployeeDTO employeeDTO, DeviceDTO deviceDTO, Date takenDate);
+    List<RecordDTO> registerDevices(EmployeeDTO employeeDTO, List<DeviceDTO> deviceDTOs, Date takenDate);
+    void closeRecord(RecordDTO recordDTO, Date returnedDate);
+    void closeRecordsByEmployee(EmployeeDTO employeeDTO, Date returnedDate);
 }

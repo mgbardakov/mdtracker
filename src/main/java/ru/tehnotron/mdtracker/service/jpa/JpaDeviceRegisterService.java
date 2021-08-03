@@ -2,6 +2,12 @@ package ru.tehnotron.mdtracker.service.jpa;
 
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import ru.tehnotron.mdtracker.api.dto.DeviceDTO;
+import ru.tehnotron.mdtracker.api.dto.EmployeeDTO;
+import ru.tehnotron.mdtracker.api.dto.RecordDTO;
+import ru.tehnotron.mdtracker.api.mapper.DeviceMapper;
+import ru.tehnotron.mdtracker.api.mapper.EmployeeMapper;
+import ru.tehnotron.mdtracker.api.mapper.RecordMapper;
 import ru.tehnotron.mdtracker.domain.Device;
 import ru.tehnotron.mdtracker.domain.Employee;
 import ru.tehnotron.mdtracker.domain.Record;
@@ -21,17 +27,28 @@ public class JpaDeviceRegisterService implements DeviceRegisterService {
     private final RecordRepository recordRepository;
     private final EmployeeRepository employeeRepository;
     private final DeviceRepository deviceRepository;
+    private final RecordMapper recordMapper;
+    private final EmployeeMapper employeeMapper;
+    private final DeviceMapper deviceMapper;
 
     public JpaDeviceRegisterService(RecordRepository recordRepository,
                                     EmployeeRepository employeeRepository,
-                                    DeviceRepository deviceRepository) {
+                                    DeviceRepository deviceRepository,
+                                    RecordMapper recordMapper,
+                                    EmployeeMapper employeeMapper,
+                                    DeviceMapper deviceMapper) {
         this.recordRepository = recordRepository;
         this.employeeRepository = employeeRepository;
         this.deviceRepository = deviceRepository;
+        this.recordMapper = recordMapper;
+        this.employeeMapper = employeeMapper;
+        this.deviceMapper = deviceMapper;
     }
 
     @Override
-    public Record registerDevice(Employee employee, Device device, Date takenDate) {
+    public RecordDTO registerDevice(EmployeeDTO employeeDTO, DeviceDTO deviceDTO, Date takenDate) {
+        var employee = employeeMapper.employeeDTOToEmployee(employeeDTO);
+        var device = deviceMapper.deviceDTOToDevice(deviceDTO);
         var savedEmployee = employeeRepository
                 .findById(employee.getId()).orElse(null);
         var savedDevice = deviceRepository
@@ -44,11 +61,22 @@ public class JpaDeviceRegisterService implements DeviceRegisterService {
         record.setEmployee(savedEmployee);
         record.setDevice(savedDevice);
         record.setTaken(takenDate);
-        return recordRepository.save(record);
+        return recordMapper.recordToRecordDTO(recordRepository.save(record));
     }
 
     @Override
-    public void closeRecord(Record record, Date returnedDate) {
+    public List<RecordDTO> registerDevices(EmployeeDTO employeeDTO, List<DeviceDTO> deviceDTOs, Date takenDate) {
+        var recordList = new ArrayList<Record>();
+        deviceDTOs.forEach(x -> {
+            recordList.add(recordMapper.recordDTOToRecord(registerDevice(
+                    employeeDTO, x, takenDate)));
+        });
+        return recordMapper.recordListToRecordDTOList(recordList);
+    }
+
+    @Override
+    public void closeRecord(RecordDTO recordDTO, Date returnedDate) {
+        var record = recordMapper.recordDTOToRecord(recordDTO);
         var savedRecord = recordRepository.findById(record.getId()).orElse(null);
         if (savedRecord != null) {
             savedRecord.setReturned(returnedDate);
@@ -59,17 +87,8 @@ public class JpaDeviceRegisterService implements DeviceRegisterService {
     }
 
     @Override
-    public List<Record> registerDevices(Employee employee, List<Device> devices,
-                                        Date takenDate) {
-        var recordList = new ArrayList<Record>();
-        devices.forEach(x -> {
-            recordList.add(registerDevice(employee, x, takenDate));
-        });
-        return recordList;
-    }
-
-    @Override
-    public void closeRecordsByEmployee(Employee employee, Date returnedDate) {
+    public void closeRecordsByEmployee(EmployeeDTO employeeDTO, Date returnedDate) {
+        var employee = employeeMapper.employeeDTOToEmployee(employeeDTO);
         var savedEmployee = employeeRepository
                 .findById(employee.getId()).orElse(null);
         if(savedEmployee != null) {

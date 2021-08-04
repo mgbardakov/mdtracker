@@ -1,8 +1,8 @@
 package ru.tehnotron.mdtracker.service;
 
-import ru.tehnotron.mdtracker.api.dto.DeviceDTO;
-import ru.tehnotron.mdtracker.api.dto.EmployeeDTO;
-import ru.tehnotron.mdtracker.api.dto.RecordDTO;
+import ru.tehnotron.mdtracker.api.dto.entity.DeviceDTO;
+import ru.tehnotron.mdtracker.api.dto.entity.EmployeeDTO;
+import ru.tehnotron.mdtracker.api.dto.entity.RecordDTO;
 
 
 import java.util.Date;

@@ -2,7 +2,7 @@ package ru.tehnotron.mdtracker.service.jpa;
 
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import ru.tehnotron.mdtracker.api.dto.EmployeeDTO;
+import ru.tehnotron.mdtracker.api.dto.entity.EmployeeDTO;
 import ru.tehnotron.mdtracker.api.mapper.EmployeeMapper;
 import ru.tehnotron.mdtracker.domain.Employee;
 import ru.tehnotron.mdtracker.repository.EmployeeRepository;

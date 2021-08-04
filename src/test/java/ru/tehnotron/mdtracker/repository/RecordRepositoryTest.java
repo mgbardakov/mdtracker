@@ -3,11 +3,15 @@ package ru.tehnotron.mdtracker.repository;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
+import org.springframework.data.jpa.domain.Specification;
 import ru.tehnotron.mdtracker.domain.Device;
 import ru.tehnotron.mdtracker.domain.Employee;
 import ru.tehnotron.mdtracker.domain.Record;
+import ru.tehnotron.mdtracker.repository.specification.record.RecordDeviceSpecification;
+import ru.tehnotron.mdtracker.repository.specification.record.RecordSpecificationBuilder;
 
 
+import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.List;
 
@@ -70,4 +74,24 @@ class RecordRepositoryTest {
 
         assertEquals(expectedList, repository.findAllByEmployee(employee));
     }
+    @Test
+     public void whenOneRecordFoundedByRecordSpecifications() throws ParseException {
+        var sdf = new SimpleDateFormat();
+        sdf.applyPattern("yyyy-MM-d");
+        var startDate = sdf.parse("2021-01-08");
+        var endDate = sdf.parse("2021-01-10");
+        var employee = new Employee();
+        employee.setId(1L);
+        var device = new Device();
+        device.setId(1L);
+        var expected = new Record();
+        expected.setId(1L);
+        var specs = new RecordSpecificationBuilder()
+                .addStartDateSpecification(startDate)
+                .addEndDateSpecification(endDate)
+                .addDeviceSpecification(device)
+                .addEmployeeSpecification(employee).build();
+
+        assertEquals(expected, repository.findAll(specs).get(0));
+     }
 }

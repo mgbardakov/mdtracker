@@ -2,7 +2,7 @@ package ru.tehnotron.mdtracker.api.mapper;
 
 import org.mapstruct.Mapper;
 import org.mapstruct.factory.Mappers;
-import ru.tehnotron.mdtracker.api.dto.RecordDTO;
+import ru.tehnotron.mdtracker.api.dto.entity.RecordDTO;
 import ru.tehnotron.mdtracker.domain.Record;
 
 import java.util.List;

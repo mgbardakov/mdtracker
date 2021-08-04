@@ -1,14 +1,18 @@
 package ru.tehnotron.mdtracker.service.jpa;
 
+import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import ru.tehnotron.mdtracker.api.dto.DeviceDTO;
-import ru.tehnotron.mdtracker.api.dto.RecordDTO;
+import ru.tehnotron.mdtracker.api.dto.entity.DeviceDTO;
+import ru.tehnotron.mdtracker.api.dto.entity.RecordDTO;
+import ru.tehnotron.mdtracker.api.dto.request.RecordRequestDTO;
 import ru.tehnotron.mdtracker.api.mapper.DeviceMapper;
 import ru.tehnotron.mdtracker.api.mapper.RecordMapper;
 import ru.tehnotron.mdtracker.domain.Device;
+import ru.tehnotron.mdtracker.domain.Employee;
 import ru.tehnotron.mdtracker.domain.Record;
 import ru.tehnotron.mdtracker.repository.RecordRepository;
+import ru.tehnotron.mdtracker.repository.specification.record.*;
 import ru.tehnotron.mdtracker.service.RecordService;
 
 import java.util.ArrayList;
@@ -72,5 +76,32 @@ public class JpaRecordService implements RecordService {
         var records = new ArrayList<Record>();
         repository.findAll().forEach(records::add);
         return recordMapper.recordListToRecordDTOList(records);
+    }
+
+    @Override
+    public List<RecordDTO> findRecordsByRequest(RecordRequestDTO req) {
+        var specification = getSpecificationFromRequest(req);
+        return recordMapper.recordListToRecordDTOList(repository.findAll(specification));
+    }
+
+    private Specification<Record> getSpecificationFromRequest(RecordRequestDTO req) {
+        var builder = new RecordSpecificationBuilder();
+        if(req.getStartDate() != null) {
+            builder.addStartDateSpecification(req.getStartDate());
+        }
+        if (req.getEndDate() != null) {
+            builder.addEndDateSpecification(req.getEndDate());
+        }
+        if (req.getDeviceId() != null) {
+            var device = new Device();
+            device.setId(Long.parseLong(req.getDeviceId()));
+            builder.addDeviceSpecification(device);
+        }
+        if (req.getEmployeeId() != null) {
+            var employee = new Employee();
+            employee.setId(Long.parseLong(req.getEmployeeId()));
+            builder.addEmployeeSpecification(employee);
+        }
+        return builder.build();
     }
 }

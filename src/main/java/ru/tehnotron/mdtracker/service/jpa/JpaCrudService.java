@@ -1,8 +1,7 @@
 package ru.tehnotron.mdtracker.service.jpa;
 
 import org.springframework.data.repository.CrudRepository;
-import ru.tehnotron.mdtracker.api.dto.BaseDTO;
-import ru.tehnotron.mdtracker.domain.BaseEntity;
+import ru.tehnotron.mdtracker.api.dto.entity.BaseDTO;
 import ru.tehnotron.mdtracker.service.CrudService;
 
 import java.util.ArrayList;

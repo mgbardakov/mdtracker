@@ -1,4 +1,4 @@
-package ru.tehnotron.mdtracker.api.dto;
+package ru.tehnotron.mdtracker.api.dto.entity;
 
 import lombok.Getter;
 import lombok.Setter;

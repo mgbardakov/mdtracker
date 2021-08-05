@@ -9,38 +9,30 @@ import java.util.Date;
 
 public class RecordSpecificationBuilder {
 
-    private Specification<Record> instance = null;
+    private final Specification<Record> INSTANCE = (root, query, builder) -> builder.and();
 
     public RecordSpecificationBuilder addStartDateSpecification(Date date) {
-        createOrAddSpecification(new RecordStartDateSpecification(date));
+       INSTANCE.and(new RecordStartDateSpecification(date));
         return this;
     }
 
     public RecordSpecificationBuilder addEndDateSpecification(Date date) {
-        createOrAddSpecification(new RecordEndDateSpecification(date));
+        INSTANCE.and(new RecordEndDateSpecification(date));
         return this;
     }
 
     public RecordSpecificationBuilder addDeviceSpecification(Device device) {
-        createOrAddSpecification(new RecordDeviceSpecification(device));
+        INSTANCE.and(new RecordDeviceSpecification(device));
         return this;
     }
 
     public RecordSpecificationBuilder addEmployeeSpecification(Employee employee) {
-        createOrAddSpecification(new RecordEmployeeSpecification(employee));
+        INSTANCE.and(new RecordEmployeeSpecification(employee));
         return this;
     }
 
     public Specification<Record> build() {
-        return  instance;
-    }
-
-    private void createOrAddSpecification(Specification<Record> specification) {
-        if (instance == null) {
-            instance = specification;
-        } else {
-            instance = instance.and(specification);
-        }
+        return INSTANCE;
     }
 
 }

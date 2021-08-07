@@ -13,11 +13,18 @@ import java.util.List;
 @Setter
 @ToString
 public class Employee extends BaseEntity {
+
+    public Employee() {
+        this.visible = true;
+    }
+
     @Column(name = "name")
     private String name;
     @ManyToOne
     @JoinColumn(name = "position_id")
     private Position position;
+    @Column(name = "visible")
+    private boolean visible;
     @OneToMany(mappedBy = "employee")
     private List<Device> devices = new ArrayList<>();
 

@@ -1,12 +1,14 @@
 CREATE TABLE IF NOT EXISTS position (
     id SERIAL PRIMARY KEY,
-    name TEXT
+    name TEXT,
+    visible BOOLEAN DEFAULT TRUE
 );
 
 CREATE TABLE IF NOT EXISTS employee (
     id SERIAL PRIMARY KEY,
     name TEXT,
-    position_id INT REFERENCES position(id)
+    position_id INT REFERENCES position(id),
+    visible BOOLEAN DEFAULT TRUE
 );
 
 CREATE TABLE IF NOT EXISTS device (
@@ -14,6 +16,7 @@ CREATE TABLE IF NOT EXISTS device (
     name TEXT,
     verification_expire TIMESTAMP,
     taken BOOLEAN,
+    visible BOOLEAN DEFAULT TRUE,
     employee_id INT REFERENCES employee(id)
 );
 

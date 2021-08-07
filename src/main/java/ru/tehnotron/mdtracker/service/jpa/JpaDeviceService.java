@@ -27,7 +27,8 @@ public class JpaDeviceService implements DeviceService {
 
     @Override
     public void validateDevice(DeviceDTO deviceDTO) throws Exception {
-        var dev = repository.findById(deviceDTO.getId()).orElse(null);
+        var dev = repository.findById(deviceDTO.getId())
+                .filter(Device::isVisible).orElse(null);
         boolean expired = false;
         if (dev != null) {
             expired = (dev.getVerificationExpire().getTime() - System.currentTimeMillis()) < 0;
@@ -49,26 +50,33 @@ public class JpaDeviceService implements DeviceService {
 
     @Override
     public DeviceDTO read(DeviceDTO deviceDTO) {
-        var device = mapper.deviceDTOToDevice(deviceDTO);
+        var device = repository.findById(deviceDTO.getId())
+                .filter(Device::isVisible).orElse(null);
         return mapper.deviceToDeviceDTO(device);
     }
 
     @Override
     public void update(DeviceDTO deviceDTO) {
-        var device = mapper.deviceDTOToDevice(deviceDTO);
-        repository.save(device);
+        repository.findById(deviceDTO.getId())
+                .filter(Device::isVisible).ifPresent(repository::save);
     }
 
     @Override
     public void delete(DeviceDTO deviceDTO) {
-        var device = mapper.deviceDTOToDevice(deviceDTO);
-        repository.delete(device);
+         repository.findById(deviceDTO.getId()).ifPresent(x -> {
+                    x.setVisible(false);
+                    repository.save(x);
+                });
     }
 
     @Override
     public List<DeviceDTO> findAll() {
         var devices = new ArrayList<Device>();
-        repository.findAll().forEach(devices::add);
+        repository.findAll().forEach(x -> {
+          if (x.isVisible()) {
+              devices.add(x);
+          }
+        });
         return mapper.deviceListToDeviceDTOList(devices);
     }
 }

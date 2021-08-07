@@ -4,6 +4,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import ru.tehnotron.mdtracker.api.dto.entity.EmployeeDTO;
 import ru.tehnotron.mdtracker.api.mapper.EmployeeMapper;
+import ru.tehnotron.mdtracker.domain.Device;
 import ru.tehnotron.mdtracker.domain.Employee;
 import ru.tehnotron.mdtracker.repository.EmployeeRepository;
 import ru.tehnotron.mdtracker.service.EmployeeService;
@@ -30,25 +31,32 @@ public class JpaEmployeeService implements EmployeeService {
 
     @Override
     public EmployeeDTO read(EmployeeDTO employeeDTO) {
-        return mapper.employeeToEmployeeDTO(employeeRepository.findById(employeeDTO.getId()).orElse(null));
+        return mapper.employeeToEmployeeDTO(employeeRepository.findById(employeeDTO.getId())
+                .filter(Employee::isVisible).orElse(null));
     }
 
     @Override
     public void update(EmployeeDTO employeeDTO) {
-        var employee = mapper.employeeDTOToEmployee(employeeDTO);
-        employeeRepository.save(employee);
+        employeeRepository.findById(employeeDTO.getId())
+                .filter(Employee::isVisible).ifPresent(employeeRepository::save);
     }
 
     @Override
     public void delete(EmployeeDTO employeeDTO) {
-        var employee = mapper.employeeDTOToEmployee(employeeDTO);
-        employeeRepository.delete(employee);
+        employeeRepository.findById(employeeDTO.getId()).ifPresent(x -> {
+            x.setVisible(false);
+            employeeRepository.save(x);
+        });
     }
 
     @Override
     public List<EmployeeDTO> findAll() {
         var employees = new ArrayList<Employee>();
-        employeeRepository.findAll().forEach(employees::add);
+        employeeRepository.findAll().forEach(x -> {
+            if (x.isVisible()) {
+                employees.add(x);
+            }
+        });
         return mapper.employeeListToEmployeeDTOList(employees);
     }
 }

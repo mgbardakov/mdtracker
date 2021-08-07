@@ -14,6 +14,13 @@ import javax.persistence.Table;
 @Setter
 @ToString
 public class Position extends BaseEntity {
+
+    public Position() {
+        this.visible = true;
+    }
+
     @Column(name = "name")
     private String name;
+    @Column(name = "visible")
+    private boolean visible;
 }

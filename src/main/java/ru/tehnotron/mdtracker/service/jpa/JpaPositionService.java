@@ -1,8 +1,9 @@
 package ru.tehnotron.mdtracker.service.jpa;
 
-import ru.tehnotron.mdtracker.api.dto.entity.PositionDTO;
-import ru.tehnotron.mdtracker.api.mapper.PositionMapper;
-import ru.tehnotron.mdtracker.domain.Employee;
+import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
+import ru.tehnotron.mdtracker.api.v1.dto.entity.PositionDTO;
+import ru.tehnotron.mdtracker.api.v1.mapper.PositionMapper;
 import ru.tehnotron.mdtracker.domain.Position;
 import ru.tehnotron.mdtracker.repository.PositionRepository;
 import ru.tehnotron.mdtracker.service.PositionService;
@@ -10,6 +11,8 @@ import ru.tehnotron.mdtracker.service.PositionService;
 import java.util.ArrayList;
 import java.util.List;
 
+@Service
+@Transactional
 public class JpaPositionService implements PositionService {
 
     private final PositionRepository repo;

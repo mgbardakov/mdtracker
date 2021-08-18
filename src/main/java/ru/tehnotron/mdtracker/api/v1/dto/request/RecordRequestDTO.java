@@ -1,4 +1,4 @@
-package ru.tehnotron.mdtracker.api.dto.request;
+package ru.tehnotron.mdtracker.api.v1.dto.request;
 
 import lombok.Data;
 

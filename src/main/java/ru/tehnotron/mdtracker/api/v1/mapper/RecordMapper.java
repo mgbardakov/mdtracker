@@ -1,8 +1,8 @@
-package ru.tehnotron.mdtracker.api.mapper;
+package ru.tehnotron.mdtracker.api.v1.mapper;
 
 import org.mapstruct.Mapper;
 import org.mapstruct.factory.Mappers;
-import ru.tehnotron.mdtracker.api.dto.entity.RecordDTO;
+import ru.tehnotron.mdtracker.api.v1.dto.entity.RecordDTO;
 import ru.tehnotron.mdtracker.domain.Record;
 
 import java.util.List;

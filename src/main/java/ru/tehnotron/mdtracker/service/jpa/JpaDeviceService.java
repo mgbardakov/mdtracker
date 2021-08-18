@@ -2,8 +2,8 @@ package ru.tehnotron.mdtracker.service.jpa;
 
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import ru.tehnotron.mdtracker.api.dto.entity.DeviceDTO;
-import ru.tehnotron.mdtracker.api.mapper.DeviceMapper;
+import ru.tehnotron.mdtracker.api.v1.dto.entity.DeviceDTO;
+import ru.tehnotron.mdtracker.api.v1.mapper.DeviceMapper;
 import ru.tehnotron.mdtracker.domain.Device;
 import ru.tehnotron.mdtracker.exception.TakenException;
 import ru.tehnotron.mdtracker.exception.VerificationException;

@@ -2,12 +2,12 @@ package ru.tehnotron.mdtracker.service.jpa;
 
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import ru.tehnotron.mdtracker.api.dto.entity.DeviceDTO;
-import ru.tehnotron.mdtracker.api.dto.entity.EmployeeDTO;
-import ru.tehnotron.mdtracker.api.dto.entity.RecordDTO;
-import ru.tehnotron.mdtracker.api.mapper.DeviceMapper;
-import ru.tehnotron.mdtracker.api.mapper.EmployeeMapper;
-import ru.tehnotron.mdtracker.api.mapper.RecordMapper;
+import ru.tehnotron.mdtracker.api.v1.dto.entity.DeviceDTO;
+import ru.tehnotron.mdtracker.api.v1.dto.entity.EmployeeDTO;
+import ru.tehnotron.mdtracker.api.v1.dto.entity.RecordDTO;
+import ru.tehnotron.mdtracker.api.v1.mapper.DeviceMapper;
+import ru.tehnotron.mdtracker.api.v1.mapper.EmployeeMapper;
+import ru.tehnotron.mdtracker.api.v1.mapper.RecordMapper;
 import ru.tehnotron.mdtracker.domain.Record;
 import ru.tehnotron.mdtracker.repository.DeviceRepository;
 import ru.tehnotron.mdtracker.repository.EmployeeRepository;

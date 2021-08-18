@@ -26,4 +26,6 @@ CREATE TABLE IF NOT EXISTS device_movement (
     returned TIMESTAMP,
     device_id INT REFERENCES device(id),
     employee_id INT REFERENCES employee(id)
-)
+);
+
+INSERT INTO position (name) VALUES ('сотрудник'), ('руководитель');

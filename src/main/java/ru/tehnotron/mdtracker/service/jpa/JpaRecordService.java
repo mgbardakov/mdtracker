@@ -25,26 +25,13 @@ public class JpaRecordService implements RecordService {
 
     private final RecordRepository repository;
     private final RecordMapper recordMapper;
-    private final DeviceMapper deviceMapper;
+
 
     public JpaRecordService(RecordRepository repository,
-                            RecordMapper recordMapper,
-                            DeviceMapper deviceMapper) {
+                            RecordMapper recordMapper) {
         this.repository = repository;
         this.recordMapper = recordMapper;
-        this.deviceMapper = deviceMapper;
-    }
 
-    @Override
-    public List<RecordDTO> findRecordsByDevice(DeviceDTO deviceDTO) {
-        var device = deviceMapper.deviceDTOToDevice(deviceDTO);
-        return recordMapper.recordListToRecordDTOList(repository.findAllByDevice(device));
-    }
-
-    @Override
-    public List<RecordDTO> findRecordsInDateInterval(Date start, Date end) {
-        return recordMapper.recordListToRecordDTOList(repository
-                .findRecordsBetweenDates(start, end));
     }
 
     @Override

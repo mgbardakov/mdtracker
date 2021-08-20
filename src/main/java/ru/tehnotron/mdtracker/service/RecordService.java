@@ -8,7 +8,5 @@ import java.util.Date;
 import java.util.List;
 
 public interface RecordService extends CrudService<RecordDTO> {
-        List<RecordDTO> findRecordsInDateInterval(Date start, Date end);
-        List<RecordDTO> findRecordsByDevice(DeviceDTO deviceDTO);
         List<RecordDTO> findRecordsByRequest(RecordRequestDTO req);
 }

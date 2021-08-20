@@ -37,8 +37,9 @@ public class JpaPositionService implements PositionService {
 
     @Override
     public void update(PositionDTO positionDTO) {
-        repo.findById(positionDTO.getId())
-                .filter(Position::isVisible).ifPresent(repo::save);
+        var position = mapper.positionDTOToPosition(positionDTO);
+        repo.findById(position.getId())
+                .filter(Position::isVisible).ifPresent(x -> repo.save(position));
     }
 
     @Override

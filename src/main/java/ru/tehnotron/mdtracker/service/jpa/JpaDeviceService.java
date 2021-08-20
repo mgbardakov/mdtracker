@@ -57,8 +57,9 @@ public class JpaDeviceService implements DeviceService {
 
     @Override
     public void update(DeviceDTO deviceDTO) {
-        repository.findById(deviceDTO.getId())
-                .filter(Device::isVisible).ifPresent(repository::save);
+        var device = mapper.deviceDTOToDevice(deviceDTO);
+        repository.findById(device.getId())
+                .filter(Device::isVisible).ifPresent(x -> repository.save(device));
     }
 
     @Override

@@ -36,8 +36,9 @@ public class JpaEmployeeService implements EmployeeService {
 
     @Override
     public void update(EmployeeDTO employeeDTO) {
-        employeeRepository.findById(employeeDTO.getId())
-                .filter(Employee::isVisible).ifPresent(employeeRepository::save);
+        var employee = mapper.employeeDTOToEmployee(employeeDTO);
+        employeeRepository.findById(employee.getId())
+                .filter(Employee::isVisible).ifPresent(x -> employeeRepository.save(employee));
     }
 
     @Override

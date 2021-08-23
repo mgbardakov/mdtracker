@@ -52,25 +52,6 @@ class JpaEmployeeServiceTest {
     }
 
     @Test
-    void whenUpdateVisibleEmployeeThenSaveInvoked() {
-        var employee = new Employee();
-        when(repo.findById(any())).thenReturn(Optional.of(employee));
-
-        service.update(new EmployeeDTO());
-        verify(repo, times(1)).save(employee);
-    }
-
-    @Test
-    void whenUpdateInvisibleEmployeeThenSaveNotInvoked() {
-        var employee = new Employee();
-        employee.setVisible(false);
-        when(repo.findById(any())).thenReturn(Optional.of(employee));
-
-        service.update(new EmployeeDTO());
-        verify(repo, times(0)).save(employee);
-    }
-
-    @Test
     void whenDeleteEmployeeThenTwoRepoMethodsInvoked() {
         var employeeDTO = new EmployeeDTO();
         employeeDTO.setId(1L);

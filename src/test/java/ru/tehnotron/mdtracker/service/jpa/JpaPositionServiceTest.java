@@ -53,25 +53,6 @@ class JpaPositionServiceTest {
     }
 
     @Test
-    void whenUpdateVisiblePositionThenSaveInvoked() {
-        var position = new Position();
-        when(repo.findById(any())).thenReturn(Optional.of(position));
-
-        service.update(new PositionDTO());
-        verify(repo, times(1)).save(position);
-    }
-
-    @Test
-    void whenUpdateInvisiblePositionThenSaveNotInvoked() {
-        var position = new Position();
-        position.setVisible(false);
-        when(repo.findById(any())).thenReturn(Optional.of(position));
-
-        service.update(new PositionDTO());
-        verify(repo, times(0)).save(position);
-    }
-
-    @Test
     void whenDeletePositionThenTwoRepoMethodsInvoked() {
         var positionDTO = new PositionDTO();
         positionDTO.setId(1L);

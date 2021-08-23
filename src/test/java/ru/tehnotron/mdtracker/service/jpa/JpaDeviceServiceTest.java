@@ -101,25 +101,6 @@ class JpaDeviceServiceTest {
     }
 
     @Test
-    void whenUpdateVisibleDeviceThenSaveInvoked() {
-        var device = new Device();
-        when(repo.findById(any())).thenReturn(Optional.of(device));
-
-        service.update(new DeviceDTO());
-        verify(repo, times(1)).save(device);
-    }
-
-    @Test
-    void whenUpdateInvisibleDeviceThenSaveNotInvoked() {
-        var device = new Device();
-        device.setVisible(false);
-        when(repo.findById(any())).thenReturn(Optional.of(device));
-
-        service.update(new DeviceDTO());
-        verify(repo, times(0)).save(device);
-    }
-
-    @Test
     void whenDeleteEmployeeThenTwoRepoMethodsInvoked() {
         var deviceDTO = new DeviceDTO();
         deviceDTO.setId(1L);

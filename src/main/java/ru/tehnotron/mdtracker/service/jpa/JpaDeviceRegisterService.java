@@ -54,7 +54,7 @@ public class JpaDeviceRegisterService implements DeviceRegisterService {
         if (savedEmployee == null || savedDevice == null) {
             return null;
         }
-        savedEmployee.addDevice(device);
+        savedEmployee.addDevice(savedDevice);
         var record = new Record();
         record.setEmployee(savedEmployee);
         record.setDevice(savedDevice);

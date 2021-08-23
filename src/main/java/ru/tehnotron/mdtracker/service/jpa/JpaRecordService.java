@@ -48,8 +48,8 @@ public class JpaRecordService implements RecordService {
 
     @Override
     public void update(RecordDTO recordDTO) {
-        var record = recordMapper.recordDTOToRecord(recordDTO);
-        repository.save(record);
+        repository.findById(recordDTO.getId())
+                .ifPresent(x -> recordMapper.updateRecordFromDTO(recordDTO, x));
     }
 
     @Override

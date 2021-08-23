@@ -10,6 +10,6 @@ import java.util.List;
 @ToString
 public class EmployeeDTO extends BaseDTO {
     private String name;
-    private PositionDTO positionDTO;
+    private PositionDTO position;
     private List<DeviceDTO> devices;
 }

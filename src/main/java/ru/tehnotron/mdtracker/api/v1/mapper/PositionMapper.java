@@ -1,8 +1,10 @@
 package ru.tehnotron.mdtracker.api.v1.mapper;
 
-import org.mapstruct.Mapper;
+import org.mapstruct.*;
 import org.mapstruct.factory.Mappers;
+import ru.tehnotron.mdtracker.api.v1.dto.entity.EmployeeDTO;
 import ru.tehnotron.mdtracker.api.v1.dto.entity.PositionDTO;
+import ru.tehnotron.mdtracker.domain.Employee;
 import ru.tehnotron.mdtracker.domain.Position;
 
 import java.util.List;
@@ -16,4 +18,7 @@ public interface PositionMapper {
     Position positionDTOToPosition (PositionDTO positionDTO);
     List<PositionDTO> positionListToPositionDTOList(List<Position> positions);
     List<Position> positionDTOListToPositionList (List<PositionDTO> positionDTOs);
+    @Mapping(target = "visible", ignore = true)
+    @BeanMapping(nullValuePropertyMappingStrategy = NullValuePropertyMappingStrategy.IGNORE)
+    void updatePositionFromDTO(PositionDTO positionDTO, @MappingTarget Position position);
 }

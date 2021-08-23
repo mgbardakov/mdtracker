@@ -10,6 +10,6 @@ import lombok.ToString;
 public class RecordDTO extends BaseDTO {
     private String taken;
     private String returned;
-    private DeviceDTO deviceDTO;
-    private EmployeeDTO employeeDTO;
+    private DeviceDTO device;
+    private EmployeeDTO employee;
 }

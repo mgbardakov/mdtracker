@@ -43,20 +43,23 @@ class JpaDeviceRegisterServiceTest {
     }
 
     @Test
-    public void whenRegisterDevice() {
+    public void whenRegisterDevices() {
         var employeeDTO = new EmployeeDTO();
         employeeDTO.setId(1L);
         var deviceDTO = new DeviceDTO();
         deviceDTO.setId(1L);
+        var deviceDTOs = List.of(deviceDTO);
+        employeeDTO.setDevices(deviceDTOs);
         var employee = new Employee();
         employee.setId(1L);
         var device = new Device();
         deviceDTO.setId(1L);
+        employee.addDevice(device);
 
         when(employeeRepository.findById(any())).thenReturn(Optional.of(employee));
         when(deviceRepository.findById(any())).thenReturn(Optional.of(device));
 
-        service.registerDevice(employeeDTO, deviceDTO, any());
+        service.registerDevices(employeeDTO, any());
 
         verify(employeeRepository, times(1)).findById(any());
         verify(deviceRepository, times(1)).findById(any());

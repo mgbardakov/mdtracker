@@ -43,8 +43,7 @@ public class JpaDeviceRegisterService implements DeviceRegisterService {
         this.deviceMapper = deviceMapper;
     }
 
-    @Override
-    public RecordDTO registerDevice(EmployeeDTO employeeDTO, DeviceDTO deviceDTO, Date takenDate) {
+    private RecordDTO registerDevice(EmployeeDTO employeeDTO, DeviceDTO deviceDTO, Date takenDate) {
         var employee = employeeMapper.employeeDTOToEmployee(employeeDTO);
         var device = deviceMapper.deviceDTOToDevice(deviceDTO);
         var savedEmployee = employeeRepository
@@ -63,9 +62,9 @@ public class JpaDeviceRegisterService implements DeviceRegisterService {
     }
 
     @Override
-    public List<RecordDTO> registerDevices(EmployeeDTO employeeDTO, List<DeviceDTO> deviceDTOs, Date takenDate) {
+    public List<RecordDTO> registerDevices(EmployeeDTO employeeDTO, Date takenDate) {
         var recordList = new ArrayList<Record>();
-        deviceDTOs.forEach(x -> {
+        employeeDTO.getDevices().forEach(x -> {
             recordList.add(recordMapper.recordDTOToRecord(registerDevice(
                     employeeDTO, x, takenDate)));
         });

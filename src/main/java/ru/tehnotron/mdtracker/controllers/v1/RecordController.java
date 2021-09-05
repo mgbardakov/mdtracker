@@ -1,5 +1,6 @@
 package ru.tehnotron.mdtracker.controllers.v1;
 
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 import ru.tehnotron.mdtracker.api.v1.dto.entity.RecordDTO;
 import ru.tehnotron.mdtracker.api.v1.dto.request.RecordRequestDTO;
@@ -17,11 +18,13 @@ public class RecordController {
         this.service = service;
     }
 
+    @PreAuthorize("hasRole('ADMIN')")
     @PostMapping("create")
     public RecordDTO createRecord(@RequestBody RecordDTO recordDTO) {
         return service.create(recordDTO);
     }
 
+    @PreAuthorize("hasRole('ADMIN')")
     @GetMapping("{id}")
     public RecordDTO getRecord(@PathVariable long id) {
         var recordDTO = new RecordDTO();
@@ -29,21 +32,25 @@ public class RecordController {
         return service.read(recordDTO);
     }
 
+    @PreAuthorize("hasRole('ADMIN')")
     @PutMapping("update")
     public void updateRecord(@RequestBody RecordDTO recordDTO) {
         service.update(recordDTO);
     }
 
+    @PreAuthorize("hasRole('ADMIN')")
     @PostMapping("delete")
     public void deleteRecord(@RequestBody RecordDTO recordDTO) {
         service.delete(recordDTO);
     }
 
+    @PreAuthorize("hasAnyRole('ADMIN', 'USER')")
     @GetMapping()
     public List<RecordDTO> getAllRecords() {
         return service.findAll();
     }
 
+    @PreAuthorize("hasAnyRole('ADMIN', 'USER')")
     @GetMapping("filter")
     public List<RecordDTO> getRecordsByRequest(RecordRequestDTO recordRequestDTO) {
         return service.findRecordsByRequest(recordRequestDTO);

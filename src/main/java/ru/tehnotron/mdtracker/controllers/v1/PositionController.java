@@ -1,6 +1,7 @@
 package ru.tehnotron.mdtracker.controllers.v1;
 
 import org.springframework.http.HttpStatus;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 import ru.tehnotron.mdtracker.api.v1.dto.entity.PositionDTO;
@@ -11,6 +12,7 @@ import java.util.List;
 
 @RestController
 @RequestMapping("api/v1/positions/")
+@PreAuthorize("hasRole('ADMIN')")
 public class PositionController {
 
     private final PositionService service;

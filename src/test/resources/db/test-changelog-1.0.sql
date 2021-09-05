@@ -26,4 +26,26 @@ CREATE TABLE IF NOT EXISTS device_movement (
     returned TIMESTAMP,
     device_id INT REFERENCES device(id),
     employee_id INT REFERENCES employee(id)
-)
+);
+
+CREATE TABLE IF NOT EXISTS user (
+    id SERIAL PRIMARY KEY,
+    user_name TEXT,
+    password TEXT,
+    employee_id INT REFERENCES employee(id),
+    account_non_expired BOOLEAN,
+    account_non_locked BOOLEAN,
+    credentials_non_expired BOOLEAN,
+    enabled BOOLEAN
+);
+
+CREATE TABLE IF NOT EXISTS authority (
+    id SERIAL PRIMARY KEY,
+    role TEXT
+);
+
+CREATE TABLE IF NOT EXISTS user_authority (
+    id SERIAL PRIMARY KEY,
+    user_id INTEGER references user(id),
+    authority_id INTEGER references authority(id)
+);

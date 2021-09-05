@@ -1,5 +1,6 @@
 package ru.tehnotron.mdtracker.controllers.v1;
 
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 import ru.tehnotron.mdtracker.api.v1.dto.entity.EmployeeDTO;
 import ru.tehnotron.mdtracker.service.EmployeeService;
@@ -8,6 +9,7 @@ import java.util.List;
 
 @RestController
 @RequestMapping("api/v1/employees/")
+@PreAuthorize("hasRole('ADMIN')")
 public class EmployeeController {
 
     private final EmployeeService service;

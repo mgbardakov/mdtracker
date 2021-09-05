@@ -1,0 +1,46 @@
+package ru.tehnotron.mdtracker.controllers.v1;
+
+import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.web.bind.annotation.*;
+import ru.tehnotron.mdtracker.api.v1.dto.entity.UserDTO;
+import ru.tehnotron.mdtracker.service.UserService;
+
+import java.util.List;
+
+@RestController
+@RequestMapping("api/v1/users/")
+@PreAuthorize("hasRole('ADMIN')")
+public class UserController {
+
+    private final UserService service;
+
+    public UserController(UserService service) {
+        this.service = service;
+    }
+
+    @PostMapping("create")
+    public UserDTO createUser(@RequestBody UserDTO userDTO) {
+        return service.register(userDTO);
+    }
+
+    @GetMapping("{id}")
+    public UserDTO getUser(@PathVariable long id) {
+        return service.findById(id);
+    }
+
+    @PutMapping("update")
+    public void updateUser(@RequestBody UserDTO userDTO) {
+        service.updateUser(userDTO);
+    }
+
+    @PostMapping("delete")
+    public void deleteUser(@RequestBody UserDTO userDTO) {
+        service.delete(userDTO.getId());
+    }
+
+    @GetMapping()
+    public List<UserDTO> getAllUsers() {
+        return service.getAll();
+    }
+
+}

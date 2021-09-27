@@ -1,0 +1,21 @@
+<mat-toolbar color="primary">
+  <span style="padding-right: 10px">
+  <mat-menu #appMenu = "matMenu">
+    <button mat-menu-item routerLink=""><a>Главная</a></button>
+    <button mat-menu-item>Журнал</button>
+    <button mat-menu-item>Обзор</button>
+    <button mat-menu-item>Настройки</button>
+  </mat-menu>
+  <button mat-mini-fab [mat-menu-trigger-for]="appMenu" color="white">
+    <mat-icon>menu</mat-icon>
+  </button>
+  </span>
+  <span>MDTracker</span>
+  <span class="example-spacer"></span>
+  <span style="padding-right: 1rem">{{userName}}</span>
+  <button mat-flat-button>
+    Выйти
+  </button>
+
+
+</mat-toolbar>

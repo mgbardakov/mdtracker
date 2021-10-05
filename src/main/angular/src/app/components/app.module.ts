@@ -11,12 +11,15 @@ import { HomeComponent } from './home/home.component';
 import { Routes, RouterModule } from "@angular/router";
 import { RegisterDeviceComponent } from './register-device/register-device.component';
 import { SelectorAddDeviceComponent } from './register-device/selector-add-device/selector-add-device.component';
-import { QrAddDeviceComponent } from './register-device/qr-add-device/qr-add-device.component'
+import { QrAddDeviceComponent } from './register-device/qr-add-device/qr-add-device.component';
+import { JournalComponent } from './journal/journal.component';
+import { NgbModule } from '@ng-bootstrap/ng-bootstrap'
 
 const appRoutes: Routes = [
   {path: 'home', component: HomeComponent},
   {path: 'login', component: LoginComponent},
   {path: 'register-devices', component: RegisterDeviceComponent},
+  {path: 'journal', component: JournalComponent}
 ]
 
 @NgModule({
@@ -27,14 +30,16 @@ const appRoutes: Routes = [
     HomeComponent,
     RegisterDeviceComponent,
     SelectorAddDeviceComponent,
-    QrAddDeviceComponent
+    QrAddDeviceComponent,
+    JournalComponent
   ],
   imports: [
     BrowserModule,
     BrowserAnimationsModule,
     MaterialModule,
     ReactiveFormsModule,
-    RouterModule.forRoot(appRoutes)
+    RouterModule.forRoot(appRoutes),
+    NgbModule
   ],
   providers: [],
   bootstrap: [AppComponent]

@@ -1,54 +1,35 @@
-<mat-card style="margin-right: 1rem; margin-left: 1rem; margin-top: 1rem">
-  <mat-card-title style="text-align: center; margin-bottom: 1rem">Журнал</mat-card-title>
-  <mat-card-content>
-        <mat-form-field appearance="fill" style="max-width: 170px">
-          <mat-label>Даты</mat-label>
-          <mat-date-range-input [rangePicker]="picker">
-            <input matStartDate placeholder="с">
-            <input matEndDate placeholder="до">
-          </mat-date-range-input>
-          <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
-          <mat-date-range-picker #picker></mat-date-range-picker>
-        </mat-form-field>
-        <mat-form-field appearance="fill" style="max-width: 150px">
-          <mat-label>Специалист</mat-label>
-          <select matNativeControl>
-            <option value="0"></option>
-            <option value="1">Аркаша</option>
-            <option value="2">Петя</option>
-            <option value="3">Маша</option>
-          </select>
-        </mat-form-field>
-        <mat-form-field appearance="fill" style="max-width: 150px">
-          <mat-label>Прибор</mat-label>
-          <select matNativeControl>
-            <option value="0"></option>
-            <option value="1">Шумомер</option>
-            <option value="2">Линейка</option>
-            <option value="3">Хроматограф</option>
-          </select>
-        </mat-form-field>
-      <button mat-flat-button color="primary" style="margin-top: 10px; float: right">Найти</button>
-    <table class="table table-striped">
-      <tr>
-        <th><button mat-mini-fab color="primary"><mat-icon>add</mat-icon></button></th>
-        <th scope="col">Дата регистрации</th>
-        <th scope="col">Специалист</th>
-        <th scope="col">Наименование прибора</th>
-        <th scope="col">Серийный номер</th>
-        <th scope="col">Дата сдачи</th>
-      </tr>
-      <tr *ngFor="let record of records">
-        <td scope="row"><button mat-mini-fab color="primary"><mat-icon>edit</mat-icon></button></td>
-        <td scope="row">{{record.taken | date: 'short'}}</td>
-        <td scope="row">{{record.employee.name}}</td>
-        <td scope="row">{{record.device.name}}</td>
-        <td scope="row">{{record.device.serialNumber}}</td>
-        <td scope="row"><p *ngIf="record.returned != null">{{record.returned}}</p></td>
-      </tr>
-    </table>
-  </mat-card-content>
-</mat-card>
+<h2>Журнал</h2>
+
+<table mat-table [dataSource]="dataSource" class="mat-elevation-z8 container">
+
+  <ng-container matColumnDef="taken">
+    <th mat-header-cell *matHeaderCellDef><button mat-mini-fab style="margin-right: 1rem" color="primary"><mat-icon>add</mat-icon></button>Дата регистрации</th>
+    <td mat-cell *matCellDef="let record"><button mat-mini-fab style="margin-right: 1rem"><mat-icon>edit</mat-icon></button> {{record.taken | date: 'short' }} </td>
+  </ng-container>
+
+  <ng-container matColumnDef="employee">
+    <th mat-header-cell *matHeaderCellDef>Сотрудник </th>
+    <td mat-cell *matCellDef="let record"> {{record.employee.name}} </td>
+  </ng-container>
+
+  <ng-container matColumnDef="deviceName">
+    <th mat-header-cell *matHeaderCellDef>Название прибора</th>
+    <td mat-cell *matCellDef="let record"> {{record.device.name}} </td>
+  </ng-container>
+
+  <ng-container matColumnDef="serialNumber">
+    <th mat-header-cell *matHeaderCellDef>Серийный номер</th>
+    <td mat-cell *matCellDef="let record"> {{record.device.serialNumber}} </td>
+  </ng-container>
+
+  <ng-container matColumnDef="returned">
+    <th mat-header-cell *matHeaderCellDef>Возвращено</th>
+    <td mat-cell *matCellDef="let record"> {{record.returned != null ? record.returned : ""}} </td>
+  </ng-container>
+
+  <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+  <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+</table>
 
 
 

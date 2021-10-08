@@ -14,6 +14,7 @@ import { SelectorAddDeviceComponent } from './register-device/selector-add-devic
 import { QrAddDeviceComponent } from './register-device/qr-add-device/qr-add-device.component';
 import { JournalComponent } from './journal/journal.component';
 import { NgbModule } from '@ng-bootstrap/ng-bootstrap'
+import {FlexModule} from "@angular/flex-layout";
 
 const appRoutes: Routes = [
   {path: 'home', component: HomeComponent},
@@ -39,7 +40,8 @@ const appRoutes: Routes = [
     MaterialModule,
     ReactiveFormsModule,
     RouterModule.forRoot(appRoutes),
-    NgbModule
+    NgbModule,
+    FlexModule
   ],
   providers: [],
   bootstrap: [AppComponent]

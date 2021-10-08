@@ -16,7 +16,7 @@ export class HomeComponent implements OnInit {
     {id: 2, name: 'Шумомер', verificationExpire: new Date('19.08.2022'), taken: true, serialNumber: '126544'},
     {id: 3, name: 'Метеомер', verificationExpire: new Date('19.08.2022'), taken: true, serialNumber: '315174'}
   ];
-  displayedColumns: string[] = ['id', 'name', 'serialNumber', 'actions'];
+  displayedColumns: string[] = ['id', 'name', 'serialNumber'];
   dataSource = this.devices;
   constructor(router: Router) {
     this.router = router;

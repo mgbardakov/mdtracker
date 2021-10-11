@@ -5,6 +5,9 @@ import {Device} from "../../model/device";
 import {MatPaginator} from "@angular/material/paginator";
 import {MatTableDataSource} from "@angular/material/table";
 import {MatSort} from "@angular/material/sort";
+import {MatDialog} from "@angular/material/dialog";
+import {RecordFormComponent} from "./record-form/record-form.component";
+import {FormControl, FormGroup} from "@angular/forms";
 
 
 @Component({
@@ -29,6 +32,8 @@ export class JournalComponent implements OnInit, AfterViewInit {
     };
     this.dataSource.sort = this.sort;
   }
+
+  form: FormGroup;
 
   employees: Employee[] = [{id:1, name: "Петя", position:null, devices:null},
     {id:2, name: "Маша", position:null, devices:null}]
@@ -79,9 +84,33 @@ export class JournalComponent implements OnInit, AfterViewInit {
   displayedColumns: string[] = ['taken', 'employee', 'deviceName', 'serialNumber', 'returned'];
   dataSource = new MatTableDataSource<Record>(this.records);
 
-  constructor() { }
+  constructor(public dialog: MatDialog) { }
 
   ngOnInit(): void {
+    this.initForm()
+  }
+  openDialog(record: Record): void {
+      this.dialog.open(RecordFormComponent, {
+      width: '250px',
+      data: record
+    });
   }
 
+
+  submit() {
+    console.log('woohoo')
+  }
+
+  resetForm() {
+    this.initForm()
+  }
+
+  initForm() {
+    this.form = new FormGroup({
+      startDate: new FormControl(),
+      endDate: new FormControl(),
+      employee: new FormControl(),
+      device: new FormControl()
+    })
+  }
 }

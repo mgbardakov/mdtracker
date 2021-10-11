@@ -15,12 +15,21 @@ import { QrAddDeviceComponent } from './register-device/qr-add-device/qr-add-dev
 import { JournalComponent } from './journal/journal.component';
 import { NgbModule } from '@ng-bootstrap/ng-bootstrap'
 import {FlexModule} from "@angular/flex-layout";
+import { OverviewComponent } from './overview/overview.component';
+import { EmployeeCrudComponent } from './settings/employee-crud/employee-crud.component';
+import { PositionCrudComponent } from './settings/position-crud/position-crud.component';
+import { DeviceCrudComponent } from './settings/device-crud/device-crud.component';
+import { DeviceQrPrinterComponent } from './settings/device-crud/device-qr-printer/device-qr-printer.component';
+import { SettingsComponent } from './settings/settings.component';
+import { RecordFormComponent } from './journal/record-form/record-form.component';
 
 const appRoutes: Routes = [
   {path: 'home', component: HomeComponent},
   {path: 'login', component: LoginComponent},
   {path: 'register-devices', component: RegisterDeviceComponent},
-  {path: 'journal', component: JournalComponent}
+  {path: 'journal', component: JournalComponent},
+  {path: 'overview', component: OverviewComponent},
+  {path: 'settings', component: SettingsComponent}
 ]
 
 @NgModule({
@@ -32,7 +41,14 @@ const appRoutes: Routes = [
     RegisterDeviceComponent,
     SelectorAddDeviceComponent,
     QrAddDeviceComponent,
-    JournalComponent
+    JournalComponent,
+    OverviewComponent,
+    EmployeeCrudComponent,
+    PositionCrudComponent,
+    DeviceCrudComponent,
+    DeviceQrPrinterComponent,
+    SettingsComponent,
+    RecordFormComponent
   ],
   imports: [
     BrowserModule,

@@ -12,6 +12,9 @@ import {MatDatepickerModule} from "@angular/material/datepicker";
 import {MatNativeDateModule} from "@angular/material/core";
 import {MatPaginatorModule} from "@angular/material/paginator";
 import {MatSortModule} from "@angular/material/sort";
+import {MatGridListModule} from "@angular/material/grid-list";
+import {MatTabsModule} from "@angular/material/tabs";
+import {MatDialogModule} from "@angular/material/dialog";
 
 
 const MaterialComponents = [
@@ -27,7 +30,10 @@ const MaterialComponents = [
   MatDatepickerModule,
   MatNativeDateModule,
   MatPaginatorModule,
-  MatSortModule
+  MatSortModule,
+  MatGridListModule,
+  MatTabsModule,
+  MatDialogModule
 ];
 
 @NgModule({

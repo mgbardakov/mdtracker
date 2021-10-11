@@ -25,4 +25,8 @@ export class HomeComponent implements OnInit {
   ngOnInit(): void {
   }
 
+  goToDevicePicker() {
+    this.router.navigate(['register-devices'])
+  }
+
 }

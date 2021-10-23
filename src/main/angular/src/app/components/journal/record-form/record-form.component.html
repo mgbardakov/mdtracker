@@ -1,6 +1,6 @@
 <h1 mat-dialog-title>{{data == null ? 'Новая запись' : 'Редактировать запись'}}</h1>
 <form [formGroup]="form" (ngSubmit)="submit()">
-  <div mat-dialog-content>
+  <div mat-dialog-content fxLayout="row" fxLayoutGap="5%" fxLayout.xs="column">
     <div>
       <mat-form-field floatLabel="auto" appearance="outline">
         <mat-label>Дата регистрации</mat-label>
@@ -10,8 +10,8 @@
     <div>
       <mat-form-field appearance="fill" style="width: 100%">
         <mat-label>Сотрудник</mat-label>
-        <mat-select formControlName="employee">
-          <mat-option *ngFor="let employee of employees" [value]="employee.id">
+        <mat-select formControlName="employee" [compareWith]="objectComparisonFunction">
+          <mat-option *ngFor="let employee of employees" [value]="employee">
             {{employee.name}}
           </mat-option>
         </mat-select>
@@ -20,8 +20,8 @@
     <div>
       <mat-form-field appearance="fill" style="width: 100%">
         <mat-label>Прибор</mat-label>
-        <mat-select formControlName="device">
-          <mat-option *ngFor="let device of devices" [value]="device.id">
+        <mat-select formControlName="device" [compareWith]="objectComparisonFunction">
+          <mat-option *ngFor="let device of devices" [value]="device">
             {{device.name}} {{device.serialNumber}}
           </mat-option>
         </mat-select>

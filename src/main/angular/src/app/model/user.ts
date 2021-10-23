@@ -3,7 +3,7 @@ import {Authority} from "./authority";
 
 export class User {
   id: number;
-  name: string;
+  login: string;
   password: string;
   employee: Employee;
   authorities: Authority[];

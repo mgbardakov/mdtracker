@@ -1,11 +1,11 @@
 <h1>Оперативная обстановка</h1>
-<div class="container" fxLayout="row" fxLayout.xs="column" fxLayoutGap="5%">
-  <div class="card" *ngFor="let employee of employees">
-    <div class="card-header"><h2>{{employee.name}}</h2></div>
+<div class="container" fxLayout="row" fxLayout.xs="column" fxLayoutGap="5%" fxLayoutAlign="space-around">
+  <div class="card" *ngFor="let pair of convertRecordsToMap() | keyvalue">
+    <div class="card-header"><h2>{{pair.value[0].employee.name}}</h2></div>
   <div class="card-body">
     <ul class="list-group">
-      <li class="list-group-item" *ngFor="let device of employee.devices">
-        {{device.name}} № {{device.serialNumber}}
+      <li class="list-group-item" *ngFor="let record of pair.value">
+        {{record.device.name}} № {{record.device.serialNumber}}
       </li>
     </ul>
   </div>

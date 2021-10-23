@@ -3,6 +3,10 @@ import {MatPaginator} from "@angular/material/paginator";
 import {MatSort} from "@angular/material/sort";
 import {MatTableDataSource} from "@angular/material/table";
 import {Device} from "../../../model/device";
+import {Record} from "../../../model/record";
+import {RecordFormComponent} from "../../journal/record-form/record-form.component";
+import {MatDialog} from "@angular/material/dialog";
+import {DeviceFormComponent} from "./device-form/device-form.component";
 
 @Component({
   selector: 'app-device-crud',
@@ -29,9 +33,16 @@ export class DeviceCrudComponent implements OnInit, AfterViewInit {
   displayedColumns: string[] = ['index', 'name', 'serialNumber', 'verificationExpire'];
   dataSource = new MatTableDataSource<Device>(this.devices);
 
-  constructor() { }
+  constructor(public dialog: MatDialog) { }
 
   ngOnInit(): void {
+  }
+
+  openDialog(device: Device): void {
+    this.dialog.open(DeviceFormComponent, {
+      width: '50%',
+      data: device
+    });
   }
 
 }

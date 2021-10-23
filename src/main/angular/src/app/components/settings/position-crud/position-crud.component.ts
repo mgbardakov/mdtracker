@@ -3,6 +3,8 @@ import {MatPaginator} from "@angular/material/paginator";
 import {MatSort} from "@angular/material/sort";
 import {MatTableDataSource} from "@angular/material/table";
 import {Position} from "../../../model/position";
+import {MatDialog} from "@angular/material/dialog";
+import {PositionFormComponent} from "./position-form/position-form.component";
 
 @Component({
   selector: 'app-position-crud',
@@ -25,9 +27,16 @@ export class PositionCrudComponent implements OnInit, AfterViewInit {
   displayedColumns: string[] = ['index', 'name'];
   dataSource = new MatTableDataSource<Position>(this.positions);
 
-  constructor() { }
+  constructor(public dialog: MatDialog) { }
 
   ngOnInit(): void {
+  }
+
+  openDialog(position: Position): void {
+    this.dialog.open(PositionFormComponent, {
+      width: '300px',
+      data: position
+    });
   }
 
 }

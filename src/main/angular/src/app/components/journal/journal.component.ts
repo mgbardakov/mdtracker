@@ -35,50 +35,50 @@ export class JournalComponent implements OnInit, AfterViewInit {
 
   form: FormGroup;
 
-  employees: Employee[] = [{id:1, name: "Петя", position:null, devices:null},
-    {id:2, name: "Маша", position:null, devices:null}]
+  employees: Employee[] = [{id:1, name: "Петя", position:null},
+    {id:2, name: "Маша", position:null}]
 
   devices: Device[] = [{id:1, name:'Шумомер', verificationExpire:null, serialNumber: '123', taken:null},
     {id:2, name:'Линейка', verificationExpire:null, serialNumber: '123', taken:null}]
 
   records: Record[] = [{id: 1, taken: new Date('01.10.2021'),
     device: {id: 1, name: 'Шумомер', serialNumber: "123", taken: true, verificationExpire: new Date('02.10.2022')},
-    employee: {id: 1, devices: [], name: "Петя", position: {id:1, name: "инженер"}}, returned: new Date('03.11.2019')},
+    employee: {id: 1, name: "Петя", position: {id:1, name: "инженер"}}, returned: new Date('03.11.2019')},
     {id: 1, taken: new Date('01.10.2021'),
       device: {id: 1, name: 'Шумомер', serialNumber: "123", taken: true, verificationExpire: new Date('02.10.2022')},
-      employee: {id: 1, devices: [], name: "Петя", position: {id:1, name: "инженер"}}, returned: null},
+      employee: {id: 1, name: "Петя", position: {id:1, name: "инженер"}}, returned: null},
     {id: 1, taken: new Date('01.10.2021'),
       device: {id: 1, name: 'Шумомер', serialNumber: "123", taken: true, verificationExpire: new Date('02.10.2022')},
-      employee: {id: 1, devices: [], name: "Петя", position: {id:1, name: "инженер"}}, returned: null},
+      employee: {id: 1, name: "Петя", position: {id:1, name: "инженер"}}, returned: null},
     {id: 1, taken: new Date('01.10.2021'),
       device: {id: 1, name: 'Шумомер', serialNumber: "123", taken: true, verificationExpire: new Date('02.10.2022')},
-      employee: {id: 1, devices: [], name: "Петя", position: {id:1, name: "инженер"}}, returned: null},
+      employee: {id: 1, name: "Петя", position: {id:1, name: "инженер"}}, returned: null},
     {id: 1, taken: new Date('01.10.2021'),
       device: {id: 1, name: 'Шумомер', serialNumber: "123", taken: true, verificationExpire: new Date('02.10.2022')},
-      employee: {id: 1, devices: [], name: "Петя", position: {id:1, name: "инженер"}}, returned: null},
+      employee: {id: 1, name: "Петя", position: {id:1, name: "инженер"}}, returned: null},
     {id: 1, taken: new Date('01.10.2021'),
       device: {id: 1, name: 'Шумомер', serialNumber: "123", taken: true, verificationExpire: new Date('02.10.2022')},
-      employee: {id: 1, devices: [], name: "Петя", position: {id:1, name: "инженер"}}, returned: null},
+      employee: {id: 1, name: "Петя", position: {id:1, name: "инженер"}}, returned: null},
     {id: 1, taken: new Date('01.10.2021'),
       device: {id: 1, name: 'Шумомер', serialNumber: "123", taken: true, verificationExpire: new Date('02.10.2022')},
-      employee: {id: 1, devices: [], name: "Петя", position: {id:1, name: "инженер"}}, returned: null},
+      employee: {id: 1, name: "Петя", position: {id:1, name: "инженер"}}, returned: null},
     {id: 1, taken: new Date('01.10.2021'),
       device: {id: 1, name: 'Шумомер', serialNumber: "123", taken: true, verificationExpire: new Date('02.10.2022')},
-      employee: {id: 1, devices: [], name: "Петя", position: {id:1, name: "инженер"}}, returned: null},
+      employee: {id: 1, name: "Петя", position: {id:1, name: "инженер"}}, returned: null},
     {id: 1, taken: new Date('01.10.2021'),
       device: {id: 1, name: 'Шумомер', serialNumber: "123", taken: true, verificationExpire: new Date('02.10.2022')},
-      employee: {id: 1, devices: [], name: "Петя", position: {id:1, name: "инженер"}}, returned: null},
+      employee: {id: 1, name: "Петя", position: {id:1, name: "инженер"}}, returned: null},
     {id: 1, taken: new Date('01.10.2021'),
       device: {id: 1, name: 'Шумомер', serialNumber: "123", taken: true, verificationExpire: new Date('02.10.2022')},
-      employee: {id: 1, devices: [], name: "Петя", position: {id:1, name: "инженер"}}, returned: null},
+      employee: {id: 1, name: "Петя", position: {id:1, name: "инженер"}}, returned: null},
     {id: 1, taken: new Date('01.10.2021'),
       device: {id: 1, name: 'Шумомер', serialNumber: "123", taken: true, verificationExpire: new Date('02.10.2022')},
-      employee: {id: 1, devices: [], name: "Петя", position: {id:1, name: "инженер"}}, returned: null},{id: 1, taken: new Date('01.10.2021'),
+      employee: {id: 1, name: "Петя", position: {id:1, name: "инженер"}}, returned: null},{id: 1, taken: new Date('01.10.2021'),
       device: {id: 1, name: 'Шумомер', serialNumber: "123", taken: true, verificationExpire: new Date('02.10.2022')},
-      employee: {id: 1, devices: [], name: "Петя", position: {id:1, name: "инженер"}}, returned: null},
+      employee: {id: 1, name: "Петя", position: {id:1, name: "инженер"}}, returned: null},
     {id: 1, taken: new Date('01.10.2021'),
       device: {id: 1, name: 'Шумомер', serialNumber: "123", taken: true, verificationExpire: new Date('02.10.2022')},
-      employee: {id: 1, devices: [], name: "Петя", position: {id:1, name: "инженер"}}, returned: null}
+      employee: {id: 1, name: "Петя", position: {id:1, name: "инженер"}}, returned: null}
   ];
 
   displayedColumns: string[] = ['taken', 'employee', 'deviceName', 'serialNumber', 'returned'];
@@ -91,14 +91,14 @@ export class JournalComponent implements OnInit, AfterViewInit {
   }
   openDialog(record: Record): void {
       this.dialog.open(RecordFormComponent, {
-      width: '250px',
+      width: '55%',
       data: record
     });
   }
 
 
   submit() {
-    console.log('woohoo')
+
   }
 
   resetForm() {

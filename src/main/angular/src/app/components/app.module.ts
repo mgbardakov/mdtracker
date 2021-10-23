@@ -16,12 +16,16 @@ import { JournalComponent } from './journal/journal.component';
 import { NgbModule } from '@ng-bootstrap/ng-bootstrap'
 import {FlexModule} from "@angular/flex-layout";
 import { OverviewComponent } from './overview/overview.component';
-import { EmployeeCrudComponent } from './settings/employee-crud/employee-crud.component';
+import { UserCrudComponent } from './settings/user-crud/user-crud.component';
 import { PositionCrudComponent } from './settings/position-crud/position-crud.component';
 import { DeviceCrudComponent } from './settings/device-crud/device-crud.component';
 import { DeviceQrPrinterComponent } from './settings/device-crud/device-qr-printer/device-qr-printer.component';
 import { SettingsComponent } from './settings/settings.component';
 import { RecordFormComponent } from './journal/record-form/record-form.component';
+import { UserAddFormComponent } from './settings/user-crud/user-add-form/user-add-form.component';
+import { UserEditFormComponent } from './settings/user-crud/user-edit-form/user-edit-form.component';
+import { PositionFormComponent } from './settings/position-crud/position-form/position-form.component';
+import { DeviceFormComponent } from './settings/device-crud/device-form/device-form.component';
 
 const appRoutes: Routes = [
   {path: 'home', component: HomeComponent},
@@ -43,12 +47,16 @@ const appRoutes: Routes = [
     QrAddDeviceComponent,
     JournalComponent,
     OverviewComponent,
-    EmployeeCrudComponent,
+    UserCrudComponent,
     PositionCrudComponent,
     DeviceCrudComponent,
     DeviceQrPrinterComponent,
     SettingsComponent,
-    RecordFormComponent
+    RecordFormComponent,
+    UserAddFormComponent,
+    UserEditFormComponent,
+    PositionFormComponent,
+    DeviceFormComponent
   ],
   imports: [
     BrowserModule,

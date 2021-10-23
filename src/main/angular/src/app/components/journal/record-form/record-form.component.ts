@@ -19,14 +19,14 @@ export class RecordFormComponent implements OnInit{
     @Inject(MAT_DIALOG_DATA) public data: Record) {}
 
   ngOnInit(): void {
-    this.form = new FormGroup({taken: new FormControl(this.data == null ? '' : this.toDateString(this.data.taken)),
-    employee: new FormControl(this.data == null ? '' : this.data.employee.id),
-    device: new FormControl(this.data == null ? '' : this.data.device.id),
-    returned: new FormControl(this.data == null ? '' : this.toDateString(this.data.returned))});
+    this.form = new FormGroup({taken: new FormControl(this.data == null || this.data.taken == null? '' : RecordFormComponent.toDateString(this.data.taken)),
+    employee: new FormControl(this.data == null || this.data.employee == null ? '' : this.data.employee),
+    device: new FormControl(this.data == null || this.data.device == null ? '' : this.data.device),
+    returned: new FormControl(this.data == null || this.data.returned == null ? '' : RecordFormComponent.toDateString(this.data.returned))});
   }
 
-  employees: Employee[] = [{id:1, name: "Петя", position:null, devices:null},
-    {id:2, name: "Маша", position:null, devices:null}]
+  employees: Employee[] = [{id:1, name: "Петя", position:null},
+    {id:2, name: "Маша", position: null}]
 
   devices: Device[] = [{id:1, name:'Шумомер', verificationExpire:null, serialNumber: '123', taken:null},
     {id:2, name:'Линейка', verificationExpire:null, serialNumber: '123', taken:null}]
@@ -36,13 +36,25 @@ export class RecordFormComponent implements OnInit{
   }
 
   submit() {
-
+    console.log(JSON.stringify(this.getRecord()));
   }
-  private toDateString(date: Date): string {
+  private static toDateString(date: Date): string {
     return (date.getFullYear().toString() + '-'
       + ("0" + (date.getMonth() + 1)).slice(-2) + '-'
       + ("0" + (date.getDate())).slice(-2))
       + 'T' + date.toTimeString().slice(0,5);
+  }
+
+  public objectComparisonFunction = function(option, value) : boolean {
+    return option.id == value.id
+  }
+
+  private getRecord(): Record {
+    return {id: this.data == null ? 0 : this.data.id,
+      taken: this.form.controls['taken'].value,
+      device: this.form.controls['device'].value,
+      employee: this.form.controls['employee'].value,
+      returned: this.form.controls['returned'].value}
   }
 
 }

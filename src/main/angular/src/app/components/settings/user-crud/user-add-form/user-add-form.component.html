@@ -1,0 +1,63 @@
+<h1 mat-dialog-title style="text-align: center">Новый пользователь</h1>
+<form [formGroup]="form" (ngSubmit)="submit()">
+  <div mat-dialog-content fxLayout="column">
+    <div fxLayout="row" fxLayoutAlign="space-around" fxLayoutGap.xs="5%" fxLayout.xs="column">
+      <div fxFlex="30%">
+        <mat-form-field floatLabel="auto" appearance="outline">
+          <mat-label>Login</mat-label>
+          <input matInput type="text" autocomplete="off" formControlName="login"/>
+        </mat-form-field>
+      </div>
+      <div fxFlex="30%">
+        <mat-form-field floatLabel="auto" appearance="outline">
+          <mat-label>Пароль</mat-label>
+          <input matInput type="password" autocomplete="off" formControlName="password"/>
+        </mat-form-field>
+      </div>
+    </div>
+    <div fxLayout="row" fxLayoutAlign="space-around" fxLayoutGap.xs="5%" fxLayout.xs="column">
+      <div fxFlex="30%" fxFlexOrder.xs="2">
+        <mat-label>Роль</mat-label>
+        <mat-form-field appearance="fill" style="width: 100%">
+          <mat-select formControlName="authorities">
+            <mat-option *ngFor="let authority of authorities" [value]="authority">
+              {{authority.role}}
+            </mat-option>
+          </mat-select>
+        </mat-form-field>
+      </div>
+      <div fxFlex="30%" fxFlexOrder.xs="1">
+        <mat-form-field floatLabel="auto" appearance="outline">
+          <mat-label>Повторите пароль</mat-label>
+          <input matInput type="password" autocomplete="off" formControlName="passwordConfirmation"/>
+        </mat-form-field>
+      </div>
+
+    </div>
+    <div fxLayout="row" fxLayoutAlign="space-around" fxLayoutGap.xs="5%" fxLayout.xs="column">
+      <div fxFlex="30%">
+        <mat-form-field floatLabel="auto" appearance="outline">
+          <mat-label>Ф.И.О.</mat-label>
+          <input matInput type="text" autocomplete="off" formControlName="name"/>
+        </mat-form-field>
+      </div>
+      <div fxFlex="30%">
+        <mat-label>Должность</mat-label>
+        <mat-form-field appearance="fill" style="width: 100%">
+          <mat-select formControlName="position">
+            <mat-option *ngFor="let position of positions" [value]="position">
+              {{position.name}}
+            </mat-option>
+          </mat-select>
+        </mat-form-field>
+      </div>
+    </div>
+    <div fxLayout="row" fxLayoutAlign="space-around" fxLayoutGap.xs="5%" fxLayout.xs="column">
+
+    </div>
+  <div mat-dialog-actions fxLayoutAlign="end" style="margin-bottom: 10px">
+    <button mat-button mat-dialog-close>Отмена</button>
+    <button mat-button mat-dialog-close type="submit">Ok</button>
+  </div>
+  </div>
+</form>

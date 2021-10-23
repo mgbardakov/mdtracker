@@ -5,7 +5,7 @@
     <table mat-table [dataSource]="dataSource" style="width: 100%" matSort>
       <ng-container matColumnDef="index">
         <th mat-header-cell *matHeaderCellDef><span style="margin-left: 20px">№</span></th>
-        <td mat-cell *matCellDef="let employee; let j = index"><button mat-mini-fab style="margin-right: 1rem"><mat-icon>edit</mat-icon></button> {{j + 1}} </td>
+        <td mat-cell *matCellDef="let device; let j = index"><button mat-mini-fab style="margin-right: 1rem" (click)="openDialog(device)"><mat-icon>edit</mat-icon></button> {{j + 1}} </td>
       </ng-container>
 
       <ng-container matColumnDef="name">
@@ -26,7 +26,7 @@
       <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
       <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
     </table>
-    <div style="text-align: center"><button mat-mini-fab style="margin-top: 20px" color="primary"><mat-icon>add</mat-icon></button></div>
+    <div style="text-align: center"><button mat-mini-fab style="margin-top: 20px" color="primary" (click)="openDialog(null)"><mat-icon>add</mat-icon></button></div>
     <mat-paginator [pageSizeOptions]="[5, 10, 20]"
                    showFirstLastButtons
                    aria-label="Select page of periodic elements">

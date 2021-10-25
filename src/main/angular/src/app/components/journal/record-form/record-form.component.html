@@ -1,6 +1,6 @@
 <h1 mat-dialog-title>{{data == null ? 'Новая запись' : 'Редактировать запись'}}</h1>
 <form [formGroup]="form" (ngSubmit)="submit()">
-  <div mat-dialog-content fxLayout="row" fxLayoutGap="5%" fxLayout.xs="column">
+  <div mat-dialog-content fxLayout="row" fxLayoutGap="5%" fxLayout.xs="column" fxLayoutAlign="space-around">
     <div>
       <mat-form-field floatLabel="auto" appearance="outline">
         <mat-label>Дата регистрации</mat-label>

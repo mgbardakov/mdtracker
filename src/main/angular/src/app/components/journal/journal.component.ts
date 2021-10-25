@@ -91,7 +91,7 @@ export class JournalComponent implements OnInit, AfterViewInit {
   }
   openDialog(record: Record): void {
       this.dialog.open(RecordFormComponent, {
-      width: '100%',
+      width: '1000px',
       data: record
     });
   }

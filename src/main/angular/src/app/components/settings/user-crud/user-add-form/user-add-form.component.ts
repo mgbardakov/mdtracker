@@ -1,5 +1,5 @@
 import {Component, Inject, OnInit} from '@angular/core';
-import {FormControl, FormGroup} from "@angular/forms";
+import {AbstractControl, FormControl, FormGroup, ValidationErrors, ValidatorFn, Validators} from "@angular/forms";
 import {MAT_DIALOG_DATA, MatDialogRef} from "@angular/material/dialog";
 import {User} from "../../../../model/user";
 import {Authority} from "../../../../model/authority";
@@ -19,14 +19,16 @@ export class UserAddFormComponent implements OnInit {
     @Inject(MAT_DIALOG_DATA) public data: User) {}
 
   ngOnInit(): void {
-    this.form = new FormGroup({login: new FormControl(),
-                                       password: new FormControl(),
-                                       passwordConfirmation: new FormControl(),
-                                       authorities: new FormControl(),
-                                       name: new FormControl(),
-                                       position: new FormControl()
-                                       });
-
+    this.form = new FormGroup({login: new FormControl('',
+                         [Validators.required, Validators.minLength(3)]),
+                                      password: new FormControl('',
+                         [Validators.required, Validators.minLength(6)]),
+                                      passwordConfirmation: new FormControl(),
+                                      authorities: new FormControl('', Validators.required),
+                                      name: new FormControl('',
+                         [Validators.required, Validators.minLength(3)]),
+                                      position: new FormControl('', Validators.required)
+                                      }, {validators: passwordMatchValidator} );
   }
 
   authorities: Authority[] = [{id:1, role: "Администратор"},
@@ -52,4 +54,17 @@ export class UserAddFormComponent implements OnInit {
     console.log(JSON.stringify(this.getUser()))
   }
 
+
+
 }
+
+export const passwordMatchValidator: ValidatorFn = (control: AbstractControl): ValidationErrors | null => {
+  const password = control.get('password');
+  const passwordConfirmation = control.get('passwordConfirmation');
+  if (password && passwordConfirmation && password.value !== passwordConfirmation.value) {
+    passwordConfirmation.setErrors({passwordNotMatch: true})
+  } else {
+    passwordConfirmation.setErrors(null)
+  }
+  return null;
+};

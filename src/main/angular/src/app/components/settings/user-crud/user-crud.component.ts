@@ -31,8 +31,6 @@ export class UserCrudComponent implements OnInit, AfterViewInit {
     this.dataSource.sort = this.sort;
   }
 
-  employees: Employee[] = [{id:1, name: "Петя", position: {id: null, name: 'Инженер'}},
-    {id:2, name: "Маша", position: {id: null, name: 'Врач'}}]
   users: User[] = [{id: 1, login: 'bublik337', password: null,
     employee: {id:1, name: "Петя", position: {id: 1, name: 'Инженер'}},
   authorities: [{id:1, role: 'Администратор'}]},
@@ -51,13 +49,13 @@ export class UserCrudComponent implements OnInit, AfterViewInit {
 
   openAddingDialog(): void {
     this.dialog.open(UserAddFormComponent, {
-      width: '50%'
+      //width: '50%'
     });
   }
 
   openEditingDialog(user: User): void {
     this.dialog.open(UserEditFormComponent, {
-      width: '50%',
+      //width: '50%',
       data: user
     });
   }

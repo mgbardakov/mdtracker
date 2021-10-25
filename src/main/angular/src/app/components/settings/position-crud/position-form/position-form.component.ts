@@ -1,5 +1,5 @@
 import {Component, Inject, OnInit} from '@angular/core';
-import {FormControl, FormGroup} from "@angular/forms";
+import {FormControl, FormGroup, Validators} from "@angular/forms";
 import {MAT_DIALOG_DATA, MatDialogRef} from "@angular/material/dialog";
 import {Record} from "../../../../model/record";
 import {Employee} from "../../../../model/employee";
@@ -21,7 +21,8 @@ export class PositionFormComponent implements OnInit {
     @Inject(MAT_DIALOG_DATA) public data: Position) {}
 
   ngOnInit(): void {
-    this.form = new FormGroup({name: new FormControl(this.data == null ? '' : this.data.name)})
+    this.form = new FormGroup({name: new FormControl(this.data == null ? '' : this.data.name,
+        Validators.required)})
   }
 
   onNoClick(): void {

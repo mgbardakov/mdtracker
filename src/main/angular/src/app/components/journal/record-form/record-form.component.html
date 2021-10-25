@@ -4,27 +4,30 @@
     <div>
       <mat-form-field floatLabel="auto" appearance="outline">
         <mat-label>Дата регистрации</mat-label>
-        <input matInput type="datetime-local" autocomplete="off" formControlName="taken"/>
+        <input matInput type="datetime-local" autocomplete="off" formControlName="taken" required/>
+        <mat-error *ngIf="form.controls.taken.invalid">Введите дату</mat-error>
       </mat-form-field>
     </div>
     <div>
       <mat-form-field appearance="fill" style="width: 100%">
         <mat-label>Сотрудник</mat-label>
-        <mat-select formControlName="employee" [compareWith]="objectComparisonFunction">
+        <mat-select formControlName="employee" [compareWith]="objectComparisonFunction" required>
           <mat-option *ngFor="let employee of employees" [value]="employee">
             {{employee.name}}
           </mat-option>
         </mat-select>
+        <mat-error *ngIf="form.controls.employee.invalid">Выберите сотрудника</mat-error>
       </mat-form-field>
     </div>
     <div>
       <mat-form-field appearance="fill" style="width: 100%">
         <mat-label>Прибор</mat-label>
-        <mat-select formControlName="device" [compareWith]="objectComparisonFunction">
+        <mat-select formControlName="device" [compareWith]="objectComparisonFunction" required>
           <mat-option *ngFor="let device of devices" [value]="device">
             {{device.name}} {{device.serialNumber}}
           </mat-option>
         </mat-select>
+        <mat-error *ngIf="form.controls.device.invalid">Выберите прибор</mat-error>
       </mat-form-field>
     </div>
     <div>
@@ -36,7 +39,7 @@
   </div>
   <div mat-dialog-actions>
     <button mat-button mat-dialog-close>Отмена</button>
-    <button mat-button mat-dialog-close type="submit">Ok</button>
+    <button mat-button mat-dialog-close type="submit" [disabled]="form.invalid">Ok</button>
   </div>
 </form>
 

@@ -20,7 +20,7 @@
 
       <ng-container matColumnDef="verificationExpire">
         <th mat-header-cell *matHeaderCellDef mat-sort-header>Окончание срока поверки</th>
-        <td mat-cell *matCellDef="let device"> {{device.verificationExpire | date: 'short'}} </td>
+        <td mat-cell *matCellDef="let device"> {{device.verificationExpire | date: 'dd/MM/yyyy'}} </td>
       </ng-container>
 
       <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>

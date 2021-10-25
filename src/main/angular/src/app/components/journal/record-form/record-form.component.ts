@@ -2,7 +2,7 @@ import {Component, Inject, OnInit} from '@angular/core';
 import {MAT_DIALOG_DATA, MatDialogRef} from "@angular/material/dialog";
 import {Employee} from "../../../model/employee";
 import {Record} from "../../../model/record";
-import {FormControl, FormGroup} from "@angular/forms";
+import {FormControl, FormGroup, Validators} from "@angular/forms";
 import {Device} from "../../../model/device";
 
 @Component({
@@ -19,9 +19,12 @@ export class RecordFormComponent implements OnInit{
     @Inject(MAT_DIALOG_DATA) public data: Record) {}
 
   ngOnInit(): void {
-    this.form = new FormGroup({taken: new FormControl(this.data == null || this.data.taken == null? '' : RecordFormComponent.toDateString(this.data.taken)),
-    employee: new FormControl(this.data == null || this.data.employee == null ? '' : this.data.employee),
-    device: new FormControl(this.data == null || this.data.device == null ? '' : this.data.device),
+    this.form = new FormGroup({taken: new FormControl(this.data == null || this.data.taken == null? '' : RecordFormComponent.toDateString(this.data.taken),
+        Validators.required),
+    employee: new FormControl(this.data == null || this.data.employee == null ? '' : this.data.employee,
+      Validators.required),
+    device: new FormControl(this.data == null || this.data.device == null ? '' : this.data.device,
+      Validators.required),
     returned: new FormControl(this.data == null || this.data.returned == null ? '' : RecordFormComponent.toDateString(this.data.returned))});
   }
 

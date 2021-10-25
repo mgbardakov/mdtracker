@@ -5,13 +5,17 @@
       <div fxFlex="30%">
         <mat-form-field floatLabel="auto" appearance="outline">
           <mat-label>Login</mat-label>
-          <input matInput type="text" autocomplete="off" formControlName="login"/>
+          <input matInput type="text" autocomplete="off" formControlName="login" required/>
+          <mat-error *ngIf="form.controls.login.errors?.required">Введите логин</mat-error>
+          <mat-error *ngIf="form.controls.login.errors?.minlength">Не менее 3 символов</mat-error>
         </mat-form-field>
       </div>
       <div fxFlex="30%">
         <mat-form-field floatLabel="auto" appearance="outline">
           <mat-label>Пароль</mat-label>
-          <input matInput type="password" autocomplete="off" formControlName="password"/>
+          <input matInput type="password" autocomplete="off" formControlName="password" required/>
+          <mat-error *ngIf="form.controls.password.errors?.required">Введите пароль</mat-error>
+          <mat-error *ngIf="form.controls.password.errors?.minlength">Не менее 6 символов</mat-error>
         </mat-form-field>
       </div>
     </div>
@@ -19,17 +23,19 @@
       <div fxFlex="30%" fxFlexOrder.xs="2">
         <mat-label>Роль</mat-label>
         <mat-form-field appearance="fill" style="width: 100%">
-          <mat-select formControlName="authorities">
+          <mat-select formControlName="authorities" required>
             <mat-option *ngFor="let authority of authorities" [value]="authority">
               {{authority.role}}
             </mat-option>
           </mat-select>
+          <mat-error *ngIf="form.controls.authorities.invalid">Выберите роль</mat-error>
         </mat-form-field>
       </div>
       <div fxFlex="30%" fxFlexOrder.xs="1">
         <mat-form-field floatLabel="auto" appearance="outline">
           <mat-label>Повторите пароль</mat-label>
           <input matInput type="password" autocomplete="off" formControlName="passwordConfirmation"/>
+          <mat-error *ngIf="form.controls.passwordConfirmation.errors?.passwordNotMatch">Пароли не совпадают</mat-error>
         </mat-form-field>
       </div>
 
@@ -38,17 +44,20 @@
       <div fxFlex="30%">
         <mat-form-field floatLabel="auto" appearance="outline">
           <mat-label>Ф.И.О.</mat-label>
-          <input matInput type="text" autocomplete="off" formControlName="name"/>
+          <input matInput type="text" autocomplete="off" formControlName="name" required/>
+          <mat-error *ngIf="form.controls.name.errors?.required">Введите имя</mat-error>
+          <mat-error *ngIf="form.controls.name.errors?.minlength">Не менее 3 символов</mat-error>
         </mat-form-field>
       </div>
       <div fxFlex="30%">
         <mat-label>Должность</mat-label>
         <mat-form-field appearance="fill" style="width: 100%">
-          <mat-select formControlName="position">
+          <mat-select formControlName="position" required>
             <mat-option *ngFor="let position of positions" [value]="position">
               {{position.name}}
             </mat-option>
           </mat-select>
+          <mat-error *ngIf="form.controls.position.invalid">Выберите должность</mat-error>
         </mat-form-field>
       </div>
     </div>
@@ -57,7 +66,11 @@
     </div>
   <div mat-dialog-actions fxLayoutAlign="end" style="margin-bottom: 10px">
     <button mat-button mat-dialog-close>Отмена</button>
-    <button mat-button mat-dialog-close type="submit">Ok</button>
+    <button mat-button mat-dialog-close type="submit" [disabled]="form.invalid">Ok</button>
   </div>
   </div>
 </form>
+
+
+
+

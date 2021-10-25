@@ -40,7 +40,7 @@ export class DeviceCrudComponent implements OnInit, AfterViewInit {
 
   openDialog(device: Device): void {
     this.dialog.open(DeviceFormComponent, {
-      width: '50%',
+      //width: '50%',
       data: device
     });
   }

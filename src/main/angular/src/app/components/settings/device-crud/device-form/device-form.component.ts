@@ -1,5 +1,5 @@
 import {Component, Inject, OnInit} from '@angular/core';
-import {FormControl, FormGroup} from "@angular/forms";
+import {FormControl, FormGroup, Validators} from "@angular/forms";
 import {MAT_DIALOG_DATA, MatDialogRef} from "@angular/material/dialog";
 import {Device} from "../../../../model/device";
 
@@ -18,9 +18,9 @@ export class DeviceFormComponent implements OnInit {
 
   ngOnInit(): void {
     this.form = new FormGroup({
-      name: new FormControl(this.data == null ? '' : this.data.name),
-      serialNumber: new FormControl(this.data == null ? '' : this.data.serialNumber),
-      verificationExpire: new FormControl(this.data == null ? '' : DeviceFormComponent.toDateString(this.data.verificationExpire))
+      name: new FormControl(this.data == null ? '' : this.data.name, Validators.required),
+      serialNumber: new FormControl(this.data == null ? '' : this.data.serialNumber, Validators.required),
+      verificationExpire: new FormControl(this.data == null ? '' : DeviceFormComponent.toDateString(this.data.verificationExpire), Validators.required)
     })
   }
 
@@ -32,7 +32,6 @@ export class DeviceFormComponent implements OnInit {
     return (date.getFullYear().toString() + '-'
       + ("0" + (date.getMonth() + 1)).slice(-2) + '-'
       + ("0" + (date.getDate())).slice(-2))
-      + 'T' + date.toTimeString().slice(0,5);
   }
 
   getDevice(): Device {

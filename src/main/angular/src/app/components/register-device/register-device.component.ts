@@ -15,10 +15,15 @@ export class RegisterDeviceComponent implements OnInit {
   ];
   displayedColumns: string[] = ['id', 'name', 'serialNumber'];
   dataSource = this.devices;
+  scannedEnabled = false;
 
   constructor() { }
 
   ngOnInit(): void {
+  }
+
+  switchScanner() {
+    this.scannedEnabled = !this.scannedEnabled
   }
 
 }

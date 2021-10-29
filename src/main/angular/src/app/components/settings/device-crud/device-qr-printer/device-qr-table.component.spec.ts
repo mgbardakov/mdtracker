@@ -1,20 +1,20 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 
-import { DeviceQrPrinterComponent } from './device-qr-printer.component';
+import { DeviceQrTableComponent } from './device-qr-table.component';
 
 describe('DeviceQrPrinterComponent', () => {
-  let component: DeviceQrPrinterComponent;
-  let fixture: ComponentFixture<DeviceQrPrinterComponent>;
+  let component: DeviceQrTableComponent;
+  let fixture: ComponentFixture<DeviceQrTableComponent>;
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      declarations: [ DeviceQrPrinterComponent ]
+      declarations: [ DeviceQrTableComponent ]
     })
     .compileComponents();
   });
 
   beforeEach(() => {
-    fixture = TestBed.createComponent(DeviceQrPrinterComponent);
+    fixture = TestBed.createComponent(DeviceQrTableComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();
   });

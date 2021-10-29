@@ -29,7 +29,14 @@
       <button mat-flat-button color="primary">Зарегистрировать</button>
     </mat-card-actions>
 </mat-card>
+<mat-card class="container" style="padding-bottom: 20px">
+  <zxing-scanner [enable]="scannedEnabled" [class.hidden]="!scannedEnabled"></zxing-scanner>
+  <div><button mat-flat-button color="primary" class="button" (click)="switchScanner()">{{scannedEnabled ? 'Выключить QR-сканер' : 'Сканировать QR-код'}}</button></div>
+</mat-card>
 <mat-card class="container">
   <app-selector-add-device></app-selector-add-device>
+
 </mat-card>
+
+
 

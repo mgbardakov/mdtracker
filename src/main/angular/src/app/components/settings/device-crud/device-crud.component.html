@@ -32,4 +32,22 @@
                    aria-label="Select page of periodic elements">
     </mat-paginator>
   </div>
+  <form [formGroup]="form" (ngSubmit)="submit()">
+    <div fxLayout="row" fxLayoutAlign="start" fxLayoutGap="5%">
+      <div fxFlex="30%">
+        <mat-label>Печать QR-кодов</mat-label>
+        <mat-form-field appearance="fill" style="width: 100%">
+          <mat-select formControlName="devicesToPrint" multiple>
+            <mat-option *ngFor="let device of devices" [value]="device">
+              {{device.name + " " + device.serialNumber}}
+            </mat-option>
+          </mat-select>
+        </mat-form-field>
+      </div>
+      <div fxFlex="30%">
+        <button mat-flat-button color="primary" style="margin-top: 30px" type="submit">Распечатать</button>
+      </div>
+    </div>
+  </form>
 </div>
+<app-device-qr-table [devices]="printableDevices" style="display: none"></app-device-qr-table>

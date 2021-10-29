@@ -19,13 +19,15 @@ import { OverviewComponent } from './overview/overview.component';
 import { UserCrudComponent } from './settings/user-crud/user-crud.component';
 import { PositionCrudComponent } from './settings/position-crud/position-crud.component';
 import { DeviceCrudComponent } from './settings/device-crud/device-crud.component';
-import { DeviceQrPrinterComponent } from './settings/device-crud/device-qr-printer/device-qr-printer.component';
+import { DeviceQrTableComponent } from './settings/device-crud/device-qr-printer/device-qr-table.component';
 import { SettingsComponent } from './settings/settings.component';
 import { RecordFormComponent } from './journal/record-form/record-form.component';
 import { UserAddFormComponent } from './settings/user-crud/user-add-form/user-add-form.component';
 import { UserEditFormComponent } from './settings/user-crud/user-edit-form/user-edit-form.component';
 import { PositionFormComponent } from './settings/position-crud/position-form/position-form.component';
 import { DeviceFormComponent } from './settings/device-crud/device-form/device-form.component';
+import {QRCodeModule} from "angular2-qrcode";
+import {ZXingScannerModule} from "@zxing/ngx-scanner";
 
 const appRoutes: Routes = [
   {path: 'home', component: HomeComponent},
@@ -50,7 +52,7 @@ const appRoutes: Routes = [
     UserCrudComponent,
     PositionCrudComponent,
     DeviceCrudComponent,
-    DeviceQrPrinterComponent,
+    DeviceQrTableComponent,
     SettingsComponent,
     RecordFormComponent,
     UserAddFormComponent,
@@ -65,7 +67,9 @@ const appRoutes: Routes = [
     ReactiveFormsModule,
     RouterModule.forRoot(appRoutes),
     NgbModule,
-    FlexModule
+    FlexModule,
+    QRCodeModule,
+    ZXingScannerModule
   ],
   providers: [],
   bootstrap: [AppComponent]

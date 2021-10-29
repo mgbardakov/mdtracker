@@ -16,3 +16,7 @@ table {
 .mat-column-id {
   padding-left: 10px;
 }
+
+.hidden {
+  display: none;
+}

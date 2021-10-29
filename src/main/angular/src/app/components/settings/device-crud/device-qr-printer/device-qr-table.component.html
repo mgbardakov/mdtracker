@@ -1,0 +1,23 @@
+<div style="width: 1000px">
+  <h2>Средства измерений</h2>
+  <table class="table" id="qr-table">
+    <thead>
+    <tr>
+      <th>#</th>
+      <th>Title</th>
+      <th>Serial number</th>
+      <th>QR-code</th>
+    </tr>
+    </thead>
+    <tbody>
+    <tr *ngFor="let device of devices; let index = index">
+      <td>{{index + 1}}</td>
+      <td>{{transliterate(device.name)}}</td>
+      <td>{{device.serialNumber}}</td>
+      <td><qr-code [value]="device.id.toString()"></qr-code></td>
+    </tr>
+    </tbody>
+  </table>
+</div>
+
+

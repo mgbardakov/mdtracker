@@ -20,6 +20,8 @@ public class Device extends BaseEntity {
 
     @Column(name = "name")
     private String name;
+    @Column(name = "serial_number")
+    private String serialNumber;
     @Temporal(TemporalType.TIMESTAMP)
     private Date verificationExpire;
     @Column(name = "taken")

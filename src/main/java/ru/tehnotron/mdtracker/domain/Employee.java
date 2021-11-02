@@ -25,21 +25,4 @@ public class Employee extends BaseEntity {
     private Position position;
     @Column(name = "visible")
     private boolean visible;
-    @OneToMany(mappedBy = "employee")
-    private List<Device> devices = new ArrayList<>();
-
-    public void addDevice(Device device) {
-        device.setEmployee(this);
-        devices.add(device);
-    }
-
-    public void removeDevice(Device device) {
-        device.setEmployee(null);
-        devices.remove(device);
-    }
-
-    public void clearAllDevices() {
-        devices.forEach(x -> x.setEmployee(null));
-        devices.clear();
-    }
 }

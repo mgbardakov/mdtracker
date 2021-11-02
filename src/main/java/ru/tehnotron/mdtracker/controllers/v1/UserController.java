@@ -1,7 +1,9 @@
 package ru.tehnotron.mdtracker.controllers.v1;
 
+import org.springframework.http.HttpStatus;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.server.ResponseStatusException;
 import ru.tehnotron.mdtracker.api.v1.dto.entity.UserDTO;
 import ru.tehnotron.mdtracker.service.UserService;
 
@@ -20,6 +22,9 @@ public class UserController {
 
     @PostMapping("create")
     public UserDTO createUser(@RequestBody UserDTO userDTO) {
+        if (service.findByUsername(userDTO.getLogin()) != null) {
+            throw new ResponseStatusException(HttpStatus.NOT_ACCEPTABLE, "Login is already taken");
+        }
         return service.register(userDTO);
     }
 

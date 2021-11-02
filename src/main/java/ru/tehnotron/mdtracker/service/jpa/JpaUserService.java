@@ -38,12 +38,12 @@ public class JpaUserService implements UserService {
 
     @Override
     public UserDTO register(UserDTO userDTO) {
+
         User user = mapper.userDTOToUser(userDTO);
         Set<Authority> authorities = new HashSet<>();
         userDTO.getAuthorities().forEach(x -> authorityRepository.findAuthorityByRole(x.getRole()));
         user.setPassword(passwordEncoder.encode(user.getPassword()));
         user.setAuthorities(authorities);
-
         return mapper.userToUserDTO(userRepository.save(user));
     }
 
@@ -64,7 +64,7 @@ public class JpaUserService implements UserService {
 
     @Override
     public void updateUser(UserDTO userDTO) {
-        userRepository.findByUsername(userDTO.getUsername()).ifPresent(user -> {
+        userRepository.findByUsername(userDTO.getLogin()).ifPresent(user -> {
             mapper.updateUserFromDTO(userDTO, user);
             log.info("IN updateUser - user: {} successfully updated", user);
         });

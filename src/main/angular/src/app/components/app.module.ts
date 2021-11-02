@@ -28,6 +28,7 @@ import { PositionFormComponent } from './settings/position-crud/position-form/po
 import { DeviceFormComponent } from './settings/device-crud/device-form/device-form.component';
 import {QRCodeModule} from "angular2-qrcode";
 import {ZXingScannerModule} from "@zxing/ngx-scanner";
+import {HttpClientModule} from "@angular/common/http";
 
 const appRoutes: Routes = [
   {path: 'home', component: HomeComponent},
@@ -69,7 +70,8 @@ const appRoutes: Routes = [
     NgbModule,
     FlexModule,
     QRCodeModule,
-    ZXingScannerModule
+    ZXingScannerModule,
+    HttpClientModule
   ],
   providers: [],
   bootstrap: [AppComponent]

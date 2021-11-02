@@ -54,7 +54,7 @@ class JpaDeviceRegisterServiceTest {
         employee.setId(1L);
         var device = new Device();
         deviceDTO.setId(1L);
-        employee.addDevice(device);
+
 
         when(employeeRepository.findById(any())).thenReturn(Optional.of(employee));
         when(deviceRepository.findById(any())).thenReturn(Optional.of(device));
@@ -74,8 +74,6 @@ class JpaDeviceRegisterServiceTest {
         device.setId(2L);
         var employee = new Employee();
         employee.setId(1L);
-        employee.addDevice(device);
-        employee.addDevice(device2);
         var record = new Record();
         record.setId(1L);
         record.setEmployee(employee);
@@ -101,8 +99,6 @@ class JpaDeviceRegisterServiceTest {
         device2.setId(2L);
         var employee = new Employee();
         employee.setId(1L);
-        employee.addDevice(device);
-        employee.addDevice(device2);
         var record = new Record();
         record.setId(1L);
         record.setEmployee(employee);

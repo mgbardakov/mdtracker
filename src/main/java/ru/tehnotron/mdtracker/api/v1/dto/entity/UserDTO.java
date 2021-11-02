@@ -11,7 +11,7 @@ import java.util.Set;
 @ToString
 
 public class UserDTO extends BaseDTO {
-    private String username;
+    private String login;
     private String password;
     private EmployeeDTO employee;
     private Set<AuthorityDTO> authorities;

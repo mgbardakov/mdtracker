@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import {Component, EventEmitter, Input, OnInit, Output} from '@angular/core';
 import {FormControl} from "@angular/forms";
 import {Device} from "../../../model/device";
 
@@ -9,6 +9,11 @@ import {Device} from "../../../model/device";
 })
 export class SelectorAddDeviceComponent implements OnInit {
 
+  @Input()
+  deviceList: Device[];
+  @Output()
+  deviceEvent = new EventEmitter<Device[]>();
+
   constructor() { }
 
   ngOnInit(): void {
@@ -16,8 +21,10 @@ export class SelectorAddDeviceComponent implements OnInit {
 
   devices = new FormControl();
 
-  deviceList: Device[] = [{id: 1, name: "Линейка", serialNumber: "123",
-    verificationExpire: new Date("12/09/2023"), taken: false},
-    {id: 2, name: "Шумомер", serialNumber: "321",
-      verificationExpire: new Date("12/11/2022"), taken: false}];
+  addNewDevice() {
+    if (this.devices.value !== null) {
+      this.deviceEvent.emit(this.devices.value)
+    }
+
+  }
 }

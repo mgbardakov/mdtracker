@@ -14,6 +14,7 @@ CREATE TABLE IF NOT EXISTS employee (
 CREATE TABLE IF NOT EXISTS device (
     id SERIAL PRIMARY KEY,
     name TEXT,
+    serial_number TEXT,
     verification_expire TIMESTAMP,
     taken BOOLEAN,
     visible BOOLEAN DEFAULT TRUE,

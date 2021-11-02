@@ -31,7 +31,7 @@ public class AuthServiceImpl implements AuthService {
 
     @Override
     public UserDTO authorize(UserDTO userDTO, HttpServletResponse resp) throws AuthenticationException {
-        String username = userDTO.getUsername().toLowerCase();
+        String username = userDTO.getLogin().toLowerCase();
         authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(username,
                 userDTO.getPassword()));
         var user = userRepository.findByUsername(username).orElse(null);

@@ -19,42 +19,26 @@ export class DeviceCrudComponent implements OnInit, AfterViewInit {
   @ViewChild(MatSort) sort: MatSort;
   @ViewChild(DeviceQrTableComponent) table: DeviceQrTableComponent
   form: FormGroup
+  devices: Device[];
+  displayedColumns: string[] = ['index', 'name', 'serialNumber', 'verificationExpire'];
+  dataSource;
+  printableDevices: Device[];
 
   ngAfterViewInit() {
     this.dataSource.paginator = this.paginator;
-    this.dataSource.sort = this.sort;
-  }
+    this.dataSource.sort = this.sort;}
 
-  devices: Device[] = [
-    {id: 1, name: 'Линейка', verificationExpire: new Date('08.18.2022'), taken: true, serialNumber: '321511'},
-    {id: 2, name: 'Шумомер', verificationExpire: new Date('08.19.2022'), taken: true, serialNumber: '126544'},
-    {id: 3, name: 'Метеомер', verificationExpire: new Date('08.19.2022'), taken: true, serialNumber: '315174'},
-    {id: 4, name: 'Метеомер', verificationExpire: new Date('08.19.2022'), taken: true, serialNumber: '315174'},
-    {id: 5, name: 'Метеомер', verificationExpire: new Date('08.19.2022'), taken: true, serialNumber: '315174'},
-    {id: 6, name: 'Метеомер', verificationExpire: new Date('08.19.2022'), taken: true, serialNumber: '315174'},
-    {id: 7, name: 'Метеомер', verificationExpire: new Date('08.19.2022'), taken: true, serialNumber: '315174'},
-    {id: 8, name: 'Метеомер', verificationExpire: new Date('08.19.2022'), taken: true, serialNumber: '315174'},
-    {id: 9, name: 'Метеомер', verificationExpire: new Date('08.19.2022'), taken: true, serialNumber: '315174'},
-    {id: 10, name: 'Метеомер', verificationExpire: new Date('08.19.2022'), taken: true, serialNumber: '315174'},
-    {id: 11, name: 'Метеомер', verificationExpire: new Date('08.19.2022'), taken: true, serialNumber: '315174'},
-    {id: 12, name: 'Метеомер', verificationExpire: new Date('08.19.2022'), taken: true, serialNumber: '315174'},
-    {id: 13, name: 'Метеомер', verificationExpire: new Date('08.19.2022'), taken: true, serialNumber: '315174'},
-    {id: 14, name: 'Метеомер', verificationExpire: new Date('08.19.2022'), taken: true, serialNumber: '315174'},
-    {id: 15, name: 'Метеомер', verificationExpire: new Date('08.19.2022'), taken: true, serialNumber: '315174'},
-    {id: 16, name: 'Метеомер', verificationExpire: new Date('08.19.2022'), taken: true, serialNumber: '315174'},
-    {id: 17, name: 'Метеомер', verificationExpire: new Date('08.19.2022'), taken: true, serialNumber: '315174'},
-    {id: 18, name: 'Метеомер', verificationExpire: new Date('08.19.2022'), taken: true, serialNumber: '315174'}
-  ];
-
-
-  displayedColumns: string[] = ['index', 'name', 'serialNumber', 'verificationExpire'];
-  dataSource = new MatTableDataSource<Device>(this.devices);
-  printableDevices: Device[];
 
   constructor(public dialog: MatDialog) { }
 
   ngOnInit(): void {
     this.form = new FormGroup({devicesToPrint: new FormControl()})
+    this.devices = [
+      {id: 1, name: 'Линейка', verificationExpire: new Date(2022, 8, 18), taken: true, serialNumber: '321511'},
+      {id: 2, name: 'Шумомер', verificationExpire: new Date(2022, 8, 19), taken: true, serialNumber: '126544'},
+      {id: 3, name: 'Метеомер', verificationExpire: new Date(2022, 8, 19), taken: true, serialNumber: '315174'}
+    ];
+    this.dataSource = new MatTableDataSource<Device>(this.devices)
   }
 
   openDialog(device: Device): void {

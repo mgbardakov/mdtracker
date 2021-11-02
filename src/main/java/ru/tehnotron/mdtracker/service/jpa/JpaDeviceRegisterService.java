@@ -53,7 +53,6 @@ public class JpaDeviceRegisterService implements DeviceRegisterService {
         if (savedEmployee == null || savedDevice == null) {
             return null;
         }
-        savedEmployee.addDevice(savedDevice);
         var record = new Record();
         record.setEmployee(savedEmployee);
         record.setDevice(savedDevice);
@@ -78,7 +77,6 @@ public class JpaDeviceRegisterService implements DeviceRegisterService {
         if (savedRecord != null) {
             savedRecord.setReturned(returnedDate);
             var employee = savedRecord.getEmployee();
-            employee.removeDevice(savedRecord.getDevice());
             employeeRepository.save(employee);
         }
     }
@@ -89,7 +87,6 @@ public class JpaDeviceRegisterService implements DeviceRegisterService {
         var savedEmployee = employeeRepository
                 .findById(employee.getId()).orElse(null);
         if(savedEmployee != null) {
-            savedEmployee.clearAllDevices();
             employeeRepository.save(savedEmployee);
         }
         var recordList = recordRepository.findAllByEmployee(savedEmployee);

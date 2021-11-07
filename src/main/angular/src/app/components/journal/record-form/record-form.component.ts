@@ -63,7 +63,7 @@ export class RecordFormComponent implements OnInit{
   createNewRecord(record: Record) {
     this.submitDisabled = true;
     this.recordService.createRecord(record).subscribe(record => {
-      this.dialogRef.close(record);
+      this.dialogRef.close({status: 'created', record: record});
     }, error => {
        this.errorHandler(error);
        this.submitDisabled = false;
@@ -92,7 +92,7 @@ export class RecordFormComponent implements OnInit{
 
 
   onNoClick(): void {
-    this.dialogRef.close();
+    this.dialogRef.close({status: 'canceled'});
   }
 
   submit() {

@@ -65,15 +65,25 @@ export class JournalComponent implements OnInit, AfterViewInit {
     console.log(record)
       return this.dialog.open(RecordFormComponent, {
       width: '1000px',
-      data: record
+      data: record,
+      disableClose: true
     });
   }
 
   createRecord() {
-    this.openDialog(null).afterClosed().subscribe(record => {
-      this.records.push(record)
-      this.dataSource.data = this.records;
-      this.table.renderRows();
+    this.openDialog(null).afterClosed().subscribe(data => {
+      switch (data.status) {
+        case 'created': {
+          this.records.push(data.record)
+          this.dataSource.data = this.records;
+          this.table.renderRows();
+          break;
+        }
+        case 'canceled': {
+          break;
+        }
+      }
+
     })
   }
 
@@ -88,6 +98,10 @@ export class JournalComponent implements OnInit, AfterViewInit {
         }
         case 'remove': {
           this.records.splice(index, 1)
+          break;
+        }
+        case 'canceled': {
+          break;
         }
       }
       this.dataSource.data = this.records

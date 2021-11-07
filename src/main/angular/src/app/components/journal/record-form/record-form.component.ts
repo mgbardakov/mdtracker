@@ -23,6 +23,9 @@ export class RecordFormComponent implements OnInit{
 
   form: FormGroup;
   deleteDisabled: boolean;
+  employees: Employee[];
+  devices: Device[];
+  submitDisabled: boolean;
 
   constructor(
     public dialogRef: MatDialogRef<RecordFormComponent>,
@@ -32,9 +35,7 @@ export class RecordFormComponent implements OnInit{
     private recordService: RecordService,
     private dialog: MatDialog) {}
 
-    employees: Employee[];
-    devices: Device[];
-    submitDisabled: boolean;
+
 
   ngOnInit(): void {
     this.form = new FormGroup({taken: new FormControl(this.data == null || this.data.taken == null? '' : RecordFormComponent.toDateString(this.data.taken),

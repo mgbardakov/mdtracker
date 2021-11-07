@@ -7,6 +7,7 @@ import lombok.ToString;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.Table;
+import javax.validation.constraints.NotNull;
 
 @Entity
 @Table(name = "position")
@@ -20,7 +21,9 @@ public class Position extends BaseEntity {
     }
 
     @Column(name = "name")
+    @NotNull
     private String name;
     @Column(name = "visible")
+    @NotNull
     private boolean visible;
 }

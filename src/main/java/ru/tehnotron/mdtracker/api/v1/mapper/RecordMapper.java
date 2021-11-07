@@ -17,13 +17,16 @@ public interface RecordMapper {
 
     RecordDTO recordToRecordDTO(Record record);
 
+    @Mapping(target = "employee", ignore = true)
+    @Mapping(target = "device", ignore = true)
     Record recordDTOToRecord(RecordDTO recordDTO);
 
     List<RecordDTO> recordListToRecordDTOList(List<Record> records);
 
     List<Record> recordDTOListToRecordList(List<RecordDTO> recordDTOs);
 
-    @BeanMapping(nullValuePropertyMappingStrategy = NullValuePropertyMappingStrategy.IGNORE)
+    @Mapping(target = "employee", ignore = true)
+    @Mapping(target = "device", ignore = true)
     void updateRecordFromDTO(RecordDTO recordDTO, @MappingTarget Record record);
 
     static long map(Date date) {

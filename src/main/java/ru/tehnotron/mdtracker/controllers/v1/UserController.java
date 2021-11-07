@@ -4,10 +4,13 @@ import org.springframework.http.HttpStatus;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.server.ResponseStatusException;
+import ru.tehnotron.mdtracker.api.v1.dto.entity.AuthorityDTO;
 import ru.tehnotron.mdtracker.api.v1.dto.entity.UserDTO;
 import ru.tehnotron.mdtracker.service.UserService;
 
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 @RestController
 @RequestMapping("api/v1/users/")
@@ -46,6 +49,11 @@ public class UserController {
     @GetMapping()
     public List<UserDTO> getAllUsers() {
         return service.getAll();
+    }
+
+    @GetMapping("authorities")
+    public Set<AuthorityDTO> getAllAuthorities() {
+        return service.getAllAuthorities();
     }
 
 }

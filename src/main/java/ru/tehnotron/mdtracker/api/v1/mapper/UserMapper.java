@@ -16,10 +16,13 @@ public interface UserMapper {
     @Mapping(target = "accountNonExpired", ignore = true)
     @Mapping(target = "accountNonLocked", ignore = true)
     @Mapping(target = "credentialsNonExpired", ignore = true)
+    @Mapping(target = "employee", ignore = true)
+    @Mapping(target = "password", ignore = true)
     @Mapping(target = "username", source = "login")
     User userDTOToUser(UserDTO userDTO);
     @BeanMapping(nullValuePropertyMappingStrategy = NullValuePropertyMappingStrategy.IGNORE)
     @Mapping(target = "username", source = "login")
+    @Mapping(target = "password", ignore = true)
     void updateUserFromDTO(UserDTO userDTO, @MappingTarget User user);
     @Mapping(target = "password", ignore = true)
     @Mapping(target = "login", source = "username")

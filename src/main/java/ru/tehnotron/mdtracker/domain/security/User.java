@@ -5,6 +5,8 @@ import ru.tehnotron.mdtracker.domain.BaseEntity;
 import ru.tehnotron.mdtracker.domain.Employee;
 
 import javax.persistence.*;
+import javax.validation.constraints.NotNull;
+import java.util.HashSet;
 import java.util.Set;
 
 @Setter
@@ -17,7 +19,9 @@ import java.util.Set;
 public class User extends BaseEntity {
 
     @Column(name = "user_name")
+    @NotNull
     private String username;
+    @NotNull
     private String password;
 
     @OneToOne(cascade = {CascadeType.PERSIST, CascadeType.MERGE})
@@ -25,11 +29,11 @@ public class User extends BaseEntity {
     private Employee employee;
 
     @Singular
-    @ManyToMany(cascade = CascadeType.MERGE)
+    @ManyToMany()
     @JoinTable(name = "user_authority",
             joinColumns = {@JoinColumn(name = "user_id", referencedColumnName = "id")},
             inverseJoinColumns = {@JoinColumn(name = "authority_id", referencedColumnName = "id")})
-    private Set<Authority> authorities;
+    private Set<Authority> authorities = new HashSet<>();
 
     @Builder.Default
     @Column(name = "account_non_expired")
@@ -45,5 +49,15 @@ public class User extends BaseEntity {
 
     @Builder.Default
     private Boolean enabled = true;
+
+    public void addAuthority(Authority authority) {
+        authorities.add(authority);
+        authority.addUser(this);
+    }
+
+    public void clearAuthorities() {
+        authorities.forEach(authority -> authority.removeUser(this));
+        authorities.clear();
+    }
 
 }

@@ -17,6 +17,8 @@ import ru.tehnotron.mdtracker.repository.RecordRepository;
 import ru.tehnotron.mdtracker.repository.specification.record.*;
 import ru.tehnotron.mdtracker.service.RecordService;
 
+import javax.persistence.EntityManager;
+import javax.persistence.PersistenceContext;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -40,6 +42,8 @@ public class JpaRecordService implements RecordService {
     @Override
     public RecordDTO create(RecordDTO recordDTO) {
         var record = recordMapper.recordDTOToRecord(recordDTO);
+        deviceRepository.findById(recordDTO.getDevice().getId()).ifPresent(record::setDevice);
+        employeeRepository.findById(recordDTO.getEmployee().getId()).ifPresent(record::setEmployee);
         return recordMapper.recordToRecordDTO(recordRepository.save(record));
     }
 
@@ -52,9 +56,10 @@ public class JpaRecordService implements RecordService {
     @Override
     public void update(RecordDTO recordDTO) {
         recordRepository.findById(recordDTO.getId()).ifPresent(record -> {
-            record.setDevice(deviceRepository.findById(recordDTO.getDevice().getId()).orElse(null));
-            record.setEmployee(employeeRepository.findById(recordDTO.getEmployee().getId()).orElse(null));
             recordMapper.updateRecordFromDTO(recordDTO, record);
+            deviceRepository.findById(recordDTO.getDevice().getId()).ifPresent(record::setDevice);
+            employeeRepository.findById(recordDTO.getEmployee().getId()).ifPresent(record::setEmployee);
+            recordRepository.save(record);
         });
    }
 

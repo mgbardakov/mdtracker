@@ -8,6 +8,7 @@ import ru.tehnotron.mdtracker.api.v1.dto.entity.EmployeeDTO;
 import ru.tehnotron.mdtracker.api.v1.mapper.EmployeeMapper;
 import ru.tehnotron.mdtracker.domain.Employee;
 import ru.tehnotron.mdtracker.repository.EmployeeRepository;
+import ru.tehnotron.mdtracker.repository.PositionRepository;
 import ru.tehnotron.mdtracker.service.EmployeeService;
 
 
@@ -23,13 +24,14 @@ class JpaEmployeeServiceTest {
 
     @Mock
     EmployeeRepository repo;
-
+    @Mock
+    PositionRepository positionRepository;
     EmployeeService service;
 
     @BeforeEach
     public void setUp() {
         MockitoAnnotations.openMocks(this);
-        service = new JpaEmployeeService(repo, EmployeeMapper.INSTANCE);
+        service = new JpaEmployeeService(repo, positionRepository, EmployeeMapper.INSTANCE);
     }
 
 

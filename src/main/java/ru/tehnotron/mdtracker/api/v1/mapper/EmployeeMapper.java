@@ -15,14 +15,14 @@ public interface EmployeeMapper {
     EmployeeMapper INSTANCE = Mappers.getMapper(EmployeeMapper.class);
 
     EmployeeDTO employeeToEmployeeDTO (Employee employee);
+    @Mapping(target = "position", ignore = true)
     Employee employeeDTOToEmployee (EmployeeDTO employeeDTO);
     List<EmployeeDTO> employeeListToEmployeeDTOList (List<Employee> employees);
     List<Employee> employeeDTOListToEmployeeList (List<EmployeeDTO> employeeDTOs);
     @Mapping(target = "visible", ignore = true)
+    @Mapping(target = "position", ignore = true)
     @BeanMapping(nullValuePropertyMappingStrategy = NullValuePropertyMappingStrategy.IGNORE)
     void updateEmployeeFromDTO(EmployeeDTO employeeDTO, @MappingTarget Employee employee);
-    @Mapping(target = "visible", ignore = true)
-    @BeanMapping(nullValuePropertyMappingStrategy = NullValuePropertyMappingStrategy.IGNORE)
-    void updateEmployeeFromDTO(PositionDTO positionDTO, @MappingTarget Position position);
+
 
 }

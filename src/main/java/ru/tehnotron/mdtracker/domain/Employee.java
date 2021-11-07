@@ -5,6 +5,7 @@ import lombok.Setter;
 import lombok.ToString;
 
 import javax.persistence.*;
+import javax.validation.constraints.NotNull;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -19,10 +20,13 @@ public class Employee extends BaseEntity {
     }
 
     @Column(name = "name")
+    @NotNull
     private String name;
     @ManyToOne
     @JoinColumn(name = "position_id")
+    @NotNull
     private Position position;
     @Column(name = "visible")
+    @NotNull
     private boolean visible;
 }

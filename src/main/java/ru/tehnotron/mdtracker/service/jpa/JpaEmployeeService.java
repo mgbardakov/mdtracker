@@ -6,6 +6,7 @@ import ru.tehnotron.mdtracker.api.v1.dto.entity.EmployeeDTO;
 import ru.tehnotron.mdtracker.api.v1.mapper.EmployeeMapper;
 import ru.tehnotron.mdtracker.domain.Employee;
 import ru.tehnotron.mdtracker.repository.EmployeeRepository;
+import ru.tehnotron.mdtracker.repository.PositionRepository;
 import ru.tehnotron.mdtracker.service.EmployeeService;
 
 import java.util.ArrayList;
@@ -15,16 +16,19 @@ import java.util.List;
 @Transactional
 public class JpaEmployeeService implements EmployeeService {
     private final EmployeeRepository employeeRepository;
+    private final PositionRepository positionRepository;
     private final EmployeeMapper mapper;
 
-    public JpaEmployeeService(EmployeeRepository employeeRepository, EmployeeMapper mapper) {
+    public JpaEmployeeService(EmployeeRepository employeeRepository, PositionRepository positionRepository, EmployeeMapper mapper) {
         this.employeeRepository = employeeRepository;
+        this.positionRepository = positionRepository;
         this.mapper = mapper;
     }
 
     @Override
     public EmployeeDTO create(EmployeeDTO employeeDTO) {
         var employee = mapper.employeeDTOToEmployee(employeeDTO);
+        positionRepository.findById(employeeDTO.getPosition().getId()).ifPresent(employee::setPosition);
         return mapper.employeeToEmployeeDTO(employeeRepository.save(employee));
     }
 
@@ -38,7 +42,11 @@ public class JpaEmployeeService implements EmployeeService {
     public void update(EmployeeDTO employeeDTO) {
         employeeRepository.findById(employeeDTO.getId())
                 .filter(Employee::isVisible)
-                .ifPresent(x -> mapper.updateEmployeeFromDTO(employeeDTO, x));
+                .ifPresent(employee -> {
+                    mapper.updateEmployeeFromDTO(employeeDTO, employee);
+                    positionRepository.findById(employeeDTO.getPosition().getId()).ifPresent(employee::setPosition);
+                    employeeRepository.save(employee);
+                });
     }
 
     @Override

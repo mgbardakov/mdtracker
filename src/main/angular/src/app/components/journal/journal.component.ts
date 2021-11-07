@@ -3,11 +3,13 @@ import {Record} from "../../model/record";
 import {Employee} from "../../model/employee";
 import {Device} from "../../model/device";
 import {MatPaginator} from "@angular/material/paginator";
-import {MatTableDataSource} from "@angular/material/table";
+import {MatTable, MatTableDataSource} from "@angular/material/table";
 import {MatSort} from "@angular/material/sort";
-import {MatDialog} from "@angular/material/dialog";
+import {MatDialog, MatDialogRef} from "@angular/material/dialog";
 import {RecordFormComponent} from "./record-form/record-form.component";
 import {FormControl, FormGroup} from "@angular/forms";
+import {AuthService} from "../../services/security/auth.service";
+import {RecordService} from "../../services/record.service";
 
 
 @Component({
@@ -18,6 +20,7 @@ import {FormControl, FormGroup} from "@angular/forms";
 
 export class JournalComponent implements OnInit, AfterViewInit {
 
+  @ViewChild(MatTable) table: MatTable<any>;
   @ViewChild(MatPaginator) paginator: MatPaginator;
   @ViewChild(MatSort) sort: MatSort;
 
@@ -27,6 +30,7 @@ export class JournalComponent implements OnInit, AfterViewInit {
       switch(property) {
         case 'deviceName': return record.device.name
         case 'serialNumber': return record.device.serialNumber;
+        case 'employee': return record.employee.name;
         default: return record[property];
       }
     };
@@ -41,59 +45,54 @@ export class JournalComponent implements OnInit, AfterViewInit {
   devices: Device[] = [{id:1, name:'Шумомер', verificationExpire:null, serialNumber: '123', taken:null},
     {id:2, name:'Линейка', verificationExpire:null, serialNumber: '123', taken:null}]
 
-  records: Record[] = [{id: 1, taken: new Date('01.10.2021'),
-    device: {id: 1, name: 'Шумомер', serialNumber: "123", taken: true, verificationExpire: new Date('02.10.2022')},
-    employee: {id: 1, name: "Петя", position: {id:1, name: "инженер"}}, returned: new Date('03.11.2019')},
-    {id: 1, taken: new Date('01.10.2021'),
-      device: {id: 1, name: 'Шумомер', serialNumber: "123", taken: true, verificationExpire: new Date('02.10.2022')},
-      employee: {id: 1, name: "Петя", position: {id:1, name: "инженер"}}, returned: null},
-    {id: 1, taken: new Date('01.10.2021'),
-      device: {id: 1, name: 'Шумомер', serialNumber: "123", taken: true, verificationExpire: new Date('02.10.2022')},
-      employee: {id: 1, name: "Петя", position: {id:1, name: "инженер"}}, returned: null},
-    {id: 1, taken: new Date('01.10.2021'),
-      device: {id: 1, name: 'Шумомер', serialNumber: "123", taken: true, verificationExpire: new Date('02.10.2022')},
-      employee: {id: 1, name: "Петя", position: {id:1, name: "инженер"}}, returned: null},
-    {id: 1, taken: new Date('01.10.2021'),
-      device: {id: 1, name: 'Шумомер', serialNumber: "123", taken: true, verificationExpire: new Date('02.10.2022')},
-      employee: {id: 1, name: "Петя", position: {id:1, name: "инженер"}}, returned: null},
-    {id: 1, taken: new Date('01.10.2021'),
-      device: {id: 1, name: 'Шумомер', serialNumber: "123", taken: true, verificationExpire: new Date('02.10.2022')},
-      employee: {id: 1, name: "Петя", position: {id:1, name: "инженер"}}, returned: null},
-    {id: 1, taken: new Date('01.10.2021'),
-      device: {id: 1, name: 'Шумомер', serialNumber: "123", taken: true, verificationExpire: new Date('02.10.2022')},
-      employee: {id: 1, name: "Петя", position: {id:1, name: "инженер"}}, returned: null},
-    {id: 1, taken: new Date('01.10.2021'),
-      device: {id: 1, name: 'Шумомер', serialNumber: "123", taken: true, verificationExpire: new Date('02.10.2022')},
-      employee: {id: 1, name: "Петя", position: {id:1, name: "инженер"}}, returned: null},
-    {id: 1, taken: new Date('01.10.2021'),
-      device: {id: 1, name: 'Шумомер', serialNumber: "123", taken: true, verificationExpire: new Date('02.10.2022')},
-      employee: {id: 1, name: "Петя", position: {id:1, name: "инженер"}}, returned: null},
-    {id: 1, taken: new Date('01.10.2021'),
-      device: {id: 1, name: 'Шумомер', serialNumber: "123", taken: true, verificationExpire: new Date('02.10.2022')},
-      employee: {id: 1, name: "Петя", position: {id:1, name: "инженер"}}, returned: null},
-    {id: 1, taken: new Date('01.10.2021'),
-      device: {id: 1, name: 'Шумомер', serialNumber: "123", taken: true, verificationExpire: new Date('02.10.2022')},
-      employee: {id: 1, name: "Петя", position: {id:1, name: "инженер"}}, returned: null},{id: 1, taken: new Date('01.10.2021'),
-      device: {id: 1, name: 'Шумомер', serialNumber: "123", taken: true, verificationExpire: new Date('02.10.2022')},
-      employee: {id: 1, name: "Петя", position: {id:1, name: "инженер"}}, returned: null},
-    {id: 1, taken: new Date('01.10.2021'),
-      device: {id: 1, name: 'Шумомер', serialNumber: "123", taken: true, verificationExpire: new Date('02.10.2022')},
-      employee: {id: 1, name: "Петя", position: {id:1, name: "инженер"}}, returned: null}
-  ];
+  records: Record[];
 
   displayedColumns: string[] = ['taken', 'employee', 'deviceName', 'serialNumber', 'returned'];
-  dataSource = new MatTableDataSource<Record>(this.records);
+  dataSource = new MatTableDataSource<Record>();
 
-  constructor(public dialog: MatDialog) { }
+  constructor(public dialog: MatDialog, public authService: AuthService, private recordService: RecordService) { }
 
   ngOnInit(): void {
     this.initForm()
+    this.recordService.getAllRecords().subscribe(records => {
+      this.records = records;
+      this.dataSource.data = records;
+      console.log(this.dataSource.data)
+    });
+
   }
-  openDialog(record: Record): void {
-      this.dialog.open(RecordFormComponent, {
+  openDialog(record: Record): MatDialogRef<RecordFormComponent> {
+    console.log(record)
+      return this.dialog.open(RecordFormComponent, {
       width: '1000px',
       data: record
     });
+  }
+
+  createRecord() {
+    this.openDialog(null).afterClosed().subscribe(record => {
+      this.records.push(record)
+      this.dataSource.data = this.records;
+      this.table.renderRows();
+    })
+  }
+
+  updateRecord(record: Record) {
+    console.log(record)
+    this.openDialog(record).afterClosed().subscribe(data => {
+      let index = this.records.findIndex(x => x.id === record.id)
+      switch (data.status) {
+        case 'update': {
+          this.records[index] = data.record;
+          break;
+        }
+        case 'remove': {
+          this.records.splice(index, 1)
+        }
+      }
+      this.dataSource.data = this.records
+      this.table.renderRows();
+    })
   }
 
 

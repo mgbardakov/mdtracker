@@ -1,4 +1,4 @@
-import { NgModule } from '@angular/core';
+import {InjectionToken, NgModule} from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
 
 import { AppComponent } from './app.component';
@@ -28,15 +28,27 @@ import { PositionFormComponent } from './settings/position-crud/position-form/po
 import { DeviceFormComponent } from './settings/device-crud/device-form/device-form.component';
 import {QRCodeModule} from "angular2-qrcode";
 import {ZXingScannerModule} from "@zxing/ngx-scanner";
-import {HttpClientModule} from "@angular/common/http";
+import {HTTP_INTERCEPTORS, HttpClientModule} from "@angular/common/http";
+import {CookieService} from "ngx-cookie-service";
+import {AuthGuardService} from "../services/security/auth-guard.service";
+import {RoleGuardService} from "../services/security/role-guard.service";
+import {A} from "@angular/cdk/keycodes";
+import {JWT_OPTIONS, JwtHelperService, JwtModule} from "@auth0/angular-jwt";
+import {RecordService} from "../services/record.service";
+import {TokenInterceptor} from "../services/security/interceptors/token.interceptor";
+import {EmployeeService} from "../services/employee.service";
+import {DeviceService} from "../services/device.service";
+import { ErrorComponent } from './error/error.component';
 
 const appRoutes: Routes = [
-  {path: 'home', component: HomeComponent},
+  {path: 'home', component: HomeComponent, canActivate: [AuthGuardService]},
   {path: 'login', component: LoginComponent},
-  {path: 'register-devices', component: RegisterDeviceComponent},
-  {path: 'journal', component: JournalComponent},
-  {path: 'overview', component: OverviewComponent},
-  {path: 'settings', component: SettingsComponent}
+  {path: 'register-devices', component: RegisterDeviceComponent, canActivate: [AuthGuardService]},
+  {path: 'journal', component: JournalComponent, canActivate: [AuthGuardService]},
+  {path: 'overview', component: OverviewComponent, canActivate: [RoleGuardService],
+    data: {expectedRole: 'ROLE_ADMIN'}},
+  {path: 'settings', component: SettingsComponent, canActivate: [RoleGuardService],
+    data: {expectedRole: 'ROLE_ADMIN'}}
 ]
 
 @NgModule({
@@ -59,7 +71,8 @@ const appRoutes: Routes = [
     UserAddFormComponent,
     UserEditFormComponent,
     PositionFormComponent,
-    DeviceFormComponent
+    DeviceFormComponent,
+    ErrorComponent
   ],
   imports: [
     BrowserModule,
@@ -71,9 +84,18 @@ const appRoutes: Routes = [
     FlexModule,
     QRCodeModule,
     ZXingScannerModule,
-    HttpClientModule
+    HttpClientModule,
+    JwtModule
   ],
-  providers: [],
-  bootstrap: [AppComponent]
+  providers: [CookieService,
+    AuthGuardService,
+    RoleGuardService,
+    JwtHelperService,
+    RecordService,
+    EmployeeService,
+    DeviceService,
+    { provide: JWT_OPTIONS, useValue: JWT_OPTIONS },
+    {provide: HTTP_INTERCEPTORS, useClass: TokenInterceptor, multi: true}],
+      bootstrap: [AppComponent]
 })
 export class AppModule { }

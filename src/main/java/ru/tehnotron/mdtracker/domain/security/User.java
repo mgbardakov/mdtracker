@@ -13,6 +13,7 @@ import java.util.Set;
 @NoArgsConstructor
 @Builder
 @Entity
+@Table(name = "users")
 public class User extends BaseEntity {
 
     @Column(name = "user_name")
@@ -20,6 +21,7 @@ public class User extends BaseEntity {
     private String password;
 
     @OneToOne(cascade = {CascadeType.PERSIST, CascadeType.MERGE})
+    @JoinColumn(name = "employee_id")
     private Employee employee;
 
     @Singular

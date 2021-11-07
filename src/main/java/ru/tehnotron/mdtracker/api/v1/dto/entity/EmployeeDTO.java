@@ -11,5 +11,4 @@ import java.util.List;
 public class EmployeeDTO extends BaseDTO {
     private String name;
     private PositionDTO position;
-    private List<DeviceDTO> devices;
 }

@@ -7,6 +7,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.server.ResponseStatusException;
+import ru.tehnotron.mdtracker.api.v1.dto.entity.EmployeeDTO;
 import ru.tehnotron.mdtracker.api.v1.dto.entity.UserDTO;
 
 import ru.tehnotron.mdtracker.service.AuthService;
@@ -20,20 +21,18 @@ import javax.servlet.http.HttpServletResponse;
 public class AuthController {
 
     private final AuthService authService;
-    private final UserService userService;
 
-    public AuthController(AuthService authService, UserService userService) {
+
+    public AuthController(AuthService authService) {
         this.authService = authService;
-        this.userService = userService;
     }
 
     @PostMapping(value = "login", consumes = {"application/json"})
-    public UserDTO login(@RequestBody UserDTO userDTO, HttpServletResponse resp) {
+    public EmployeeDTO login(@RequestBody UserDTO userDTO, HttpServletResponse resp) {
         try {
-            return authService.authorize(userDTO, resp);
+            return authService.authorize(userDTO, resp).getEmployee();
         } catch (AuthenticationException e) {
-            resp.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND, "No such user");
         }
-        return null;
     }
 }

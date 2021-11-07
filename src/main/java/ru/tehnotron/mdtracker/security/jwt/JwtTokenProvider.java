@@ -65,9 +65,9 @@ public class JwtTokenProvider {
     }
 
     public String resolveToken(HttpServletRequest req) {
-        Cookie jwtCookie = WebUtils.getCookie(req, "JWT");
-        if (jwtCookie != null) {
-            return jwtCookie.getValue();
+        var header = req.getHeader("Authorization");
+        if (header != null) {
+            return header.split(" ")[1];
         }
         return null;
     }
@@ -86,4 +86,5 @@ public class JwtTokenProvider {
         userRoles.forEach(role -> result.add(role.getRole()));
         return result;
     }
+
 }

@@ -11,6 +11,7 @@ import java.util.Date;
 @ToString
 public class DeviceDTO extends BaseDTO {
     private String name;
-    private Date verificationExpire;
+    private long verificationExpire;
     private boolean taken;
+    private String serialNumber;
 }

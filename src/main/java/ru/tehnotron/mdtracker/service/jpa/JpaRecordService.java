@@ -11,6 +11,8 @@ import ru.tehnotron.mdtracker.api.v1.mapper.RecordMapper;
 import ru.tehnotron.mdtracker.domain.Device;
 import ru.tehnotron.mdtracker.domain.Employee;
 import ru.tehnotron.mdtracker.domain.Record;
+import ru.tehnotron.mdtracker.repository.DeviceRepository;
+import ru.tehnotron.mdtracker.repository.EmployeeRepository;
 import ru.tehnotron.mdtracker.repository.RecordRepository;
 import ru.tehnotron.mdtracker.repository.specification.record.*;
 import ru.tehnotron.mdtracker.service.RecordService;
@@ -23,52 +25,56 @@ import java.util.List;
 @Transactional
 public class JpaRecordService implements RecordService {
 
-    private final RecordRepository repository;
+    private final RecordRepository recordRepository;
     private final RecordMapper recordMapper;
+    private final EmployeeRepository employeeRepository;
+    private final DeviceRepository deviceRepository;
 
-
-    public JpaRecordService(RecordRepository repository,
-                            RecordMapper recordMapper) {
-        this.repository = repository;
+    public JpaRecordService(RecordRepository recordRepository, RecordMapper recordMapper, EmployeeRepository employeeRepository, DeviceRepository deviceRepository) {
+        this.recordRepository = recordRepository;
         this.recordMapper = recordMapper;
-
+        this.employeeRepository = employeeRepository;
+        this.deviceRepository = deviceRepository;
     }
 
     @Override
     public RecordDTO create(RecordDTO recordDTO) {
         var record = recordMapper.recordDTOToRecord(recordDTO);
-        return recordMapper.recordToRecordDTO(repository.save(record));
+        return recordMapper.recordToRecordDTO(recordRepository.save(record));
     }
 
     @Override
     public RecordDTO read(RecordDTO recordDTO) {
-        return recordMapper.recordToRecordDTO(repository
+        return recordMapper.recordToRecordDTO(recordRepository
                 .findById(recordDTO.getId()).orElse(null));
     }
 
     @Override
     public void update(RecordDTO recordDTO) {
-        repository.findById(recordDTO.getId())
-                .ifPresent(x -> recordMapper.updateRecordFromDTO(recordDTO, x));
-    }
+        recordRepository.findById(recordDTO.getId()).ifPresent(record -> {
+            record.setDevice(deviceRepository.findById(recordDTO.getDevice().getId()).orElse(null));
+            record.setEmployee(employeeRepository.findById(recordDTO.getEmployee().getId()).orElse(null));
+            recordMapper.updateRecordFromDTO(recordDTO, record);
+        });
+   }
 
     @Override
     public void delete(RecordDTO recordDTO) {
         var record = recordMapper.recordDTOToRecord(recordDTO);
-        repository.delete(record);
+        recordRepository.delete(record);
     }
 
     @Override
     public List<RecordDTO> findAll() {
         var records = new ArrayList<Record>();
-        repository.findAll().forEach(records::add);
+        recordRepository.findAll().forEach(records::add);
         return recordMapper.recordListToRecordDTOList(records);
     }
 
     @Override
     public List<RecordDTO> findRecordsByRequest(RecordRequestDTO req) {
         var specification = getSpecificationFromRequest(req);
-        return recordMapper.recordListToRecordDTOList(repository.findAll(specification));
+        return recordMapper.recordListToRecordDTOList(recordRepository.findAll(specification));
     }
 
     private Specification<Record> getSpecificationFromRequest(RecordRequestDTO req) {

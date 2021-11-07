@@ -5,6 +5,7 @@ import org.springframework.transaction.annotation.Transactional;
 import ru.tehnotron.mdtracker.api.v1.dto.entity.DeviceDTO;
 import ru.tehnotron.mdtracker.api.v1.dto.entity.EmployeeDTO;
 import ru.tehnotron.mdtracker.api.v1.dto.entity.RecordDTO;
+import ru.tehnotron.mdtracker.api.v1.dto.entity.UserDTO;
 import ru.tehnotron.mdtracker.api.v1.mapper.DeviceMapper;
 import ru.tehnotron.mdtracker.api.v1.mapper.EmployeeMapper;
 import ru.tehnotron.mdtracker.api.v1.mapper.RecordMapper;
@@ -17,6 +18,7 @@ import ru.tehnotron.mdtracker.service.DeviceRegisterService;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
+import java.util.Set;
 
 @Service
 @Transactional
@@ -61,11 +63,11 @@ public class JpaDeviceRegisterService implements DeviceRegisterService {
     }
 
     @Override
-    public List<RecordDTO> registerDevices(EmployeeDTO employeeDTO, Date takenDate) {
+    public List<RecordDTO> registerDevices(UserDTO userDTO, Set<DeviceDTO> devices, Date takenDate) {
         var recordList = new ArrayList<Record>();
-        employeeDTO.getDevices().forEach(x -> {
+        devices.forEach(x -> {
             recordList.add(recordMapper.recordDTOToRecord(registerDevice(
-                    employeeDTO, x, takenDate)));
+                    userDTO.getEmployee(), x, takenDate)));
         });
         return recordMapper.recordListToRecordDTOList(recordList);
     }

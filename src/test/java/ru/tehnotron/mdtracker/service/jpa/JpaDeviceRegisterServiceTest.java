@@ -7,6 +7,7 @@ import org.mockito.MockitoAnnotations;
 import ru.tehnotron.mdtracker.api.v1.dto.entity.DeviceDTO;
 import ru.tehnotron.mdtracker.api.v1.dto.entity.EmployeeDTO;
 import ru.tehnotron.mdtracker.api.v1.dto.entity.RecordDTO;
+import ru.tehnotron.mdtracker.api.v1.dto.entity.UserDTO;
 import ru.tehnotron.mdtracker.api.v1.mapper.DeviceMapper;
 import ru.tehnotron.mdtracker.api.v1.mapper.EmployeeMapper;
 import ru.tehnotron.mdtracker.api.v1.mapper.RecordMapper;
@@ -20,6 +21,7 @@ import ru.tehnotron.mdtracker.service.DeviceRegisterService;
 
 import java.util.List;
 import java.util.Optional;
+import java.util.Set;
 
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.*;
@@ -44,12 +46,14 @@ class JpaDeviceRegisterServiceTest {
 
     @Test
     public void whenRegisterDevices() {
+        var userDTO  = new UserDTO();
+        userDTO.setId(1L);
         var employeeDTO = new EmployeeDTO();
         employeeDTO.setId(1L);
         var deviceDTO = new DeviceDTO();
         deviceDTO.setId(1L);
-        var deviceDTOs = List.of(deviceDTO);
-        employeeDTO.setDevices(deviceDTOs);
+        var deviceDTOs = Set.of(deviceDTO);
+        userDTO.setEmployee(employeeDTO);
         var employee = new Employee();
         employee.setId(1L);
         var device = new Device();
@@ -59,7 +63,7 @@ class JpaDeviceRegisterServiceTest {
         when(employeeRepository.findById(any())).thenReturn(Optional.of(employee));
         when(deviceRepository.findById(any())).thenReturn(Optional.of(device));
 
-        service.registerDevices(employeeDTO, any());
+        service.registerDevices(userDTO, deviceDTOs, any());
 
         verify(employeeRepository, times(1)).findById(any());
         verify(deviceRepository, times(1)).findById(any());

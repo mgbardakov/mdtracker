@@ -33,8 +33,7 @@ public class JpaDeviceService implements DeviceService {
         if (dev != null) {
             expired = (dev.getVerificationExpire().getTime() - System.currentTimeMillis()) < 0;
             if(dev.isTaken()) {
-                throw new TakenException(String.format("Прибор уже используется!" +
-                        " Текущий пользователь: %s", dev.getEmployee().getName()));
+                throw new TakenException("Прибор уже используется!");
             }
         }
         if(expired) {

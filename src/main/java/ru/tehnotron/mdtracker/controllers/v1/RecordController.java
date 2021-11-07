@@ -19,7 +19,7 @@ public class RecordController {
     }
 
     @PreAuthorize("hasRole('ADMIN')")
-    @PostMapping("create")
+    @PostMapping(value = "create", consumes = {"application/json"})
     public RecordDTO createRecord(@RequestBody RecordDTO recordDTO) {
         return service.create(recordDTO);
     }

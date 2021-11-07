@@ -1,10 +1,12 @@
 package ru.tehnotron.mdtracker.service;
 
+import org.springframework.http.HttpStatus;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.AuthenticationException;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.web.server.ResponseStatusException;
 import ru.tehnotron.mdtracker.api.v1.dto.entity.UserDTO;
 import ru.tehnotron.mdtracker.api.v1.mapper.UserMapper;
 import ru.tehnotron.mdtracker.repository.security.UserRepository;
@@ -35,15 +37,11 @@ public class AuthServiceImpl implements AuthService {
         authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(username,
                 userDTO.getPassword()));
         var user = userRepository.findByUsername(username).orElse(null);
-        if (user != null) {
-            var token = jwtTokenProvider.createToken(user.getUsername(), user.getAuthorities());
-            var cookie = new Cookie("JWT", token);
-            //cookie.setHttpOnly(true);
-            //cookie.setSecure(true);
-            resp.addCookie(cookie);
-            return userMapper.userToUserDTO(user);
+        if (user == null) {
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Пользователь не найден");
         }
-        return null;
-
+        var token = jwtTokenProvider.createToken(user.getUsername(), user.getAuthorities());
+        resp.addHeader("Authorization", "Bearer: " + token);
+        return userMapper.userToUserDTO(user);
     }
 }

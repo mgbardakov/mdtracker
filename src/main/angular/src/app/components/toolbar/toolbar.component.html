@@ -3,8 +3,8 @@
   <mat-menu #appMenu = "matMenu">
     <button mat-menu-item routerLink="home"><a>Главная</a></button>
     <button mat-menu-item routerLink="journal">Журнал</button>
-    <button mat-menu-item routerLink="overview">Обзор</button>
-    <button mat-menu-item routerLink="settings">Настройки</button>
+    <button mat-menu-item routerLink="overview" *ngIf="authService.isAdmin()">Обзор</button>
+    <button mat-menu-item routerLink="settings" *ngIf="authService.isAdmin()">Настройки</button>
   </mat-menu>
   <button mat-mini-fab [mat-menu-trigger-for]="appMenu" color="white">
     <mat-icon>menu</mat-icon>
@@ -13,7 +13,7 @@
   <span>MDTracker</span>
   <span class="example-spacer"></span>
   <span style="padding-right: 1rem; margin-left: 1rem">{{userName}}</span>
-  <button mat-flat-button>
+  <button mat-flat-button (click)="authService.logout()">
     Выйти
   </button>
 

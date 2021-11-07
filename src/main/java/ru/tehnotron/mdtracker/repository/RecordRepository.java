@@ -18,4 +18,5 @@ public interface RecordRepository extends CrudRepository<Record, Long>,
     List<Record> findRecordsBetweenDates(Date startDate, Date endDate);
     List<Record> findAllByDevice(Device device);
     List<Record> findAllByEmployee(Employee employee);
+    List<Record> findAllByEmployeeAndReturned(Employee employee, Date returned);
 }

@@ -28,8 +28,4 @@ public class Device extends BaseEntity {
     private boolean taken;
     @Column(name = "visible")
     private boolean visible;
-    @ManyToOne
-    @JoinColumn(name = "employee_id")
-    @ToString.Exclude
-    private Employee employee;
 }

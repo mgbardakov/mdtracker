@@ -39,7 +39,7 @@ class JpaDeviceServiceTest {
         var expireDate = new Date(System.currentTimeMillis() + 1000000);
         var deviceDTO = new DeviceDTO();
         deviceDTO.setTaken(false);
-        deviceDTO.setVerificationExpire(expireDate);
+        deviceDTO.setVerificationExpire(expireDate.getTime());
         var device = new Device();
         device.setTaken(false);
         device.setVerificationExpire(expireDate);
@@ -55,12 +55,11 @@ class JpaDeviceServiceTest {
        var expireDate = new Date(System.currentTimeMillis() + 1000000);
        var deviceDTO = new DeviceDTO();
        deviceDTO.setTaken(true);
-       deviceDTO.setVerificationExpire(expireDate);
+       deviceDTO.setVerificationExpire(expireDate.getTime());
        deviceDTO.setName("Vasya");
        var device = new Device();
        device.setTaken(true);
        device.setVerificationExpire(expireDate);
-       device.setEmployee(employee);
        when(repo.findById(any())).thenReturn(Optional.of(device));
        Assertions.assertThrows(TakenException.class,() -> service.validateDevice(deviceDTO));
    }
@@ -72,12 +71,11 @@ class JpaDeviceServiceTest {
        var expireDate = new Date(System.currentTimeMillis() - 1000000);
        var deviceDTO = new DeviceDTO();
        deviceDTO.setTaken(false);
-       deviceDTO.setVerificationExpire(expireDate);
+       deviceDTO.setVerificationExpire(expireDate.getTime());
        deviceDTO.setName("Vasya");
        var device = new Device();
        device.setTaken(false);
        device.setVerificationExpire(expireDate);
-       device.setEmployee(employee);
        when(repo.findById(any())).thenReturn(Optional.of(device));
        Assertions.assertThrows(VerificationException.class,() -> service.validateDevice(deviceDTO));
    }

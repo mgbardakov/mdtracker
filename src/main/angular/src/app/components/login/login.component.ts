@@ -1,17 +1,18 @@
-import { Component, OnInit } from '@angular/core';
+import {Component, OnDestroy, OnInit} from '@angular/core';
 import {FormControl, FormGroup} from "@angular/forms";
-import {AuthService} from "../../services/auth.service";
+import {AuthService} from "../../services/security/auth.service";
 import {User} from "../../model/user";
+import {Router} from "@angular/router";
 
 @Component({
   selector: 'app-login',
   templateUrl: './login.component.html',
   styleUrls: ['./login.component.css']
 })
-export class LoginComponent implements OnInit {
+export class LoginComponent implements OnInit, OnDestroy {
 
   form: FormGroup;
-  errorMessage = ""
+  errorMessage: String = ""
 
   constructor(private authService: AuthService) { }
 
@@ -19,6 +20,9 @@ export class LoginComponent implements OnInit {
   ngOnInit(): void {
     this.form = new FormGroup({login: new FormControl(),
     password: new FormControl()});
+    this.authService.errorStream.subscribe(errMsg => {
+      this.errorMessage = errMsg;
+    })
   }
 
   login() {
@@ -30,5 +34,9 @@ export class LoginComponent implements OnInit {
       employee: null, password: this.form.controls.password.value,
       authorities: null
     }
+  }
+
+  ngOnDestroy(): void {
+    //this.authService.errorStream.unsubscribe();
   }
 }

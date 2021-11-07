@@ -8,8 +8,8 @@ import lombok.ToString;
 @Getter
 @ToString
 public class RecordDTO extends BaseDTO {
-    private String taken;
-    private String returned;
+    private long taken;
+    private long returned;
     private DeviceDTO device;
     private EmployeeDTO employee;
 }

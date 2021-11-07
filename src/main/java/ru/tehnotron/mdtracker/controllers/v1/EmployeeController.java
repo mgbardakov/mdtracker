@@ -9,7 +9,6 @@ import java.util.List;
 
 @RestController
 @RequestMapping("api/v1/employees/")
-@PreAuthorize("hasRole('ADMIN')")
 public class EmployeeController {
 
     private final EmployeeService service;
@@ -19,11 +18,13 @@ public class EmployeeController {
     }
 
     @PostMapping("create")
+    @PreAuthorize("hasRole('ADMIN')")
     public EmployeeDTO createEmployee(@RequestBody EmployeeDTO employeeDTO) {
         return service.create(employeeDTO);
     }
 
     @GetMapping("{id}")
+    @PreAuthorize("hasAnyRole('ADMIN', 'USER')")
     public EmployeeDTO getEmployee(@PathVariable long id) {
         var employeeDTO = new EmployeeDTO();
         employeeDTO.setId(id);
@@ -31,16 +32,19 @@ public class EmployeeController {
     }
 
     @PutMapping("update")
+    @PreAuthorize("hasRole('ADMIN')")
     public void updateEmployee(@RequestBody EmployeeDTO employeeDTO) {
         service.update(employeeDTO);
     }
 
     @PostMapping("delete")
+    @PreAuthorize("hasRole('ADMIN')")
     public void deleteEmployee(@RequestBody EmployeeDTO employeeDTO) {
         service.delete(employeeDTO);
     }
 
     @GetMapping()
+    @PreAuthorize("hasAnyRole('ADMIN', 'USER')")
     public List<EmployeeDTO> getAllEmployees() {
         return service.findAll();
     }

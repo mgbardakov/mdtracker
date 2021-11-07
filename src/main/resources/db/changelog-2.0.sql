@@ -22,5 +22,5 @@ VALUES ('2021-01-09 12:00:00', '2021-01-09 17:00:00', 1, 1),
 
 INSERT INTO authority (role) VALUES ('ROLE_USER'), ('ROLE_ADMIN');
 INSERT INTO users (user_name, password, employee_id) VALUES ('admin', '$2a$10$uPEwJrOjZUOy2ItDwoSQ4u8LqUfBNU/pCZHXQtjl0ayOOdWavZPLu', 1),
-                                                            ('user', '$2a$10$hcZjVAVgdIowoLPVlZ0fteMXYwqsFjSXO2Jgqh6Sew4EmjzYqhxbS', 2);
+('user', '$2a$10$hcZjVAVgdIowoLPVlZ0fteMXYwqsFjSXO2Jgqh6Sew4EmjzYqhxbS', 2);
 INSERT INTO user_authority (user_id, authority_id) VALUES (1, 2), (2, 1);

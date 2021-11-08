@@ -1,7 +1,9 @@
 package ru.tehnotron.mdtracker.service.jpa;
 
+import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.web.server.ResponseStatusException;
 import ru.tehnotron.mdtracker.api.v1.dto.entity.DeviceDTO;
 import ru.tehnotron.mdtracker.api.v1.dto.entity.EmployeeDTO;
 import ru.tehnotron.mdtracker.api.v1.dto.entity.RecordDTO;
@@ -46,24 +48,27 @@ public class JpaDeviceRegisterService implements DeviceRegisterService {
     }
 
     private RecordDTO registerDevice(EmployeeDTO employeeDTO, DeviceDTO deviceDTO, Date takenDate) {
-        var employee = employeeMapper.employeeDTOToEmployee(employeeDTO);
-        var device = deviceMapper.deviceDTOToDevice(deviceDTO);
-        var savedEmployee = employeeRepository
-                .findById(employee.getId()).orElse(null);
-        var savedDevice = deviceRepository
-                .findById(device.getId()).orElse(null);
-        if (savedEmployee == null || savedDevice == null) {
+        var record = new Record();
+        employeeRepository.findById(employeeDTO.getId()).ifPresent(record::setEmployee);
+        deviceRepository.findById(deviceDTO.getId()).ifPresent(device -> {
+            device.setTaken(true);
+            record.setDevice(device);
+        });
+        record.setTaken(takenDate);
+        if (record.getDevice() == null || record.getEmployee() == null || takenDate == null) {
             return null;
         }
-        var record = new Record();
-        record.setEmployee(savedEmployee);
-        record.setDevice(savedDevice);
-        record.setTaken(takenDate);
         return recordMapper.recordToRecordDTO(recordRepository.save(record));
     }
 
     @Override
     public List<RecordDTO> registerDevices(UserDTO userDTO, Set<DeviceDTO> devices, Date takenDate) {
+        devices.forEach(device -> {
+            if (device.isTaken() ||
+               (device.getVerificationExpire() - System.currentTimeMillis()) < 0) {
+               throw new ResponseStatusException(HttpStatus.UNPROCESSABLE_ENTITY);
+            }
+        });
         var recordList = new ArrayList<Record>();
         devices.forEach(x -> {
             recordList.add(recordMapper.recordDTOToRecord(registerDevice(
@@ -74,13 +79,10 @@ public class JpaDeviceRegisterService implements DeviceRegisterService {
 
     @Override
     public void closeRecord(RecordDTO recordDTO, Date returnedDate) {
-        var record = recordMapper.recordDTOToRecord(recordDTO);
-        var savedRecord = recordRepository.findById(record.getId()).orElse(null);
-        if (savedRecord != null) {
-            savedRecord.setReturned(returnedDate);
-            var employee = savedRecord.getEmployee();
-            employeeRepository.save(employee);
-        }
+        recordRepository.findById(recordDTO.getId()).ifPresent(record -> {
+            record.setReturned(returnedDate);
+            record.getDevice().setTaken(false);
+        });
     }
 
     @Override
@@ -88,13 +90,10 @@ public class JpaDeviceRegisterService implements DeviceRegisterService {
         var employee = employeeMapper.employeeDTOToEmployee(employeeDTO);
         var savedEmployee = employeeRepository
                 .findById(employee.getId()).orElse(null);
-        if(savedEmployee != null) {
-            employeeRepository.save(savedEmployee);
-        }
-        var recordList = recordRepository.findAllByEmployee(savedEmployee);
+        var recordList = recordRepository.findAllByEmployeeAndReturned(savedEmployee, null);
         recordList.forEach(record -> {
             record.setReturned(returnedDate);
-            recordRepository.save(record);
+            record.getDevice().setTaken(false);
         });
     }
 }

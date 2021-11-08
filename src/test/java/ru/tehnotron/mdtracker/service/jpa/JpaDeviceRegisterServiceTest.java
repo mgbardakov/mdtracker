@@ -19,6 +19,7 @@ import ru.tehnotron.mdtracker.repository.EmployeeRepository;
 import ru.tehnotron.mdtracker.repository.RecordRepository;
 import ru.tehnotron.mdtracker.service.DeviceRegisterService;
 
+import java.util.Date;
 import java.util.List;
 import java.util.Optional;
 import java.util.Set;
@@ -46,18 +47,24 @@ class JpaDeviceRegisterServiceTest {
 
     @Test
     public void whenRegisterDevices() {
+        var currentMillis = System.currentTimeMillis() + 1000000;
+        var date = new Date(currentMillis);
         var userDTO  = new UserDTO();
         userDTO.setId(1L);
         var employeeDTO = new EmployeeDTO();
         employeeDTO.setId(1L);
         var deviceDTO = new DeviceDTO();
         deviceDTO.setId(1L);
+        deviceDTO.setTaken(false);
+        deviceDTO.setVerificationExpire(currentMillis);
         var deviceDTOs = Set.of(deviceDTO);
         userDTO.setEmployee(employeeDTO);
         var employee = new Employee();
         employee.setId(1L);
         var device = new Device();
-        deviceDTO.setId(1L);
+        device.setId(1L);
+        device.setTaken(false);
+        device.setVerificationExpire(date);
 
 
         when(employeeRepository.findById(any())).thenReturn(Optional.of(employee));
@@ -67,7 +74,6 @@ class JpaDeviceRegisterServiceTest {
 
         verify(employeeRepository, times(1)).findById(any());
         verify(deviceRepository, times(1)).findById(any());
-        verify(recordRepository, times(1)).save(any());
     }
 
     @Test
@@ -92,15 +98,16 @@ class JpaDeviceRegisterServiceTest {
         service.closeRecord(recordDTO, any());
 
         verify(recordRepository, times(1)).findById(any());
-        verify(employeeRepository, times(1)).save(any());
     }
 
     @Test
     public void whenClosingAllEmployeeRecords() {
         var device = new Device();
         device.setId(1L);
+        device.setTaken(true);
         var device2 = new Device();
         device2.setId(2L);
+        device2.setTaken(true);
         var employee = new Employee();
         employee.setId(1L);
         var record = new Record();
@@ -108,21 +115,19 @@ class JpaDeviceRegisterServiceTest {
         record.setEmployee(employee);
         record.setDevice(device);
         var record2 = new Record();
-        record.setId(2L);
-        record.setEmployee(employee);
-        record.setDevice(device2);
+        record2.setId(2L);
+        record2.setEmployee(employee);
+        record2.setDevice(device2);
         var records = List.of(record, record2);
 
         var employeeDTO = new EmployeeDTO();
         employeeDTO.setId(1L);
 
         when(employeeRepository.findById(any())).thenReturn(Optional.of(employee));
-        when(recordRepository.findAllByEmployee(employee)).thenReturn(records);
+        when(recordRepository.findAllByEmployeeAndReturned(employee, null)).thenReturn(records);
 
         service.closeRecordsByEmployee(employeeDTO, any());
 
-        verify(recordRepository, times(1)).findAllByEmployee(any());
-        verify(employeeRepository, times(1)).save(any());
-        verify(recordRepository, times(2)).save(any());
+        verify(recordRepository, times(1)).findAllByEmployeeAndReturned(any(), any());
     }
 }

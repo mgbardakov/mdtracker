@@ -1,6 +1,8 @@
-import { Component, OnInit } from '@angular/core';
-import {Device} from "../../model/device";
+import {Component, OnInit, ViewChild} from '@angular/core';
 import {Router} from "@angular/router";
+import {MatTable, MatTableDataSource} from "@angular/material/table";
+import {RegisterDeviceService} from "../../services/register-device.service";
+import {Record} from "../../model/record";
 
 @Component({
   selector: 'app-home',
@@ -9,20 +11,36 @@ import {Router} from "@angular/router";
 })
 export class HomeComponent implements OnInit {
 
-  router: Router;
-
-  devices: Device[] = [
-    {id: 1, name: 'Линейка', verificationExpire: new Date('18.08.2022'), taken: true, serialNumber: '321511'},
-    {id: 2, name: 'Шумомер', verificationExpire: new Date('19.08.2022'), taken: true, serialNumber: '126544'},
-    {id: 3, name: 'Метеомер', verificationExpire: new Date('19.08.2022'), taken: true, serialNumber: '315174'}
-  ];
-  displayedColumns: string[] = ['id', 'name', 'serialNumber'];
-  dataSource = this.devices;
-  constructor(router: Router) {
-    this.router = router;
+  @ViewChild(MatTable) table: MatTable<any>
+  records: Record[];
+  displayedColumns: string[] = ['id', 'name', 'serialNumber', 'deleteAction'];
+  dataSource = new MatTableDataSource();
+  constructor(private router: Router,
+              private registerDeviceService: RegisterDeviceService) {
   }
 
   ngOnInit(): void {
+    this.registerDeviceService.getAllActiveRecords().subscribe(records => {
+      this.records = records;
+      this.dataSource.data = this.records;
+    })
+  }
+
+  closeRecord(record: Record) {
+    this.registerDeviceService.closeRecord(record).subscribe(() => {
+      let index = this.records.indexOf(record)
+      this.records.splice(index, 1)
+      this.dataSource.data = this.records;
+      this.table.renderRows();
+    })
+  }
+
+  closeAllRecords() {
+    this.registerDeviceService.closeAllRecords().subscribe(() => {
+      this.records = [];
+      this.dataSource.data = this.records;
+      this.table.renderRows()
+    })
   }
 
   goToDevicePicker() {

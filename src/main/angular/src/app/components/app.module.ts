@@ -41,6 +41,7 @@ import {DeviceService} from "../services/device.service";
 import { ErrorComponent } from './error/error.component';
 import {PositionService} from "../services/position.service";
 import {UserService} from "../services/user.service";
+import {RegisterDeviceService} from "../services/register-device.service";
 
 const appRoutes: Routes = [
   {path: 'home', component: HomeComponent, canActivate: [AuthGuardService]},
@@ -98,6 +99,7 @@ const appRoutes: Routes = [
     DeviceService,
     PositionService,
     UserService,
+    RegisterDeviceService,
     { provide: JWT_OPTIONS, useValue: JWT_OPTIONS },
     {provide: HTTP_INTERCEPTORS, useClass: TokenInterceptor, multi: true}],
       bootstrap: [AppComponent]

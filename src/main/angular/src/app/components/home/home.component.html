@@ -4,17 +4,21 @@
 
   <ng-container matColumnDef="id">
     <th mat-header-cell *matHeaderCellDef> № </th>
-    <td mat-cell *matCellDef="let device"> {{device.id}} </td>
+    <td mat-cell *matCellDef="let record; let index = index"> {{index + 1}} </td>
   </ng-container>
 
   <ng-container matColumnDef="name">
     <th mat-header-cell *matHeaderCellDef> Название </th>
-    <td mat-cell *matCellDef="let device"> {{device.name}} </td>
+    <td mat-cell *matCellDef="let record"> {{record.device.name}} </td>
   </ng-container>
 
   <ng-container matColumnDef="serialNumber">
     <th mat-header-cell *matHeaderCellDef> Серийный номер </th>
-    <td mat-cell *matCellDef="let device"> {{device.serialNumber}} <button mat-mini-fab color="primary" style="float: right">
+    <td mat-cell *matCellDef="let record"> {{record.device.serialNumber}}</td>
+  </ng-container>
+  <ng-container matColumnDef="deleteAction">
+    <th mat-header-cell *matHeaderCellDef></th>
+    <td mat-cell *matCellDef="let record"><button mat-mini-fab color="primary" style="float: right" (click)="closeRecord(record)">
       <mat-icon>remove</mat-icon>
     </button></td>
   </ng-container>
@@ -23,6 +27,6 @@
   <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
 </table>
 <div class ="container" fxLayout="row" fxLayoutAlign="space-between center" fxLayout.xs="column" fxLayoutGap="1rem">
-  <button mat-raised-button color="primary" style="float: left; width: 100%">Сдать все приборы</button>
+  <button mat-raised-button color="primary" style="float: left; width: 100%" (click)="closeAllRecords()">Сдать все приборы</button>
   <button mat-raised-button color="primary" style="float: right; width: 100%" (click)="goToDevicePicker()">Взять приборы</button>
 </div>

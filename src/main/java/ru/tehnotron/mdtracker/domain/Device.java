@@ -34,4 +34,8 @@ public class Device extends BaseEntity {
     @Column(name = "visible")
     @NotNull
     private boolean visible;
+
+    public boolean isExpired() {
+        return verificationExpire.getTime() - System.currentTimeMillis() < 0;
+    }
 }

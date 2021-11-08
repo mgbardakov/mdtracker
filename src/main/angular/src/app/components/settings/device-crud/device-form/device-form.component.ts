@@ -59,7 +59,7 @@ export class DeviceFormComponent implements OnInit {
 
   createDevice() {
     this.submitDisabled = true
-    this.deviceService.updateDevice(this.getDevice()).subscribe(device => {
+    this.deviceService.createDevice(this.getDevice()).subscribe(device => {
       this.dialogRef.close({status: 'created', device: device})
     }, error => {
       this.errorHandler(error)

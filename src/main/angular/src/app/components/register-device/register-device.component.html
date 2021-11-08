@@ -16,7 +16,12 @@
         <ng-container matColumnDef="serialNumber">
           <th mat-header-cell *matHeaderCellDef> Серийный номер </th>
           <td mat-cell *matCellDef="let device">
-            {{device.serialNumber}}
+            {{device.serialNumber}}</td>
+        </ng-container>
+
+        <ng-container matColumnDef="deleteAction">
+          <th mat-header-cell *matHeaderCellDef></th>
+          <td mat-cell *matCellDef="let device">
             <button mat-mini-fab color="primary" style="float: right" (click)="removeDevice(device)">
               <mat-icon>remove</mat-icon>
             </button></td>
@@ -27,7 +32,7 @@
       </table>
     </mat-card-content>
     <mat-card-actions align="end">
-      <button mat-flat-button color="primary">Зарегистрировать</button>
+      <button mat-flat-button color="primary" [disabled]="registerDevices.length === 0" (click)="register()">Зарегистрировать</button>
     </mat-card-actions>
 </mat-card>
 <mat-card class="container" style="padding-bottom: 20px">
@@ -35,7 +40,7 @@
   <div><button mat-flat-button color="primary" class="button" (click)="switchScanner()">{{scannedEnabled ? 'Выключить QR-сканер' : 'Сканировать QR-код'}}</button></div>
 </mat-card>
 <mat-card class="container">
-  <app-selector-add-device [deviceList]="devices" (deviceEvent)="addDevices($event)"></app-selector-add-device>
+  <app-selector-add-device [subject]="subject" (deviceEvent)="addDevices($event)"></app-selector-add-device>
 
 </mat-card>
 

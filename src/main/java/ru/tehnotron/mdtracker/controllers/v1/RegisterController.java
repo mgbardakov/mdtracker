@@ -7,13 +7,17 @@ import org.springframework.web.bind.annotation.*;
 import ru.tehnotron.mdtracker.api.v1.dto.entity.DeviceDTO;
 import ru.tehnotron.mdtracker.api.v1.dto.entity.EmployeeDTO;
 import ru.tehnotron.mdtracker.api.v1.dto.entity.RecordDTO;
+import ru.tehnotron.mdtracker.api.v1.dto.entity.UserDTO;
 import ru.tehnotron.mdtracker.domain.Device;
+import ru.tehnotron.mdtracker.domain.Employee;
 import ru.tehnotron.mdtracker.security.jwt.JwtTokenProvider;
 import ru.tehnotron.mdtracker.service.DeviceRegisterService;
+import ru.tehnotron.mdtracker.service.RecordService;
 import ru.tehnotron.mdtracker.service.UserService;
 
 import javax.servlet.http.HttpServletRequest;
 import java.util.Date;
+import java.util.List;
 import java.util.Set;
 
 @RestController
@@ -24,19 +28,18 @@ public class RegisterController {
     private final DeviceRegisterService service;
     private final JwtTokenProvider jwtTokenProvider;
     private final UserService userService;
+    private final RecordService recordService;
 
-    public RegisterController(DeviceRegisterService service, JwtTokenProvider jwtTokenProvider, UserService userService) {
+    public RegisterController(DeviceRegisterService service, JwtTokenProvider jwtTokenProvider, UserService userService, RecordService recordService) {
         this.service = service;
         this.jwtTokenProvider = jwtTokenProvider;
         this.userService = userService;
+        this.recordService = recordService;
     }
 
-    @PutMapping
+    @PostMapping
     public void registerDevices(HttpServletRequest req, @RequestBody Set<DeviceDTO> devices) {
-        var token = jwtTokenProvider.resolveToken(req);
-        Claims claims = (Claims) Jwts.parser().parse(token).getBody();
-        var username = claims.getSubject();
-        var user = userService.findByUsername(username);
+        var user = getUserFromRequest(req);
         service.registerDevices(user, devices, new Date(System.currentTimeMillis()));
     }
 
@@ -46,7 +49,21 @@ public class RegisterController {
     }
 
     @PutMapping("close-all")
-    public void closeAllEmployeeRecords(@RequestBody EmployeeDTO employeeDTO) {
-        service.closeRecordsByEmployee(employeeDTO, new Date(System.currentTimeMillis()));
+    public void closeAllEmployeeRecords(HttpServletRequest req) {
+        var user = getUserFromRequest(req);
+        service.closeRecordsByEmployee(user.getEmployee(), new Date(System.currentTimeMillis()));
+    }
+
+    @GetMapping("active-records")
+    public List<RecordDTO> getAllActiveRecordsForCurrentUser(HttpServletRequest req) {
+        var user = getUserFromRequest(req);
+        return recordService.getAllActiveRecordsByEmployee(user.getEmployee());
+
+    }
+
+    private UserDTO getUserFromRequest(HttpServletRequest req) {
+        var token = jwtTokenProvider.resolveToken(req);
+        var username = jwtTokenProvider.getUsername(token);
+        return userService.findByUsername(username);
     }
 }

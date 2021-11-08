@@ -44,7 +44,8 @@ export class RecordFormComponent implements OnInit{
       Validators.required),
     device: new FormControl(this.data == null || this.data.device == null ? '' : this.data.device,
       Validators.required),
-    returned: new FormControl(this.data == null || this.data.returned == null ? '' : RecordFormComponent.toDateString(this.data.returned))});
+    returned: new FormControl(this.data == null || this.data.returned == null ? '' : RecordFormComponent.toDateString(this.data.returned))},
+      Validators.required);
     this.employeeService.getAllEmployees().subscribe(employees => {
       this.employees = employees;
     })

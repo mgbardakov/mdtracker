@@ -1,6 +1,7 @@
 import {Component, EventEmitter, Input, OnInit, Output} from '@angular/core';
 import {FormControl} from "@angular/forms";
 import {Device} from "../../../model/device";
+import {Subject} from "rxjs";
 
 @Component({
   selector: 'app-selector-add-device',
@@ -9,14 +10,20 @@ import {Device} from "../../../model/device";
 })
 export class SelectorAddDeviceComponent implements OnInit {
 
-  @Input()
+
   deviceList: Device[];
+  @Input()
+  subject: Subject<Device[]>
   @Output()
   deviceEvent = new EventEmitter<Device[]>();
 
   constructor() { }
 
   ngOnInit(): void {
+    this.subject.subscribe(devices => {
+      console.log(devices)
+      this.deviceList = devices;
+    })
   }
 
   devices = new FormControl();

@@ -4,6 +4,7 @@ import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import ru.tehnotron.mdtracker.api.v1.dto.entity.DeviceDTO;
+import ru.tehnotron.mdtracker.api.v1.dto.entity.EmployeeDTO;
 import ru.tehnotron.mdtracker.api.v1.dto.entity.RecordDTO;
 import ru.tehnotron.mdtracker.api.v1.dto.request.RecordRequestDTO;
 import ru.tehnotron.mdtracker.api.v1.mapper.DeviceMapper;
@@ -66,6 +67,7 @@ public class JpaRecordService implements RecordService {
     @Override
     public void delete(RecordDTO recordDTO) {
         var record = recordMapper.recordDTOToRecord(recordDTO);
+        deviceRepository.findById(record.getId()).ifPresent(device -> device.setTaken(false));
         recordRepository.delete(record);
     }
 
@@ -81,6 +83,13 @@ public class JpaRecordService implements RecordService {
         var specification = getSpecificationFromRequest(req);
         return recordMapper.recordListToRecordDTOList(recordRepository.findAll(specification));
     }
+
+    @Override
+    public List<RecordDTO> getAllActiveRecordsByEmployee(EmployeeDTO employeeDTO) {
+        var employee = employeeRepository.findById(employeeDTO.getId()).orElse(null);
+        return recordMapper.recordListToRecordDTOList(recordRepository.findAllByEmployeeAndReturned(employee, null));
+    }
+
 
     private Specification<Record> getSpecificationFromRequest(RecordRequestDTO req) {
         var builder = new RecordSpecificationBuilder();

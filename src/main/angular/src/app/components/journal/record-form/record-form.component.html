@@ -33,7 +33,8 @@
     <div>
       <mat-form-field floatLabel="auto" appearance="outline">
         <mat-label>Дата возврата прибора</mat-label>
-        <input matInput type="datetime-local" autocomplete="off" formControlName="returned"/>
+        <input matInput type="datetime-local" autocomplete="off" formControlName="returned" required/>
+        <mat-error *ngIf="form.controls.returned.invalid">Введите дату</mat-error>
       </mat-form-field>
     </div>
   </div>

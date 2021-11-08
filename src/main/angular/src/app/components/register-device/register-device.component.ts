@@ -1,6 +1,13 @@
-import {Component, OnChanges, OnInit, ViewChild} from '@angular/core';
+import {Component, OnInit, ViewChild} from '@angular/core';
 import {Device} from "../../model/device";
-import {MatTable} from "@angular/material/table";
+import {MatTable, MatTableDataSource} from "@angular/material/table";
+import {DeviceService} from "../../services/device.service";
+import {MatDialog} from "@angular/material/dialog";
+import {ErrorComponent} from "../error/error.component";
+import {Subject} from "rxjs";
+import {RegisterDeviceService} from "../../services/register-device.service";
+import {Router} from "@angular/router";
+import {HttpErrorResponse} from "@angular/common/http";
 
 @Component({
   selector: 'app-register-device',
@@ -11,21 +18,25 @@ export class RegisterDeviceComponent implements OnInit {
 
   @ViewChild(MatTable) table: MatTable<any>;
   devices: Device[];
+  subject: Subject<Device[]>
   registerDevices: Device[];
-  displayedColumns: string[] = ['id', 'name', 'serialNumber'];
-  dataSource;
+  displayedColumns: string[] = ['id', 'name', 'serialNumber', 'deleteAction'];
+  dataSource = new MatTableDataSource();
   scannedEnabled: boolean;
 
-  constructor() { }
+  constructor(private deviceService: DeviceService,
+              private registerService: RegisterDeviceService,
+              private dialog: MatDialog,
+              private router: Router) { }
 
   ngOnInit(): void {
-    this.devices = [
-      {id: 1, name: 'Линейка', verificationExpire: new Date(2022, 8, 18), taken: true, serialNumber: '321511'},
-      {id: 2, name: 'Шумомер', verificationExpire: new Date(2022, 8, 19), taken: true, serialNumber: '126544'},
-      {id: 3, name: 'Метеомер', verificationExpire: new Date(2022, 8, 19), taken: true, serialNumber: '315174'}
-    ];
+    this.subject = new Subject<Device[]>()
+    this.deviceService.getAllDevices().subscribe(devices => {
+      this.devices = devices;
+      this.subject.next(this.getValidDevices())
+    })
     this.registerDevices = [];
-    this.dataSource = this.registerDevices
+    this.dataSource.data = this.registerDevices
     this.scannedEnabled = false;
   }
 
@@ -43,7 +54,22 @@ export class RegisterDeviceComponent implements OnInit {
   }
 
   addDevice(device: Device) {
-    this.dataSource.push(device);
+    if (!this.deviceIsNotExpired(device)) {
+      this.dialog.open(ErrorComponent, {
+        data: {message: `Срок поверки прибора ${device.name} № ${device.serialNumber} истёк`}
+      })
+    } else if (device.taken) {
+      this.dialog.open(ErrorComponent, {
+        data: {message: `Прибор ${device.name} № ${device.serialNumber} уже используется`}
+      })
+    } else if (this.registerDevices.includes(device)) {
+      this.dialog.open(ErrorComponent, {
+        data: {message: `Прибор ${device.name} № ${device.serialNumber} уже выбран`}
+      })
+    } else {
+      this.registerDevices.push(device);
+      this.dataSource.data = this.registerDevices;
+    }
   }
 
   addDevices(devices: Device[]) {
@@ -57,5 +83,29 @@ export class RegisterDeviceComponent implements OnInit {
       this.registerDevices.splice(index, 1)
     }
     this.table.renderRows();
+  }
+
+  getValidDevices(): Device[] {
+    return this.devices.filter(device => {
+      return !device.taken && this.deviceIsNotExpired(device)
+    })
+  }
+
+  deviceIsNotExpired(device: Device): boolean {
+    return device.verificationExpire.getTime() - Date.now() > 0
+  }
+
+  register() {
+    this.registerService.registerDevices(this.registerDevices).subscribe(() => {
+      this.router.navigate(['home'])
+    }, error => {
+      this.errorHandler(error)
+    })
+  }
+
+  errorHandler(error: HttpErrorResponse) {
+    this.dialog.open(ErrorComponent, {
+      data: {message: 'Неизвестная ошибка'}
+    })
   }
 }

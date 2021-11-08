@@ -12,7 +12,9 @@
   </span>
   <span>MDTracker</span>
   <span class="example-spacer"></span>
-  <span style="padding-right: 1rem; margin-left: 1rem">{{userName}}</span>
+  <div style="padding-right: 1rem; margin-left: 1rem; font-size: small; max-width: 200px">
+    {{getName()}}
+  </div>
   <button mat-flat-button (click)="authService.logout()">
     Выйти
   </button>

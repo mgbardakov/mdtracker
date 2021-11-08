@@ -26,7 +26,7 @@
         <mat-form-field appearance="fill" style="width: 100%">
           <mat-select formControlName="authorities" [compareWith]="objectComparisonFunction" required>
             <mat-option *ngFor="let authority of authorities" [value]="authority">
-              {{authority.role}}
+              {{getRoleName(authority.role)}}
             </mat-option>
           </mat-select>
           <mat-error *ngIf="form.controls.authorities.invalid">Выберите роль</mat-error>

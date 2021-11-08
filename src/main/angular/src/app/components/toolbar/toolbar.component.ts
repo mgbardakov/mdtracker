@@ -1,6 +1,7 @@
 import {Component, OnChanges, OnDestroy, OnInit} from '@angular/core';
 import {Router} from "@angular/router";
 import {AuthService} from "../../services/security/auth.service";
+import {addModuleImportToModule} from "@angular/cdk/schematics";
 
 @Component({
   selector: 'app-toolbar',
@@ -9,7 +10,7 @@ import {AuthService} from "../../services/security/auth.service";
 })
 export class ToolbarComponent implements OnInit, OnDestroy {
 
-  userName: String = JSON.parse(localStorage.getItem('employee'))?.name;
+  userName: String;
   router: Router;
 
   constructor(router: Router, public authService: AuthService) {
@@ -24,6 +25,14 @@ export class ToolbarComponent implements OnInit, OnDestroy {
 
   ngOnDestroy(): void {
     //this.authService.eventStream.unsubscribe();
+  }
+
+  getName(): string {
+    let name = JSON.parse(localStorage.getItem('employee')).name;
+    let lastName = name.split(" ")[0] + " "
+    let firstName = name.split(" ")[1] === undefined ? "" : name.split(" ")[1][0] + ". "
+    let middleName = name.split(" ")[2] === undefined ? "" : name.split(" ")[2][0] + "."
+    return lastName + firstName + middleName
   }
 
 

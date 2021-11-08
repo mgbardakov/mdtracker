@@ -14,6 +14,7 @@ import {PositionService} from "../../../../services/position.service";
 import {HttpErrorResponse} from "@angular/common/http";
 import {ErrorComponent} from "../../../error/error.component";
 import {AuthService} from "../../../../services/security/auth.service";
+import {ROLE_NAMES} from "../user-crud.component";
 
 @Component({
   selector: 'app-user-edit-form',
@@ -119,6 +120,10 @@ export class UserEditFormComponent implements OnInit {
       }
     }
   }
+  getRoleName(name: string): string {
+    return ROLE_NAMES.get(name);
+  }
+
 
   isSubmitDisabled() {
     return this.form.invalid || this.submitDisabled;

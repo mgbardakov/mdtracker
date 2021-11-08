@@ -1,12 +1,13 @@
 import {AfterViewInit, Component, OnInit, ViewChild} from '@angular/core';
 import {MatPaginator} from "@angular/material/paginator";
 import {MatSort} from "@angular/material/sort";
-import {MatTableDataSource} from "@angular/material/table";
+import {MatTable, MatTableDataSource} from "@angular/material/table";
 import {Device} from "../../../model/device";
-import {MatDialog} from "@angular/material/dialog";
+import {MatDialog, MatDialogRef} from "@angular/material/dialog";
 import {DeviceFormComponent} from "./device-form/device-form.component";
 import {FormControl, FormGroup} from "@angular/forms";
 import {DeviceQrTableComponent} from "./device-qr-printer/device-qr-table.component";
+import {DeviceService} from "../../../services/device.service";
 
 @Component({
   selector: 'app-device-crud',
@@ -18,10 +19,11 @@ export class DeviceCrudComponent implements OnInit, AfterViewInit {
   @ViewChild(MatPaginator) paginator: MatPaginator;
   @ViewChild(MatSort) sort: MatSort;
   @ViewChild(DeviceQrTableComponent) table: DeviceQrTableComponent
+  @ViewChild(MatTable) matTable: MatTable<any>
   form: FormGroup
   devices: Device[];
   displayedColumns: string[] = ['index', 'name', 'serialNumber', 'verificationExpire'];
-  dataSource;
+  dataSource = new MatTableDataSource<Device>();
   printableDevices: Device[];
 
   ngAfterViewInit() {
@@ -29,23 +31,64 @@ export class DeviceCrudComponent implements OnInit, AfterViewInit {
     this.dataSource.sort = this.sort;}
 
 
-  constructor(public dialog: MatDialog) { }
+  constructor(public dialog: MatDialog,
+              private deviceService: DeviceService) { }
 
   ngOnInit(): void {
     this.form = new FormGroup({devicesToPrint: new FormControl()})
-    this.devices = [
-      {id: 1, name: 'Линейка', verificationExpire: new Date(2022, 8, 18), taken: true, serialNumber: '321511'},
-      {id: 2, name: 'Шумомер', verificationExpire: new Date(2022, 8, 19), taken: true, serialNumber: '126544'},
-      {id: 3, name: 'Метеомер', verificationExpire: new Date(2022, 8, 19), taken: true, serialNumber: '315174'}
-    ];
-    this.dataSource = new MatTableDataSource<Device>(this.devices)
+    this.deviceService.getAllDevices().subscribe(devices => {
+      this.devices = devices;
+      this.dataSource.data = this.devices
+    })
   }
 
-  openDialog(device: Device): void {
-    this.dialog.open(DeviceFormComponent, {
+  openDialog(device: Device): MatDialogRef<any> {
+    return this.dialog.open(DeviceFormComponent, {
       width: '700px',
-      data: device
+      data: device,
+      disableClose: true
     });
+  }
+
+  createNewDevice() {
+    this.openDialog(null).afterClosed().subscribe(data => {
+      switch (data.status) {
+        case "created": {
+          this.devices.push(data.device)
+          this.dataSource.data = this.devices;
+          this.matTable.renderRows();
+          break;
+        }
+        case "canceled": {
+          break;
+        }
+      }
+    })
+  }
+
+  updateOrDeleteDevice(device: Device) {
+    this.openDialog(device).afterClosed().subscribe(data => {
+      let index = this.devices.findIndex(x => x.id === device.id)
+      console.log(data)
+      switch (data.status) {
+        case 'updated': {
+          console.log('updated')
+          this.devices[index] = data.device;
+          break;
+        }
+        case 'removed': {
+          console.log('removed')
+          this.devices.splice(index, 1)
+          break;
+        }
+        case 'canceled': {
+          console.log('canceled')
+          break;
+        }
+      }
+      this.dataSource.data = this.devices
+      this.matTable.renderRows();
+    })
   }
 
   submit() {

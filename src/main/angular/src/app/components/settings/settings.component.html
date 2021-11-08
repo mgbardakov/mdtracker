@@ -7,7 +7,9 @@
     </div>
   </mat-tab>
   <mat-tab label="Приборы">
-    <app-device-crud></app-device-crud>
+    <ng-template matTabContent>
+      <app-device-crud></app-device-crud>
+    </ng-template>
   </mat-tab>
   </mat-tab-group>
 

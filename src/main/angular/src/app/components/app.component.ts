@@ -12,3 +12,7 @@ export class AppComponent {
   constructor(public authService: AuthService) {
   }
 }
+
+export const ROLE_NAMES = new Map();
+ROLE_NAMES.set('ROLE_ADMIN', 'Администратор')
+ROLE_NAMES.set('ROLE_USER', 'Пользователь')

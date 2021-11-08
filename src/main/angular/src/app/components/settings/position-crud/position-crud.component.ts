@@ -19,17 +19,16 @@ export class PositionCrudComponent implements OnInit, AfterViewInit {
   @ViewChild(MatTable) table: MatTable<any>;
   @ViewChild(MatPaginator) paginator: MatPaginator;
   @ViewChild(MatSort) sort: MatSort;
+  positions: Position[];
+  displayedColumns: string[] = ['index', 'name'];
+  dataSource = new MatTableDataSource<Position>();
 
   ngAfterViewInit() {
     this.dataSource.paginator = this.paginator;
     this.dataSource.sort = this.sort;
   }
 
-  positions: Position[];
 
-
-  displayedColumns: string[] = ['index', 'name'];
-  dataSource = new MatTableDataSource<Position>();
 
   constructor(public dialog: MatDialog, private positionService: PositionService) { }
 

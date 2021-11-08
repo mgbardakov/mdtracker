@@ -12,7 +12,7 @@ import {UserService} from "../../../../services/user.service";
 import {PositionService} from "../../../../services/position.service";
 import {HttpErrorResponse} from "@angular/common/http";
 import {ErrorComponent} from "../../../error/error.component";
-import {ROLE_NAMES} from "../user-crud.component";
+import {ROLE_NAMES} from "../../../app.component";
 
 @Component({
   selector: 'app-user-add-form',
@@ -105,7 +105,7 @@ export class UserAddFormComponent implements OnInit {
   }
 
   getRoleName(name: string): string {
-    return ROLE_NAMES.get(name);
+    return ROLE_NAMES.get(name)
   }
 
 

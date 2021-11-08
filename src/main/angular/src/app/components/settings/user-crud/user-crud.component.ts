@@ -8,6 +8,7 @@ import {User} from "../../../model/user";
 import {UserAddFormComponent} from "./user-add-form/user-add-form.component";
 import {UserEditFormComponent} from "./user-edit-form/user-edit-form.component";
 import {UserService} from "../../../services/user.service";
+import {ROLE_NAMES} from "../../app.component";
 
 @Component({
   selector: 'app-employee-crud',
@@ -96,6 +97,4 @@ export class UserCrudComponent implements OnInit, AfterViewInit {
 
 }
 
-export const ROLE_NAMES = new Map();
-ROLE_NAMES.set('ROLE_ADMIN', 'Администратор')
-ROLE_NAMES.set('ROLE_USER', 'Пользователь')
+

@@ -14,7 +14,8 @@ import {PositionService} from "../../../../services/position.service";
 import {HttpErrorResponse} from "@angular/common/http";
 import {ErrorComponent} from "../../../error/error.component";
 import {AuthService} from "../../../../services/security/auth.service";
-import {ROLE_NAMES} from "../user-crud.component";
+import {ROLE_NAMES} from "../../../app.component";
+
 
 @Component({
   selector: 'app-user-edit-form',

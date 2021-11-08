@@ -7,6 +7,7 @@ import {Device} from "../model/device";
 import {Record} from "../model/record";
 
 
+
 @Injectable({
   providedIn: 'root'
 })
@@ -25,10 +26,42 @@ export class DeviceService {
       }));
   }
 
+  createDevice(device: Device): Observable<Device> {
+    let deviceDTO = this.mapDeviceToJSON(device);
+    return this.http.post<Object>(environment.apiUrl + 'api/v1/devices/create',
+      deviceDTO, {headers: {'Content-Type': 'application/json'}})
+      .pipe(map(deviceJSON => this.mapJSONToDevice(deviceJSON)));
+  }
+
+  updateDevice(device: Device): Observable<Device> {
+    let deviceDTO = this.mapDeviceToJSON(device);
+    return this.http.put(environment.apiUrl + 'api/v1/devices/update',
+      deviceDTO, {headers: {'Content-Type': 'application/json'}})
+      .pipe(map(() => {
+        return device
+      }));
+  }
+
+  removeDevice(device: Device): Observable<Device> {
+    let deviceDTO = this.mapDeviceToJSON(device);
+    return this.http.post(environment.apiUrl + 'api/v1/devices/delete', deviceDTO,
+      {headers: {'Content-Type': 'application/json'}})
+      .pipe(map(() => {
+        return device
+      }))
+  }
+
   mapJSONToDevice(deviceJSON: Object): Device{
     deviceJSON['verificationExpire'] = deviceJSON['verificationExpire'] === 0 ? null : new Date(deviceJSON['verificationExpire'])
     let device = new Device();
     Object.assign(device, deviceJSON)
     return device
+  }
+
+  mapDeviceToJSON(device: Device): Object {
+    let deviceDTO = {};
+    Object.assign(deviceDTO, device)
+    deviceDTO['verificationExpire'] = device.verificationExpire === null ? null : device.verificationExpire.getTime()
+    return deviceDTO;
   }
 }

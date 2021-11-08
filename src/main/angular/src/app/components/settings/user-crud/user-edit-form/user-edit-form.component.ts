@@ -1,10 +1,19 @@
 import {Component, Inject, OnInit} from '@angular/core';
 import {FormControl, FormGroup, Validators} from "@angular/forms";
-import {MAT_DIALOG_DATA, MatDialogRef} from "@angular/material/dialog";
+import {
+  MAT_DIALOG_DATA,
+  MatDialog,
+  MatDialogRef
+} from "@angular/material/dialog";
 import {User} from "../../../../model/user";
 import {Authority} from "../../../../model/authority";
 import {Position} from "../../../../model/position";
 import {passwordMatchValidator} from "../user-add-form/user-add-form.component";
+import {UserService} from "../../../../services/user.service";
+import {PositionService} from "../../../../services/position.service";
+import {HttpErrorResponse} from "@angular/common/http";
+import {ErrorComponent} from "../../../error/error.component";
+import {AuthService} from "../../../../services/security/auth.service";
 
 @Component({
   selector: 'app-user-edit-form',
@@ -15,34 +24,69 @@ export class UserEditFormComponent implements OnInit {
 
   form: FormGroup;
   isPasswordFormVisible: boolean;
+  authorities: Authority[];
+  positions: Position[];
+  submitDisabled: boolean;
+  deleteDisabled: boolean;
+
 
   constructor(
     public dialogRef: MatDialogRef<UserEditFormComponent>,
-    @Inject(MAT_DIALOG_DATA) public data: User) {}
+    @Inject(MAT_DIALOG_DATA) public data: User,
+    private userService: UserService,
+    private positionService: PositionService,
+    private auth: AuthService,
+    private dialog: MatDialog) {}
 
   ngOnInit(): void {
     this.form = new FormGroup({password: new FormControl('', Validators.minLength(6)),
       passwordConfirmation: new FormControl(''),
-      authorities: new FormControl(this.data.authorities[0], Validators.required),
+      authorities: new FormControl({value: this.data.authorities[0],
+        disabled: this.auth.getCurrentEmployee().id === this.data.employee.id}, Validators.required),
       name: new FormControl(this.data.employee.name,
         [Validators.required, Validators.minLength(3)]),
       position: new FormControl(this.data.employee.position, Validators.required)
       }, {validators: passwordMatchValidator})
     console.log(JSON.stringify(this.data))
     this.isPasswordFormVisible = false;
+    this.userService.getAllAuthorities().subscribe(authorities => {
+      this.authorities = authorities;
+    })
+    this.positionService.getAllPositions().subscribe(positions => {
+      this.positions = positions
+    })
+    this.submitDisabled = false;
+    this.deleteDisabled = false;
   }
 
   onNoClick(): void {
-    this.dialogRef.close();
+    this.dialogRef.close({status: 'canceled'});
   }
 
-  authorities: Authority[] = [{id:1, role: "Администратор"},
-    {id:2, role: "Пользователь"}]
+  updateUser() {
+    this.submitDisabled = true;
+    this.userService.updateUser(this.getUser()).subscribe(() => {
+      this.dialogRef.close({status: 'updated', user: this.getUser()})
+    }, error => {
+      this.errorHandler(error)
+      this.submitDisabled = false;
+    })
+  }
 
-  positions: Position[] = [{id:1, name: "инженер"},
-    {id:2, name: "врач"}]
+  deleteUser() {
+    this.deleteDisabled = true;
+    this.userService.removeUser(this.getUser()).subscribe(() => {
+      this.dialogRef.close({status: 'removed', user: this.getUser()})
+    }, error => {
+      this.errorHandler(error)
+      this.deleteDisabled = false;
+    })
+  }
+
+
 
   public getUser(): User {
+    this.form.controls['authorities'].setValue(this.form.controls['authorities'].value)
     return {id: this.data.id, authorities: [this.form.controls['authorities'].value],
       login: this.data.login,
       password: this.form.controls['password'].value,
@@ -50,9 +94,38 @@ export class UserEditFormComponent implements OnInit {
         position: this.form.controls['position'].value}}
   }
 
-  submit() {
-    this.form.controls['authorities'].setValue([this.form.controls['authorities'].value])
-    console.log(JSON.stringify(this.getUser()))
+  private errorHandler(error: HttpErrorResponse) {
+    switch (error.status) {
+      case 401: {
+        this.dialog.open(ErrorComponent, {
+          width: '200px',
+          data: {message: "Недостаточно прав"}
+        });
+        break;
+      }
+      case 406: {
+        this.dialog.open(ErrorComponent, {
+          width: '200px',
+          data: {message: "Выбранный логин занят"}
+        });
+        break;
+      }
+      default: {
+        this.dialog.open(ErrorComponent, {
+          width: '200px',
+          data: {message: "Неизвестная ошибка"}
+        });
+        break;
+      }
+    }
+  }
+
+  isSubmitDisabled() {
+    return this.form.invalid || this.submitDisabled;
+ }
+  isDeleteDisabled() {
+    return this.auth.getCurrentEmployee().id === this.data.employee.id ||
+      this.deleteDisabled;
   }
 
   public objectComparisonFunction = function(option, value) : boolean {

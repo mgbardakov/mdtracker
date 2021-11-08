@@ -20,6 +20,7 @@ public class Authority extends BaseEntity {
    private String role;
 
     @ManyToMany(mappedBy = "authorities")
+    @Builder.Default
     private Set<User> users = new HashSet<>();
 
     public void addUser(User user) {

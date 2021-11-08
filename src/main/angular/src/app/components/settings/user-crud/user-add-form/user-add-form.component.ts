@@ -1,9 +1,17 @@
 import {Component, Inject, OnInit} from '@angular/core';
 import {AbstractControl, FormControl, FormGroup, ValidationErrors, ValidatorFn, Validators} from "@angular/forms";
-import {MAT_DIALOG_DATA, MatDialogRef} from "@angular/material/dialog";
+import {
+  MAT_DIALOG_DATA,
+  MatDialog,
+  MatDialogRef
+} from "@angular/material/dialog";
 import {User} from "../../../../model/user";
 import {Authority} from "../../../../model/authority";
 import {Position} from "../../../../model/position";
+import {UserService} from "../../../../services/user.service";
+import {PositionService} from "../../../../services/position.service";
+import {HttpErrorResponse} from "@angular/common/http";
+import {ErrorComponent} from "../../../error/error.component";
 
 @Component({
   selector: 'app-user-add-form',
@@ -12,11 +20,17 @@ import {Position} from "../../../../model/position";
 })
 export class UserAddFormComponent implements OnInit {
 
-  form: FormGroup;
+  form: FormGroup
+  authorities: Authority[];
+  positions: Position[];
+  submitDisabled: boolean;
 
   constructor(
     public dialogRef: MatDialogRef<UserAddFormComponent>,
-    @Inject(MAT_DIALOG_DATA) public data: User) {}
+    @Inject(MAT_DIALOG_DATA) public data: User,
+    private userService: UserService,
+    private positionService: PositionService,
+    private dialog: MatDialog) {}
 
   ngOnInit(): void {
     this.form = new FormGroup({login: new FormControl('',
@@ -29,17 +43,20 @@ export class UserAddFormComponent implements OnInit {
                          [Validators.required, Validators.minLength(3)]),
                                       position: new FormControl('', Validators.required)
                                       }, {validators: passwordMatchValidator} );
+    this.userService.getAllAuthorities().subscribe(authorities => {
+      this.authorities = authorities;
+    })
+    this.positionService.getAllPositions().subscribe(positions => {
+      this.positions = positions;
+    })
   }
 
-  authorities: Authority[] = [{id:1, role: "Администратор"},
-                              {id:2, role: "Пользователь"}]
-
-  positions: Position[] = [{id:1, name: "инженер"},
-    {id:2, name: "врач"}]
-
+  isSubmitDisabled() {
+    return this.form.invalid || this.submitDisabled;
+  }
 
   onNoClick(): void {
-    this.dialogRef.close();
+    this.dialogRef.close({status: 'canceled'});
   }
 
   private getUser(): User {
@@ -51,8 +68,41 @@ export class UserAddFormComponent implements OnInit {
   }
 
   submit() {
-    console.log(JSON.stringify(this.getUser()))
+    this.submitDisabled = true;
+    this.userService.createUser(this.getUser()).subscribe(user => {
+      this.dialogRef.close({status: 'created', user: user});
+    }, error => {
+      this.errorHandler(error);
+      this.submitDisabled = false;
+    })
   }
+
+  private errorHandler(error: HttpErrorResponse) {
+    switch (error.status) {
+      case 401: {
+        this.dialog.open(ErrorComponent, {
+          width: '200px',
+          data: {message: "Недостаточно прав"}
+        });
+        break;
+      }
+      case 406: {
+        this.dialog.open(ErrorComponent, {
+          width: '200px',
+          data: {message: "Выбранный логин занят"}
+        });
+        break;
+      }
+      default: {
+        this.dialog.open(ErrorComponent, {
+          width: '200px',
+          data: {message: "Неизвестная ошибка"}
+        });
+        break;
+      }
+    }
+  }
+
 
 
 

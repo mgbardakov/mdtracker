@@ -67,6 +67,10 @@ export class AuthService {
     return localStorage.getItem('jwt');
   }
 
+  public getCurrentEmployee(): Employee {
+    return JSON.parse(localStorage.getItem('employee'))
+  }
+
   public logout() {
     localStorage.removeItem('jwt');
     localStorage.removeItem('employee')

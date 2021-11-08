@@ -10,6 +10,7 @@ import ru.tehnotron.mdtracker.api.v1.mapper.AuthorityMapper;
 import ru.tehnotron.mdtracker.api.v1.mapper.UserMapper;
 import ru.tehnotron.mdtracker.domain.security.Authority;
 import ru.tehnotron.mdtracker.domain.security.User;
+import ru.tehnotron.mdtracker.repository.EmployeeRepository;
 import ru.tehnotron.mdtracker.repository.security.AuthorityRepository;
 import ru.tehnotron.mdtracker.repository.security.UserRepository;
 import ru.tehnotron.mdtracker.service.EmployeeService;
@@ -18,6 +19,7 @@ import ru.tehnotron.mdtracker.service.UserService;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 import java.util.*;
+import java.util.stream.Collectors;
 
 @Slf4j
 @Service
@@ -25,34 +27,33 @@ import java.util.*;
 public class JpaUserService implements UserService {
 
     private final UserRepository userRepository;
+    private final EmployeeRepository employeeRepository;
     private final AuthorityRepository authorityRepository;
     private final EmployeeService employeeService;
     private final PasswordEncoder passwordEncoder;
     private final UserMapper userMapper;
     private final AuthorityMapper authorityMapper;
-    @PersistenceContext
-    private final EntityManager entityManager;
 
 
-    public JpaUserService(UserRepository userRepository,
-                          AuthorityRepository authorityRepository,
-                          EmployeeService employeeService,
-                          PasswordEncoder passwordEncoder,
-                          UserMapper userMapper, AuthorityMapper authorityMapper,
-                          EntityManager entityManager) {
+    public JpaUserService(UserRepository userRepository, EmployeeRepository employeeRepository, AuthorityRepository authorityRepository, EmployeeService employeeService, PasswordEncoder passwordEncoder, UserMapper userMapper, AuthorityMapper authorityMapper) {
         this.userRepository = userRepository;
+        this.employeeRepository = employeeRepository;
         this.authorityRepository = authorityRepository;
         this.employeeService = employeeService;
         this.passwordEncoder = passwordEncoder;
         this.userMapper = userMapper;
         this.authorityMapper = authorityMapper;
-        this.entityManager = entityManager;
     }
 
     @Override
     public UserDTO register(UserDTO userDTO) {
         User user = userMapper.userDTOToUser(userDTO);
-        user.setPassword(passwordEncoder.encode(user.getPassword()));
+        user.setPassword(passwordEncoder.encode(userDTO.getPassword()));
+        employeeRepository.findById(employeeService.create(userDTO.getEmployee()).getId()).ifPresent(user::setEmployee);
+        userDTO.getAuthorities()
+                .forEach(x -> {
+                    authorityRepository.findById(x.getId()).ifPresent(user::addAuthority);
+                });
         return userMapper.userToUserDTO(userRepository.save(user));
     }
 
@@ -84,7 +85,7 @@ public class JpaUserService implements UserService {
                 user.clearAuthorities();
                 authorities.forEach(user::addAuthority);
             }
-            if (userDTO.getPassword() != null) {
+            if (!userDTO.getPassword().equals("")) {
                 user.setPassword(passwordEncoder.encode(userDTO.getPassword()));
             }
             log.info("IN updateUser - user: {} successfully updated", user);
@@ -100,6 +101,8 @@ public class JpaUserService implements UserService {
 
     @Override
     public Set<AuthorityDTO> getAllAuthorities() {
-        return authorityMapper.authoritySetToAuthorityDTOSet(new HashSet<>(authorityRepository.findAll()));
+        return authorityMapper.authoritySetToAuthorityDTOSet(
+                new HashSet<>(authorityRepository.findAll())
+        );
     }
 }

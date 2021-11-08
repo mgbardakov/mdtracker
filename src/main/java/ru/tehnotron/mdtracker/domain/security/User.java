@@ -28,12 +28,12 @@ public class User extends BaseEntity {
     @JoinColumn(name = "employee_id")
     private Employee employee;
 
-    @Singular
+    @Builder.Default
     @ManyToMany()
     @JoinTable(name = "user_authority",
             joinColumns = {@JoinColumn(name = "user_id", referencedColumnName = "id")},
             inverseJoinColumns = {@JoinColumn(name = "authority_id", referencedColumnName = "id")})
-    private Set<Authority> authorities = new HashSet<>();
+    private Set<Authority> authorities =new HashSet<>();
 
     @Builder.Default
     @Column(name = "account_non_expired")

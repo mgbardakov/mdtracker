@@ -29,6 +29,8 @@ public interface RecordMapper {
     @Mapping(target = "device", ignore = true)
     void updateRecordFromDTO(RecordDTO recordDTO, @MappingTarget Record record);
 
+    void updateRecordDTOFromRecord(Record record, @MappingTarget RecordDTO recordDTO);
+
     static long map(Date date) {
         if (date == null) {
             return 0;

@@ -10,6 +10,7 @@ import {RecordFormComponent} from "./record-form/record-form.component";
 import {FormControl, FormGroup} from "@angular/forms";
 import {AuthService} from "../../services/security/auth.service";
 import {RecordService} from "../../services/record.service";
+import {RegisterDeviceService} from "../../services/register-device.service";
 
 
 @Component({
@@ -50,7 +51,10 @@ export class JournalComponent implements OnInit, AfterViewInit {
   displayedColumns: string[] = ['taken', 'employee', 'deviceName', 'serialNumber', 'returned'];
   dataSource = new MatTableDataSource<Record>();
 
-  constructor(public dialog: MatDialog, public authService: AuthService, private recordService: RecordService) { }
+  constructor(public dialog: MatDialog,
+              public authService: AuthService,
+              private recordService: RecordService,
+              private registerDeviceService: RegisterDeviceService) { }
 
   ngOnInit(): void {
     this.initForm()
@@ -112,6 +116,15 @@ export class JournalComponent implements OnInit, AfterViewInit {
 
   submit() {
 
+  }
+
+  closeRecord(record: Record) {
+    this.registerDeviceService.closeRecord(record).subscribe(returnedRecord => {
+      let index = this.records.indexOf(record)
+      this.records[index].returned = returnedRecord.returned
+      this.dataSource.data = this.records;
+      this.table.renderRows();
+    })
   }
 
   resetForm() {

@@ -44,8 +44,8 @@ public class RegisterController {
     }
 
     @PutMapping("close")
-    public void closeRecord(@RequestBody RecordDTO recordDTO) {
-        service.closeRecord(recordDTO, new Date(System.currentTimeMillis()));
+    public RecordDTO closeRecord(@RequestBody RecordDTO recordDTO) {
+        return service.closeRecord(recordDTO, new Date(System.currentTimeMillis()));
     }
 
     @PutMapping("close-all")

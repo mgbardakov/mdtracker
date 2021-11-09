@@ -47,7 +47,7 @@
     <table mat-table [dataSource]="dataSource" style="width: 100%" matSort matSortActive="taken" matSortDirection="desc" matSortDisableClear>
       <ng-container matColumnDef="taken">
         <th mat-header-cell *matHeaderCellDef mat-sort-header><span style="margin-left: 20px">Дата регистрации</span></th>
-        <td mat-cell *matCellDef="let record"><button mat-mini-fab style="margin-right: 1rem" (click)="updateRecord(record)" *ngIf="authService.isAdmin()"><mat-icon>edit</mat-icon></button> {{record.taken | date: 'dd.MM.YY/HH:mm' }} </td>
+        <td mat-cell *matCellDef="let record"><button mat-mini-fab style="margin-right: 1rem" (click)="updateRecord(record)" *ngIf="authService.isAdmin()" [disabled]="record.returned === null"><mat-icon>edit</mat-icon></button> {{record.taken | date: 'dd.MM.YY/HH:mm' }} </td>
       </ng-container>
 
       <ng-container matColumnDef="employee">
@@ -67,7 +67,10 @@
 
       <ng-container matColumnDef="returned">
         <th mat-header-cell *matHeaderCellDef mat-sort-header>Возвращено</th>
-        <td mat-cell *matCellDef="let record"> {{record.returned != null ? (record.returned | date: 'dd.MM.YY/HH:mm') : ""}} </td>
+        <td mat-cell *matCellDef="let record">
+          <button mat-raised-button color="primary" *ngIf="record.returned === null && authService.isAdmin()" (click)="closeRecord(record)">Закрыть</button>
+          {{record.returned != null ? (record.returned | date: 'dd.MM.YY/HH:mm') : ""}}
+        </td>
       </ng-container>
 
       <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>

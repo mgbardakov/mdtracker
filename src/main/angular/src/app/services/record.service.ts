@@ -65,7 +65,7 @@ export class RecordService {
     Object.assign(recordDTO, record)
     recordDTO['taken'] = record.taken.getTime()
     recordDTO['returned'] = record.returned === null ? 0 : record.returned.getTime()
-    recordDTO['device']['verificationExpire'] = record.device.verificationExpire === null ? 0 : record.device.verificationExpire.getTime();
+    recordDTO['device']['verificationExpire'] = record.device.verificationExpire == null ? 0 : record.device.verificationExpire.getTime();
     return recordDTO;
   }
 }

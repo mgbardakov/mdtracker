@@ -78,11 +78,14 @@ public class JpaDeviceRegisterService implements DeviceRegisterService {
     }
 
     @Override
-    public void closeRecord(RecordDTO recordDTO, Date returnedDate) {
+    public RecordDTO closeRecord(RecordDTO recordDTO, Date returnedDate) {
+        RecordDTO rslRecordDTO = new RecordDTO();
         recordRepository.findById(recordDTO.getId()).ifPresent(record -> {
             record.setReturned(returnedDate);
             record.getDevice().setTaken(false);
+            recordMapper.updateRecordDTOFromRecord(record, rslRecordDTO);
         });
+        return rslRecordDTO;
     }
 
     @Override

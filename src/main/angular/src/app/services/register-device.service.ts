@@ -23,11 +23,10 @@ export class RegisterDeviceService {
     return this.http.post(environment.apiUrl + 'api/v1/register/', deviceDTOs);
   }
 
-  closeRecord(record: Record): Observable<boolean> {
+  closeRecord(record: Record): Observable<Record> {
     let recordDTO = this.recordService.mapRecordToJSON(record);
     return this.http.put(environment.apiUrl + 'api/v1/register/close', recordDTO)
-      .pipe(map(() => true));
-
+      .pipe(map(recordDTO => this.recordService.mapJSONToRecord(recordDTO)));
   }
 
   closeAllRecords() {

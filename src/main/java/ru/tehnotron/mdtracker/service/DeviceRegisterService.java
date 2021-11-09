@@ -12,6 +12,6 @@ import java.util.Set;
 
 public interface DeviceRegisterService {
     List<RecordDTO> registerDevices(UserDTO userDTO, Set<DeviceDTO> devices, Date takenDate);
-    void closeRecord(RecordDTO recordDTO, Date returnedDate);
+    RecordDTO closeRecord(RecordDTO recordDTO, Date returnedDate);
     void closeRecordsByEmployee(EmployeeDTO employeeDTO, Date returnedDate);
 }

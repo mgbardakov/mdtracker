@@ -6,8 +6,8 @@ import java.util.Date;
 
 @Data
 public class RecordRequestDTO {
-    private Date startDate;
-    private Date endDate;
+    private long startDate;
+    private long endDate;
     private String deviceId;
     private String employeeId;
 }

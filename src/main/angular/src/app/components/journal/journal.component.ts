@@ -24,6 +24,12 @@ export class JournalComponent implements OnInit, AfterViewInit {
   @ViewChild(MatTable) table: MatTable<any>;
   @ViewChild(MatPaginator) paginator: MatPaginator;
   @ViewChild(MatSort) sort: MatSort;
+  form: FormGroup;
+  employees: Employee[] = [];
+  devices: Device[] = [];
+  records: Record[];
+  displayedColumns: string[] = ['taken', 'employee', 'deviceName', 'serialNumber', 'returned'];
+  dataSource = new MatTableDataSource<Record>();
 
   ngAfterViewInit() {
     this.dataSource.paginator = this.paginator;
@@ -38,18 +44,7 @@ export class JournalComponent implements OnInit, AfterViewInit {
     this.dataSource.sort = this.sort;
   }
 
-  form: FormGroup;
 
-  employees: Employee[] = [{id:1, name: "Петя", position:null},
-    {id:2, name: "Маша", position:null}]
-
-  devices: Device[] = [{id:1, name:'Шумомер', verificationExpire:null, serialNumber: '123', taken:null},
-    {id:2, name:'Линейка', verificationExpire:null, serialNumber: '123', taken:null}]
-
-  records: Record[];
-
-  displayedColumns: string[] = ['taken', 'employee', 'deviceName', 'serialNumber', 'returned'];
-  dataSource = new MatTableDataSource<Record>();
 
   constructor(public dialog: MatDialog,
               public authService: AuthService,
@@ -59,9 +54,7 @@ export class JournalComponent implements OnInit, AfterViewInit {
   ngOnInit(): void {
     this.initForm()
     this.recordService.getAllRecords().subscribe(records => {
-      this.records = records;
-      this.dataSource.data = records;
-      console.log(this.dataSource.data)
+      this.processRecords(records)
     });
 
   }
@@ -115,7 +108,12 @@ export class JournalComponent implements OnInit, AfterViewInit {
 
 
   submit() {
-
+    console.log(this.getRequest())
+    this.recordService.getRecordsByRequest(this.getRequest()).subscribe( records => {
+      console.log(records)
+      this.processRecords(records)
+      this.table.renderRows();
+    })
   }
 
   closeRecord(record: Record) {
@@ -139,4 +137,25 @@ export class JournalComponent implements OnInit, AfterViewInit {
       device: new FormControl()
     })
   }
+
+  getRequest(): Object {
+    let request = this.form.value;
+    request.startDate = request.startDate == null ? 0 : request.startDate.getTime()
+    request.endDate = request.endDate == null ? 0 : request.endDate.getTime()
+    return request;
+  }
+
+  processRecords(records: Record[]) {
+    this.records = records;
+    this.dataSource.data = records;
+    records.forEach(record => {
+      if (this.employees.filter(x => x.id === record.employee.id).length === 0) {
+        this.employees.push(record.employee);
+      }
+      if (this.devices.filter(x => x.id === record.device.id).length === 0) {
+        this.devices.push(record.device);
+      }
+    })
+  }
+
 }

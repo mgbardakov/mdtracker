@@ -51,8 +51,8 @@ public class RecordController {
     }
 
     @PreAuthorize("hasAnyRole('ADMIN', 'USER')")
-    @GetMapping("filter")
-    public List<RecordDTO> getRecordsByRequest(RecordRequestDTO recordRequestDTO) {
+    @PostMapping("filter")
+    public List<RecordDTO> getRecordsByRequest(@RequestBody RecordRequestDTO recordRequestDTO) {
         return service.findRecordsByRequest(recordRequestDTO);
     }
 

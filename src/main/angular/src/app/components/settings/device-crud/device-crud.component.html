@@ -39,7 +39,7 @@
         <mat-form-field appearance="fill" style="width: 100%">
           <mat-select formControlName="devicesToPrint" multiple>
             <mat-option *ngFor="let device of devices" [value]="device">
-              {{device.name + " " + device.serialNumber}}
+              {{device.name}} №{{device.serialNumber}}
             </mat-option>
           </mat-select>
         </mat-form-field>

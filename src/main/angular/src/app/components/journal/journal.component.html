@@ -22,7 +22,7 @@
       <mat-form-field appearance="fill" style="width: 100%">
         <mat-label>Сотрудник</mat-label>
         <mat-select formControlName="employee">
-          <mat-option *ngFor="let employee of employees" [value]="employee.id">
+          <mat-option *ngFor="let employee of employees" [value]="employee">
             {{employee.name}}
           </mat-option>
         </mat-select>
@@ -32,7 +32,7 @@
       <mat-form-field appearance="fill" style="width: 100%">
         <mat-label>Прибор</mat-label>
         <mat-select formControlName="device">
-          <mat-option *ngFor="let device of devices" [value]="device.id">
+          <mat-option *ngFor="let device of devices" [value]="device">
             {{device.name}} {{device.serialNumber}}
           </mat-option>
         </mat-select>

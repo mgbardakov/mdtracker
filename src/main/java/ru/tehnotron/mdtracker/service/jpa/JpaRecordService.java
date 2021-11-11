@@ -93,11 +93,11 @@ public class JpaRecordService implements RecordService {
 
     private Specification<Record> getSpecificationFromRequest(RecordRequestDTO req) {
         var builder = new RecordSpecificationBuilder();
-        if(req.getStartDate() != null) {
-            builder.addStartDateSpecification(req.getStartDate());
+        if(req.getStartDate() != 0) {
+            builder.addStartDateSpecification(new Date(req.getStartDate()));
         }
-        if (req.getEndDate() != null) {
-            builder.addEndDateSpecification(req.getEndDate());
+        if (req.getEndDate() != 0) {
+            builder.addEndDateSpecification(new Date(req.getEndDate()));
         }
         if (req.getDeviceId() != null) {
             var device = new Device();

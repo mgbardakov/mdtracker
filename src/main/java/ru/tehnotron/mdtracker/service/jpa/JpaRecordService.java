@@ -3,11 +3,13 @@ package ru.tehnotron.mdtracker.service.jpa;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import ru.tehnotron.mdtracker.api.v1.dto.entity.BaseDTO;
 import ru.tehnotron.mdtracker.api.v1.dto.entity.DeviceDTO;
 import ru.tehnotron.mdtracker.api.v1.dto.entity.EmployeeDTO;
 import ru.tehnotron.mdtracker.api.v1.dto.entity.RecordDTO;
 import ru.tehnotron.mdtracker.api.v1.dto.request.RecordRequestDTO;
 import ru.tehnotron.mdtracker.api.v1.mapper.DeviceMapper;
+import ru.tehnotron.mdtracker.api.v1.mapper.EmployeeMapper;
 import ru.tehnotron.mdtracker.api.v1.mapper.RecordMapper;
 import ru.tehnotron.mdtracker.domain.Device;
 import ru.tehnotron.mdtracker.domain.Employee;
@@ -20,9 +22,7 @@ import ru.tehnotron.mdtracker.service.RecordService;
 
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.List;
+import java.util.*;
 
 @Service
 @Transactional
@@ -31,13 +31,17 @@ public class JpaRecordService implements RecordService {
     private final RecordRepository recordRepository;
     private final RecordMapper recordMapper;
     private final EmployeeRepository employeeRepository;
+    private final EmployeeMapper employeeMapper;
     private final DeviceRepository deviceRepository;
+    private final DeviceMapper deviceMapper;
 
-    public JpaRecordService(RecordRepository recordRepository, RecordMapper recordMapper, EmployeeRepository employeeRepository, DeviceRepository deviceRepository) {
+    public JpaRecordService(RecordRepository recordRepository, RecordMapper recordMapper, EmployeeRepository employeeRepository, EmployeeMapper employeeMapper, DeviceRepository deviceRepository, DeviceMapper deviceMapper) {
         this.recordRepository = recordRepository;
         this.recordMapper = recordMapper;
         this.employeeRepository = employeeRepository;
+        this.employeeMapper = employeeMapper;
         this.deviceRepository = deviceRepository;
+        this.deviceMapper = deviceMapper;
     }
 
     @Override
@@ -90,6 +94,17 @@ public class JpaRecordService implements RecordService {
         return recordMapper.recordListToRecordDTOList(recordRepository.findAllByEmployeeAndReturned(employee, null));
     }
 
+    @Override
+    public Map<String, Set<? extends BaseDTO>> getEmployeesAndDevicesFromJournal() {
+        Set<EmployeeDTO> employees = new HashSet<>();
+        Set<DeviceDTO> devices = new HashSet<>();
+        var records = recordRepository.findAll();
+        records.forEach(record -> {
+            employees.add(employeeMapper.employeeToEmployeeDTO(record.getEmployee()));
+            devices.add(deviceMapper.deviceToDeviceDTO(record.getDevice()));
+        });
+        return Map.of("employees", employees, "devices", devices);
+    }
 
     private Specification<Record> getSpecificationFromRequest(RecordRequestDTO req) {
         var builder = new RecordSpecificationBuilder();
@@ -99,12 +114,12 @@ public class JpaRecordService implements RecordService {
         if (req.getEndDate() != 0) {
             builder.addEndDateSpecification(new Date(req.getEndDate()));
         }
-        if (req.getDeviceId() != null) {
+        if (!req.getDeviceId().equals("undefined")) {
             var device = new Device();
             device.setId(Long.parseLong(req.getDeviceId()));
             builder.addDeviceSpecification(device);
         }
-        if (req.getEmployeeId() != null) {
+        if (!req.getEmployeeId().equals("undefined")) {
             var employee = new Employee();
             employee.setId(Long.parseLong(req.getEmployeeId()));
             builder.addEmployeeSpecification(employee);

@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import {HttpClient} from "@angular/common/http";
+import {HttpClient, HttpParams} from "@angular/common/http";
 import {Observable} from "rxjs";
 import {Record} from "../model/record";
 import {map} from "rxjs/operators";
@@ -52,7 +52,11 @@ export class RecordService {
   }
 
   getRecordsByRequest(request: any): Observable<Record[]> {
-    return this.http.post<Object[]>(environment.apiUrl + 'api/v1/records/filter', request)
+    let params = new HttpParams().set('startDate', request.startDate)
+      .append('endDate', request.endDate)
+      .append('employeeId', request.employee?.id)
+      .append('deviceId', request.device?.id)
+    return this.http.get<Object[]>(environment.apiUrl + 'api/v1/records/filter', {params: params})
       .pipe(map(recordDTOs => {
         let records = []
         recordDTOs.forEach(recordDTO => {
@@ -60,6 +64,11 @@ export class RecordService {
         })
         return records;
       }))
+  }
+
+  getEmployeesAndDevices(): Observable<Object> {
+    return this.http.get<Map<String, Object[]>>(environment.apiUrl + 'api/v1/records/employees-and-devices');
+
   }
 
   mapJSONToRecord(recordJSON: Object): Record{

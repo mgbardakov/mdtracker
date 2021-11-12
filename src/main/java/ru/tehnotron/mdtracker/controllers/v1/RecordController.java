@@ -2,11 +2,14 @@ package ru.tehnotron.mdtracker.controllers.v1;
 
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
+import ru.tehnotron.mdtracker.api.v1.dto.entity.BaseDTO;
 import ru.tehnotron.mdtracker.api.v1.dto.entity.RecordDTO;
 import ru.tehnotron.mdtracker.api.v1.dto.request.RecordRequestDTO;
 import ru.tehnotron.mdtracker.service.RecordService;
 
 import java.util.List;
+import java.util.Map;
+import java.util.Set;
 
 @RestController
 @RequestMapping("api/v1/records/")
@@ -51,9 +54,15 @@ public class RecordController {
     }
 
     @PreAuthorize("hasAnyRole('ADMIN', 'USER')")
-    @PostMapping("filter")
-    public List<RecordDTO> getRecordsByRequest(@RequestBody RecordRequestDTO recordRequestDTO) {
+    @GetMapping("filter")
+    public List<RecordDTO> getRecordsByRequest(RecordRequestDTO recordRequestDTO) {
         return service.findRecordsByRequest(recordRequestDTO);
+    }
+
+    @PreAuthorize("hasAnyRole('ADMIN', 'USER')")
+    @GetMapping("employees-and-devices")
+    public Map<String, Set<? extends BaseDTO>> getEmployeesAndDevices() {
+        return service.getEmployeesAndDevicesFromJournal();
     }
 
 

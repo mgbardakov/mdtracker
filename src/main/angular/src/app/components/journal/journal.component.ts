@@ -54,8 +54,10 @@ export class JournalComponent implements OnInit, AfterViewInit {
   ngOnInit(): void {
     this.initForm()
     this.recordService.getAllRecords().subscribe(records => {
-      this.processRecords(records)
+      this.records = records
+      this.dataSource.data = this.records;
     });
+    this.setEmployeesAndDevices();
 
   }
   openDialog(record: Record): MatDialogRef<RecordFormComponent> {
@@ -111,7 +113,8 @@ export class JournalComponent implements OnInit, AfterViewInit {
     console.log(this.getRequest())
     this.recordService.getRecordsByRequest(this.getRequest()).subscribe( records => {
       console.log(records)
-      this.processRecords(records)
+      this.records = records;
+      this.dataSource.data = records;
       this.table.renderRows();
     })
   }
@@ -127,6 +130,7 @@ export class JournalComponent implements OnInit, AfterViewInit {
 
   resetForm() {
     this.initForm()
+    this.submit();
   }
 
   initForm() {
@@ -137,24 +141,19 @@ export class JournalComponent implements OnInit, AfterViewInit {
       device: new FormControl()
     })
   }
-
   getRequest(): Object {
     let request = this.form.value;
-    request.startDate = request.startDate == null ? 0 : request.startDate.getTime()
-    request.endDate = request.endDate == null ? 0 : request.endDate.getTime()
+    request.startDate = request.startDate == null || request.startDate == 0 ? 0 : new Date(request.startDate).getTime()
+    request.endDate = request.endDate == null || request.endDate == 0 ? 0 : new Date(request.endDate).getTime()
     return request;
   }
 
-  processRecords(records: Record[]) {
-    this.records = records;
-    this.dataSource.data = records;
-    records.forEach(record => {
-      if (this.employees.filter(x => x.id === record.employee.id).length === 0) {
-        this.employees.push(record.employee);
-      }
-      if (this.devices.filter(x => x.id === record.device.id).length === 0) {
-        this.devices.push(record.device);
-      }
+
+
+  setEmployeesAndDevices() {
+    this.recordService.getEmployeesAndDevices().subscribe(obj => {
+      this.employees = <Employee[]>obj['employees'];
+      this.devices = <Device[]>obj['devices']
     })
   }
 

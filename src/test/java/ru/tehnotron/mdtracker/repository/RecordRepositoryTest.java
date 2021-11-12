@@ -4,10 +4,9 @@ import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 import org.springframework.data.jpa.domain.Specification;
-import ru.tehnotron.mdtracker.domain.Device;
-import ru.tehnotron.mdtracker.domain.Employee;
-import ru.tehnotron.mdtracker.domain.Record;
+import ru.tehnotron.mdtracker.domain.*;
 import ru.tehnotron.mdtracker.repository.specification.record.RecordDeviceSpecification;
+import ru.tehnotron.mdtracker.repository.specification.record.RecordEmployeeSpecification;
 import ru.tehnotron.mdtracker.repository.specification.record.RecordSpecificationBuilder;
 
 
@@ -92,6 +91,7 @@ class RecordRepositoryTest {
                 .addDeviceSpecification(device)
                 .addEmployeeSpecification(employee).build();
 
+        assertEquals(1, repository.findAll(specs).size());
         assertEquals(expected, repository.findAll(specs).get(0));
      }
 }

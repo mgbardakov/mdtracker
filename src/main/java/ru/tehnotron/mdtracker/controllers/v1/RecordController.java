@@ -65,5 +65,11 @@ public class RecordController {
         return service.getEmployeesAndDevicesFromJournal();
     }
 
+    @PreAuthorize("hasAnyRole('ADMIN', 'USER')")
+    @GetMapping("active")
+    public List<RecordDTO> getActiveRecords() {
+        return service.getAllActiveRecords();
+    }
+
 
 }

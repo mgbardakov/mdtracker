@@ -45,6 +45,7 @@ import {RegisterDeviceService} from "../services/register-device.service";
 
 const appRoutes: Routes = [
   {path: 'home', component: HomeComponent, canActivate: [AuthGuardService]},
+  {path: '', component: HomeComponent, canActivate: [AuthGuardService]},
   {path: 'login', component: LoginComponent},
   {path: 'register-devices', component: RegisterDeviceComponent, canActivate: [AuthGuardService]},
   {path: 'journal', component: JournalComponent, canActivate: [AuthGuardService]},

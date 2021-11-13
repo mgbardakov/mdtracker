@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import {Employee} from "../../model/employee";
 import {Record} from "../../model/record";
+import {RecordService} from "../../services/record.service";
 
 
 @Component({
@@ -10,25 +11,11 @@ import {Record} from "../../model/record";
 })
 export class OverviewComponent implements OnInit {
 
-  records: Record[] = [{id: 1, employee: {id: 1, name: "Петя",
-                       position: {id: 1, name: "врач"}}, taken: new Date("12/10/2021"),
-                       returned: null,
-                       device: {id: 1, taken: true, name: 'Шумомер', serialNumber: "133",
-                       verificationExpire: new Date('12/10/2022')}},
-                       {id: 2, employee: {id: 1, name: "Петя",
-                       position: {id: 1, name: "врач"}}, taken: new Date("12/10/2021"),
-                       returned: null,
-                       device: {id: 2, taken: true, name: 'Линейка', serialNumber: "221",
-                       verificationExpire: new Date('11/10/2022')}},
-                       {id: 3, employee: {id: 2, name: "Маша",
-                       position: {id: 2, name: "инженер"}}, taken: new Date("12/10/2021"),
-                       returned: null,
-                       device: {id: 1, taken: true, name: 'BE-метр', serialNumber: "1488",
-                       verificationExpire: new Date('12/10/2022')}}]
+  records: Record[];
 
   employeeDevices: Map<Number, Record[]> = new Map<Number, Record[]>();
 
-  constructor() { }
+  constructor(private recordService: RecordService) { }
 
   public convertRecordsToMap() {
     let rslMap: Map<Number, Record[]> = new Map<Number, Record[]>();
@@ -43,7 +30,10 @@ export class OverviewComponent implements OnInit {
   }
 
   ngOnInit(): void {
-
+     this.recordService.getActiveRecords().subscribe(records => {
+       this.records = records;
+       this.convertRecordsToMap()
+     })
   }
 
 

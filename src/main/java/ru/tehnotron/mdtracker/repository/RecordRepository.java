@@ -19,4 +19,5 @@ public interface RecordRepository extends CrudRepository<Record, Long>,
     List<Record> findAllByDevice(Device device);
     List<Record> findAllByEmployee(Employee employee);
     List<Record> findAllByEmployeeAndReturned(Employee employee, Date returned);
+    List<Record> findAllByReturned(Date returned);
 }

@@ -71,6 +71,18 @@ export class RecordService {
 
   }
 
+  getActiveRecords(): Observable<Record[]> {
+    return this.http.get<Object[]>(environment.apiUrl + 'api/v1/records/active')
+      .pipe(map(recordJSONs => {
+        let records = [];
+        recordJSONs.forEach(recordJSON => {
+          records.push(this.mapJSONToRecord(recordJSON))
+        })
+        return records
+      }));
+  }
+
+
   mapJSONToRecord(recordJSON: Object): Record{
     recordJSON['taken'] = recordJSON['taken'] === 0 ? null : new Date(recordJSON['taken'])
     recordJSON['returned'] = recordJSON['returned'] === 0 ? null : new Date(recordJSON['returned'])

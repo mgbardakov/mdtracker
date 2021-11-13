@@ -106,6 +106,11 @@ public class JpaRecordService implements RecordService {
         return Map.of("employees", employees, "devices", devices);
     }
 
+    @Override
+    public List<RecordDTO> getAllActiveRecords() {
+        return recordMapper.recordListToRecordDTOList(recordRepository.findAllByReturned(null));
+    }
+
     private Specification<Record> getSpecificationFromRequest(RecordRequestDTO req) {
         var builder = new RecordSpecificationBuilder();
         if(req.getStartDate() != 0) {

@@ -15,4 +15,5 @@ public interface RecordService extends CrudService<RecordDTO> {
         List<RecordDTO> findRecordsByRequest(RecordRequestDTO req);
         List<RecordDTO> getAllActiveRecordsByEmployee(EmployeeDTO employeeDTO);
         Map<String, Set<? extends BaseDTO>> getEmployeesAndDevicesFromJournal();
+        List<RecordDTO> getAllActiveRecords();
 }

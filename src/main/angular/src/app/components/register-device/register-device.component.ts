@@ -4,10 +4,11 @@ import {MatTable, MatTableDataSource} from "@angular/material/table";
 import {DeviceService} from "../../services/device.service";
 import {MatDialog} from "@angular/material/dialog";
 import {ErrorComponent} from "../error/error.component";
-import {Subject} from "rxjs";
+import {Observable, Subject} from "rxjs";
 import {RegisterDeviceService} from "../../services/register-device.service";
 import {Router} from "@angular/router";
 import {HttpErrorResponse} from "@angular/common/http";
+import {ConfirmDialogComponent} from "../confirm-dialog/confirm-dialog.component";
 
 @Component({
   selector: 'app-register-device',
@@ -96,10 +97,14 @@ export class RegisterDeviceComponent implements OnInit {
   }
 
   register() {
-    this.registerService.registerDevices(this.registerDevices).subscribe(() => {
-      this.router.navigate(['home'])
-    }, error => {
-      this.errorHandler(error)
+    this.confirm("Зарегистрировать выбранные приборы?").subscribe(flag => {
+      if (flag) {
+        this.registerService.registerDevices(this.registerDevices).subscribe(() => {
+          this.router.navigate(['home'])
+        }, error => {
+          this.errorHandler(error)
+        })
+      }
     })
   }
 
@@ -107,5 +112,12 @@ export class RegisterDeviceComponent implements OnInit {
     this.dialog.open(ErrorComponent, {
       data: {message: 'Неизвестная ошибка'}
     })
+  }
+
+  confirm(message: String): Observable<boolean> {
+    return this.dialog.open(ConfirmDialogComponent, {
+      data: message,
+      disableClose: true
+    }).afterClosed();
   }
 }

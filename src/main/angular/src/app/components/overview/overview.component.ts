@@ -17,9 +17,9 @@ export class OverviewComponent implements OnInit {
 
   constructor(private recordService: RecordService) { }
 
-  public convertRecordsToMap() {
+  public convertRecordsToMap(records) {
     let rslMap: Map<Number, Record[]> = new Map<Number, Record[]>();
-    this.records.forEach(record => {
+    records.forEach(record => {
       if (rslMap.has(record.employee.id)) {
         rslMap.get(record.employee.id).push(record);
       } else {
@@ -32,7 +32,7 @@ export class OverviewComponent implements OnInit {
   ngOnInit(): void {
      this.recordService.getActiveRecords().subscribe(records => {
        this.records = records;
-       this.convertRecordsToMap()
+       this.employeeDevices = this.convertRecordsToMap(records)
      })
   }
 

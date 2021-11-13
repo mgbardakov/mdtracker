@@ -42,6 +42,7 @@ import { ErrorComponent } from './error/error.component';
 import {PositionService} from "../services/position.service";
 import {UserService} from "../services/user.service";
 import {RegisterDeviceService} from "../services/register-device.service";
+import { ConfirmDialogComponent } from './confirm-dialog/confirm-dialog.component';
 
 const appRoutes: Routes = [
   {path: 'home', component: HomeComponent, canActivate: [AuthGuardService]},
@@ -76,7 +77,8 @@ const appRoutes: Routes = [
     UserEditFormComponent,
     PositionFormComponent,
     DeviceFormComponent,
-    ErrorComponent
+    ErrorComponent,
+    ConfirmDialogComponent
   ],
   imports: [
     BrowserModule,

@@ -38,7 +38,13 @@
         <mat-label>Печать QR-кодов</mat-label>
         <mat-form-field appearance="fill" style="width: 100%">
           <mat-select formControlName="devicesToPrint" multiple>
-            <mat-option *ngFor="let device of devices" [value]="device">
+            <mat-select-filter [placeholder]="'Поиск..'"
+                               [noResultsMessage] = "'Нет результатов'"
+                               [array]="devices"
+                               [displayMember]="'name'"
+                               (filteredReturn)="filteredDevices = $event">
+            </mat-select-filter>
+            <mat-option *ngFor="let device of filteredDevices" [value]="device">
               {{device.name}} №{{device.serialNumber}}
             </mat-option>
           </mat-select>

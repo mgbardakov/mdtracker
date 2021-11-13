@@ -11,6 +11,8 @@ import {FormControl, FormGroup} from "@angular/forms";
 import {AuthService} from "../../services/security/auth.service";
 import {RecordService} from "../../services/record.service";
 import {RegisterDeviceService} from "../../services/register-device.service";
+import {Observable} from "rxjs";
+import {ConfirmDialogComponent} from "../confirm-dialog/confirm-dialog.component";
 
 
 @Component({
@@ -30,6 +32,8 @@ export class JournalComponent implements OnInit, AfterViewInit {
   records: Record[];
   displayedColumns: string[] = ['taken', 'employee', 'deviceName', 'serialNumber', 'returned'];
   dataSource = new MatTableDataSource<Record>();
+  filteredEmployees: Employee[];
+  filteredDevices: Device[];
 
   ngAfterViewInit() {
     this.dataSource.paginator = this.paginator;
@@ -120,11 +124,15 @@ export class JournalComponent implements OnInit, AfterViewInit {
   }
 
   closeRecord(record: Record) {
-    this.registerDeviceService.closeRecord(record).subscribe(returnedRecord => {
-      let index = this.records.indexOf(record)
-      this.records[index].returned = returnedRecord.returned
-      this.dataSource.data = this.records;
-      this.table.renderRows();
+    this.confirm("Закрыть выбранную запись?").subscribe(flag => {
+      if (flag) {
+        this.registerDeviceService.closeRecord(record).subscribe(returnedRecord => {
+          let index = this.records.indexOf(record)
+          this.records[index].returned = returnedRecord.returned
+          this.dataSource.data = this.records;
+          this.table.renderRows();
+        })
+      }
     })
   }
 
@@ -153,8 +161,17 @@ export class JournalComponent implements OnInit, AfterViewInit {
   setEmployeesAndDevices() {
     this.recordService.getEmployeesAndDevices().subscribe(obj => {
       this.employees = <Employee[]>obj['employees'];
+      this.filteredEmployees = this.employees;
       this.devices = <Device[]>obj['devices']
+      this.filteredDevices = this.devices;
     })
+  }
+
+  confirm(message: String): Observable<boolean> {
+    return this.dialog.open(ConfirmDialogComponent, {
+      data: message,
+      disableClose: true
+    }).afterClosed();
   }
 
 }

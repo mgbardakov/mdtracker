@@ -25,6 +25,7 @@ export class DeviceCrudComponent implements OnInit, AfterViewInit {
   displayedColumns: string[] = ['index', 'name', 'serialNumber', 'verificationExpire'];
   dataSource = new MatTableDataSource<Device>();
   printableDevices: Device[];
+  filteredDevices: Device[];
 
   ngAfterViewInit() {
     this.dataSource.paginator = this.paginator;
@@ -38,6 +39,7 @@ export class DeviceCrudComponent implements OnInit, AfterViewInit {
     this.form = new FormGroup({devicesToPrint: new FormControl()})
     this.deviceService.getAllDevices().subscribe(devices => {
       this.devices = devices;
+      this.filteredDevices = devices;
       this.dataSource.data = this.devices
     })
   }

@@ -13,6 +13,8 @@ import {RecordFormComponent} from "../../../journal/record-form/record-form.comp
 import {PositionService} from "../../../../services/position.service";
 import {HttpErrorResponse} from "@angular/common/http";
 import {ErrorComponent} from "../../../error/error.component";
+import {Observable} from "rxjs";
+import {ConfirmDialogComponent} from "../../../confirm-dialog/confirm-dialog.component";
 
 @Component({
   selector: 'app-position-form',
@@ -66,12 +68,16 @@ export class PositionFormComponent implements OnInit {
   }
 
   removePosition() {
-    this.deleteDisabled = true;
-    this.positionService.removePosition(this.getPosition()).subscribe(() => {
-      this.dialogRef.close({status: 'remove', position: this.getPosition()});
-    }, error => {
-      this.errorHandler(error);
-      this.deleteDisabled = false;
+    this.confirm("Удалить должность?").subscribe(flag => {
+      if (flag) {
+        this.deleteDisabled = true;
+        this.positionService.removePosition(this.getPosition()).subscribe(() => {
+          this.dialogRef.close({status: 'remove', position: this.getPosition()});
+        }, error => {
+          this.errorHandler(error);
+          this.deleteDisabled = false;
+        })
+      }
     })
   }
 
@@ -92,6 +98,13 @@ export class PositionFormComponent implements OnInit {
     } else {
       this.updatePosition(this.getPosition())
     }
+  }
+
+  confirm(message: String): Observable<boolean> {
+    return this.dialog.open(ConfirmDialogComponent, {
+      data: message,
+      disableClose: true
+    }).afterClosed();
   }
 
   private errorHandler(error: HttpErrorResponse) {

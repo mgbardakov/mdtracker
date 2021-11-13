@@ -27,6 +27,6 @@
   <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
 </table>
 <div class ="container" fxLayout="row" fxLayoutAlign="space-between center" fxLayout.xs="column" fxLayoutGap="1rem">
-  <button mat-raised-button color="primary" style="float: left; width: 100%" (click)="closeAllRecords()">Сдать все приборы</button>
+  <button mat-raised-button color="primary" style="float: left; width: 100%" (click)="closeAllRecords()" [disabled]="records.length === 0">Сдать все приборы</button>
   <button mat-raised-button color="primary" style="float: right; width: 100%" (click)="goToDevicePicker()">Взять приборы</button>
 </div>

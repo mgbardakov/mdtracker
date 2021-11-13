@@ -15,6 +15,8 @@ import {HttpErrorResponse} from "@angular/common/http";
 import {ErrorComponent} from "../../../error/error.component";
 import {AuthService} from "../../../../services/security/auth.service";
 import {ROLE_NAMES} from "../../../app.component";
+import {Observable} from "rxjs";
+import {ConfirmDialogComponent} from "../../../confirm-dialog/confirm-dialog.component";
 
 
 @Component({
@@ -76,13 +78,24 @@ export class UserEditFormComponent implements OnInit {
   }
 
   deleteUser() {
-    this.deleteDisabled = true;
-    this.userService.removeUser(this.getUser()).subscribe(() => {
-      this.dialogRef.close({status: 'removed', user: this.getUser()})
-    }, error => {
-      this.errorHandler(error)
-      this.deleteDisabled = false;
+    this.confirm("Удалить пользователя?").subscribe(flag => {
+      if (flag) {
+        this.deleteDisabled = true;
+        this.userService.removeUser(this.getUser()).subscribe(() => {
+          this.dialogRef.close({status: 'removed', user: this.getUser()})
+        }, error => {
+          this.errorHandler(error)
+          this.deleteDisabled = false;
+        })
+      }
     })
+  }
+
+  confirm(message: String): Observable<boolean> {
+    return this.dialog.open(ConfirmDialogComponent, {
+      data: message,
+      disableClose: true
+    }).afterClosed();
   }
 
 

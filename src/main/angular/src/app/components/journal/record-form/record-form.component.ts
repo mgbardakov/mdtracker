@@ -13,6 +13,8 @@ import {EmployeeService} from "../../../services/employee.service";
 import {RecordService} from "../../../services/record.service";
 import {HttpErrorResponse} from "@angular/common/http";
 import {ErrorComponent} from "../../error/error.component";
+import {Observable} from "rxjs";
+import {ConfirmDialogComponent} from "../../confirm-dialog/confirm-dialog.component";
 
 @Component({
   selector: 'app-record-form',
@@ -34,6 +36,8 @@ export class RecordFormComponent implements OnInit{
     private employeeService: EmployeeService,
     private recordService: RecordService,
     private dialog: MatDialog) {}
+    filteredEmployees: Employee[];
+    filteredDevices: Device[];
 
 
 
@@ -48,9 +52,11 @@ export class RecordFormComponent implements OnInit{
       Validators.required);
     this.employeeService.getAllEmployees().subscribe(employees => {
       this.employees = employees;
+      this.filteredEmployees = employees;
     })
     this.deviceService.getAllDevices().subscribe(devices => {
       this.devices = devices;
+      this.filteredDevices = devices;
     })
     this.submitDisabled = false;
     this.deleteDisabled = false;
@@ -82,12 +88,16 @@ export class RecordFormComponent implements OnInit{
   }
 
   removeRecord() {
-    this.deleteDisabled = true;
-    this.recordService.removeRecord(this.getRecord()).subscribe(() => {
-      this.dialogRef.close({status: 'remove', record: this.getRecord()});
-    }, error => {
-      this.errorHandler(error);
-      this.deleteDisabled = false;
+    this.confirm("Удалить выбранную запись?").subscribe(flag => {
+      if (flag) {
+        this.deleteDisabled = true;
+        this.recordService.removeRecord(this.getRecord()).subscribe(() => {
+          this.dialogRef.close({status: 'remove', record: this.getRecord()});
+        }, error => {
+          this.errorHandler(error);
+          this.deleteDisabled = false;
+        })
+      }
     })
   }
 
@@ -116,6 +126,7 @@ export class RecordFormComponent implements OnInit{
     return option.id == value.id
   }
 
+
   private getRecord(): Record {
     let device = this.form.controls['device'].value;
     device['verificationExpire'] = device['verificationExpire'] === 0 ? null : new Date(device['verificationExpire'])
@@ -127,6 +138,13 @@ export class RecordFormComponent implements OnInit{
       returned: this.form.controls['returned'].value === "" ? null : new Date(this.form.controls['returned'].value)
     }
   }
+  confirm(message: String): Observable<boolean> {
+    return this.dialog.open(ConfirmDialogComponent, {
+      data: message,
+      disableClose: true
+    }).afterClosed();
+  }
+
 
   private errorHandler(error: HttpErrorResponse) {
     switch (error.status) {

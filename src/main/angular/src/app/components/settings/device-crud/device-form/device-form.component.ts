@@ -9,6 +9,8 @@ import {Device} from "../../../../model/device";
 import {DeviceService} from "../../../../services/device.service";
 import {HttpErrorResponse} from "@angular/common/http";
 import {ErrorComponent} from "../../../error/error.component";
+import {Observable} from "rxjs";
+import {ConfirmDialogComponent} from "../../../confirm-dialog/confirm-dialog.component";
 
 @Component({
   selector: 'app-device-form',
@@ -86,17 +88,28 @@ export class DeviceFormComponent implements OnInit {
   }
 
   remove() {
-    this.deleteDisabled = true;
-    this.deviceService.removeDevice(this.getDevice()).subscribe(() => {
-      this.dialogRef.close({status: 'removed', device: this.getDevice()})
-    }, error => {
-      this.errorHandler(error)
-      this.deleteDisabled = false;
+    this.confirm("Удалить выбранный прибор?").subscribe(flag => {
+      if (flag) {
+        this.deleteDisabled = true;
+        this.deviceService.removeDevice(this.getDevice()).subscribe(() => {
+          this.dialogRef.close({status: 'removed', device: this.getDevice()})
+        }, error => {
+          this.errorHandler(error)
+          this.deleteDisabled = false;
+        })
+      }
     })
   }
 
   isSubmitDisabled() {
     return this.form.invalid || this.submitDisabled;
+  }
+
+  confirm(message: String): Observable<boolean> {
+    return this.dialog.open(ConfirmDialogComponent, {
+      data: message,
+      disableClose: true
+    }).afterClosed();
   }
 
   private errorHandler(error: HttpErrorResponse) {

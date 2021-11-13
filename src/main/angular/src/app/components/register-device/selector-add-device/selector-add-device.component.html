@@ -10,7 +10,13 @@
         (+{{devices.value.length - 1}} {{devices.value?.length === 2 ? 'other' : 'others'}})
       </span>
           </mat-select-trigger>
-          <mat-option *ngFor="let device of deviceList" [value]="device">{{device.name}} № {{device.serialNumber}}</mat-option>
+          <mat-select-filter [placeholder]="'Поиск..'"
+                             [noResultsMessage] = "'Нет результатов'"
+                             [array]="deviceList"
+                             [displayMember]="'name'"
+                             (filteredReturn)="filteredDevices = $event">
+          </mat-select-filter>
+          <mat-option *ngFor="let device of filteredDevices" [value]="device">{{device.name}} № {{device.serialNumber}}</mat-option>
         </mat-select>
       </mat-form-field>
       <mat-card-actions >

@@ -16,17 +16,19 @@ export class SelectorAddDeviceComponent implements OnInit {
   subject: Subject<Device[]>
   @Output()
   deviceEvent = new EventEmitter<Device[]>();
-
+  filteredDevices: Device[];
   constructor() { }
 
   ngOnInit(): void {
     this.subject.subscribe(devices => {
       console.log(devices)
       this.deviceList = devices;
+      this.filteredDevices = devices;
     })
   }
 
   devices = new FormControl();
+
 
   addNewDevice() {
     if (this.devices.value !== null) {

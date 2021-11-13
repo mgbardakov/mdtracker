@@ -1,13 +1,22 @@
 <h1>Оперативная обстановка</h1>
 <div class="container" fxLayout="row" fxLayout.xs="column" fxLayoutGap="5%" fxLayoutAlign="space-around">
-  <div class="card" *ngFor="let pair of convertRecordsToMap() | keyvalue">
-    <div class="card-header"><h2>{{pair.value[0].employee.name}}</h2></div>
+  <div class="card" *ngFor="let pair of employeeDevices | keyvalue">
+    <div class="card-header"><h2>{{pair.value[0].employee.name}}, {{pair.value[0].employee.position.name}}</h2></div>
   <div class="card-body">
-    <ul class="list-group">
-      <li class="list-group-item" *ngFor="let record of pair.value">
-        {{record.device.name}} № {{record.device.serialNumber}}
-      </li>
-    </ul>
+    <table class="table-bordered">
+      <tr>
+        <th class="mat-header-cell">№</th>
+        <th class="mat-header-cell">Название</th>
+        <th class="mat-header-cell">Серийный номер</th>
+        <th class="mat-header-cell">Взят</th>
+      </tr>
+      <tr *ngFor="let record of pair.value; let index = index">
+        <td class="mat-cell">{{index + 1}}</td>
+        <td class="mat-cell">{{record.device.name}}</td>
+        <td class="mat-cell">{{record.device.serialNumber}}</td>
+        <td class="mat-cell">{{record.taken | date: "dd.MM.YY/ HH:mm" }}</td>
+      </tr>
+    </table>
   </div>
   </div>
 </div>

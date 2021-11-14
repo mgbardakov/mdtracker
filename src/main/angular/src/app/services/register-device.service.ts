@@ -20,22 +20,22 @@ export class RegisterDeviceService {
 
   registerDevices(devices: Device[]) {
     let deviceDTOs = devices.map(x => this.deviceService.mapDeviceToJSON(x));
-    return this.http.post(environment.apiUrl + 'api/v1/register/', deviceDTOs);
+    return this.http.post('/api/v1/register/', deviceDTOs);
   }
 
   closeRecord(record: Record): Observable<Record> {
     let recordDTO = this.recordService.mapRecordToJSON(record);
-    return this.http.put(environment.apiUrl + 'api/v1/register/close', recordDTO)
+    return this.http.put('/api/v1/register/close', recordDTO)
       .pipe(map(recordDTO => this.recordService.mapJSONToRecord(recordDTO)));
   }
 
   closeAllRecords() {
-    return this.http.put(environment.apiUrl + 'api/v1/register/close-all', {})
+    return this.http.put('/api/v1/register/close-all', {})
       .pipe(map(() => true));
   }
 
   getAllActiveRecords(): Observable<Record[]> {
-    return this.http.get<Object[]>(environment.apiUrl + 'api/v1/register/active-records')
+    return this.http.get<Object[]>('/api/v1/register/active-records')
       .pipe(map(recordDTOs => {
         let records = [];
         recordDTOs.forEach(recordDTO => records.push(this.recordService.mapJSONToRecord(recordDTO)));

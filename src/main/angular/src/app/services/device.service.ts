@@ -16,7 +16,7 @@ export class DeviceService {
   constructor(private http: HttpClient) { }
 
   getAllDevices(): Observable<Device[]> {
-    return this.http.get<Device[]>(environment.apiUrl + 'api/v1/devices/')
+    return this.http.get<Device[]>('/api/v1/devices/')
       .pipe(map(deviceJSONs => {
         let devices = [];
         deviceJSONs.forEach(deviceJSON => {
@@ -28,14 +28,14 @@ export class DeviceService {
 
   createDevice(device: Device): Observable<Device> {
     let deviceDTO = this.mapDeviceToJSON(device);
-    return this.http.post<Object>(environment.apiUrl + 'api/v1/devices/create',
+    return this.http.post<Object>('/api/v1/devices/create',
       deviceDTO, {headers: {'Content-Type': 'application/json'}})
       .pipe(map(deviceJSON => this.mapJSONToDevice(deviceJSON)));
   }
 
   updateDevice(device: Device): Observable<Device> {
     let deviceDTO = this.mapDeviceToJSON(device);
-    return this.http.put(environment.apiUrl + 'api/v1/devices/update',
+    return this.http.put('/api/v1/devices/update',
       deviceDTO, {headers: {'Content-Type': 'application/json'}})
       .pipe(map(() => {
         return device
@@ -44,7 +44,7 @@ export class DeviceService {
 
   removeDevice(device: Device): Observable<Device> {
     let deviceDTO = this.mapDeviceToJSON(device);
-    return this.http.post(environment.apiUrl + 'api/v1/devices/delete', deviceDTO,
+    return this.http.post('/api/v1/devices/delete', deviceDTO,
       {headers: {'Content-Type': 'application/json'}})
       .pipe(map(() => {
         return device

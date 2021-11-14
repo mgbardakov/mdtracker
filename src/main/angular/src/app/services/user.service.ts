@@ -14,16 +14,16 @@ export class UserService {
   constructor(private http: HttpClient) { }
 
   getAllUsers(): Observable<User[]> {
-    return this.http.get<User[]>(environment.apiUrl + 'api/v1/users/');
+    return this.http.get<User[]>('/api/v1/users/');
   }
 
   createUser(user: User): Observable<User> {
-    return this.http.post<User>(environment.apiUrl + 'api/v1/users/create',
+    return this.http.post<User>('/api/v1/users/create',
       user, {headers: {'Content-Type': 'application/json'}});
   }
 
   updateUser(user: User): Observable<User> {
-    return this.http.put(environment.apiUrl + 'api/v1/users/update',
+    return this.http.put('/api/v1/users/update',
       user, {headers: {'Content-Type': 'application/json'}})
       .pipe(map(() => {
         return user
@@ -31,7 +31,7 @@ export class UserService {
   }
 
   removeUser(user: User): Observable<User> {
-    return this.http.post(environment.apiUrl + 'api/v1/users/delete', user,
+    return this.http.post('/api/v1/users/delete', user,
       {headers: {'Content-Type': 'application/json'}})
       .pipe(map(() => {
         return user
@@ -39,6 +39,6 @@ export class UserService {
   }
 
   getAllAuthorities(): Observable<Authority[]> {
-    return this.http.get<Authority[]>(environment.apiUrl + 'api/v1/users/authorities');
+    return this.http.get<Authority[]>('/api/v1/users/authorities');
   }
 }

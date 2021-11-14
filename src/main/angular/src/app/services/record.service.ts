@@ -15,7 +15,7 @@ export class RecordService {
   constructor(private http: HttpClient) { }
 
   getAllRecords(): Observable<Record[]> {
-    return this.http.get<Object[]>(environment.apiUrl + 'api/v1/records/')
+    return this.http.get<Object[]>('/api/v1/records/')
       .pipe(map(recordJSONs => {
         let records = []
         recordJSONs.forEach(recordJSON => {
@@ -27,7 +27,7 @@ export class RecordService {
 
   createRecord(record: Record): Observable<Record> {
     let recordDTO = this.mapRecordToJSON(record);
-    return this.http.post<Object>(environment.apiUrl + 'api/v1/records/create', recordDTO, {headers: {'Content-Type': 'application/json'}})
+    return this.http.post<Object>('/api/v1/records/create', recordDTO, {headers: {'Content-Type': 'application/json'}})
       .pipe(map(recordJSON => {
         return this.mapJSONToRecord(recordJSON)
       }));
@@ -35,7 +35,7 @@ export class RecordService {
 
   updateRecord(record: Record): Observable<Record> {
     let recordDTO = this.mapRecordToJSON(record);
-    return this.http.put(environment.apiUrl + 'api/v1/records/update', recordDTO, {headers: {'Content-Type': 'application/json'}})
+    return this.http.put('/api/v1/records/update', recordDTO, {headers: {'Content-Type': 'application/json'}})
       .pipe(map(() => {
         console.log(record)
         return record
@@ -45,7 +45,7 @@ export class RecordService {
   removeRecord(record: Record): Observable<Record> {
     console.log(record);
     let recordDTO = this.mapRecordToJSON(record);
-    return this.http.post(environment.apiUrl + 'api/v1/records/delete', recordDTO, {headers: {'Content-Type': 'application/json'}})
+    return this.http.post('/api/v1/records/delete', recordDTO, {headers: {'Content-Type': 'application/json'}})
       .pipe(map(() => {
         return record
       }))
@@ -56,7 +56,7 @@ export class RecordService {
       .append('endDate', request.endDate)
       .append('employeeId', request.employee?.id)
       .append('deviceId', request.device?.id)
-    return this.http.get<Object[]>(environment.apiUrl + 'api/v1/records/filter', {params: params})
+    return this.http.get<Object[]>('/api/v1/records/filter', {params: params})
       .pipe(map(recordDTOs => {
         let records = []
         recordDTOs.forEach(recordDTO => {
@@ -67,12 +67,12 @@ export class RecordService {
   }
 
   getEmployeesAndDevices(): Observable<Object> {
-    return this.http.get<Map<String, Object[]>>(environment.apiUrl + 'api/v1/records/employees-and-devices');
+    return this.http.get<Map<String, Object[]>>('/api/v1/records/employees-and-devices');
 
   }
 
   getActiveRecords(): Observable<Record[]> {
-    return this.http.get<Object[]>(environment.apiUrl + 'api/v1/records/active')
+    return this.http.get<Object[]>('/api/v1/records/active')
       .pipe(map(recordJSONs => {
         let records = [];
         recordJSONs.forEach(recordJSON => {

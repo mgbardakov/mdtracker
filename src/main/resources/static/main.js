@@ -944,8 +944,7 @@ __webpack_require__.r(__webpack_exports__);
 // `ng build --prod` replaces `environment.ts` with `environment.prod.ts`.
 // The list of file replacements can be found in `angular.json`.
 const environment = {
-    production: false,
-    apiUrl: 'http://localhost:8080/'
+    production: false
 };
 /*
  * For easier debugging in development mode, you can import the following file
@@ -1137,12 +1136,10 @@ AppModule.ɵinj = _angular_core__WEBPACK_IMPORTED_MODULE_42__["ɵɵdefineInjecto
 "use strict";
 __webpack_require__.r(__webpack_exports__);
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "DeviceService", function() { return DeviceService; });
-/* harmony import */ var _environments_environment__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ../../environments/environment */ "AytR");
-/* harmony import */ var rxjs_operators__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! rxjs/operators */ "kU1M");
-/* harmony import */ var _model_device__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ../model/device */ "dpNM");
-/* harmony import */ var _angular_core__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! @angular/core */ "fXoL");
-/* harmony import */ var _angular_common_http__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! @angular/common/http */ "tk/3");
-
+/* harmony import */ var rxjs_operators__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! rxjs/operators */ "kU1M");
+/* harmony import */ var _model_device__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ../model/device */ "dpNM");
+/* harmony import */ var _angular_core__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! @angular/core */ "fXoL");
+/* harmony import */ var _angular_common_http__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! @angular/common/http */ "tk/3");
 
 
 
@@ -1152,8 +1149,8 @@ class DeviceService {
         this.http = http;
     }
     getAllDevices() {
-        return this.http.get(_environments_environment__WEBPACK_IMPORTED_MODULE_0__["environment"].apiUrl + 'api/v1/devices/')
-            .pipe(Object(rxjs_operators__WEBPACK_IMPORTED_MODULE_1__["map"])(deviceJSONs => {
+        return this.http.get('/api/v1/devices/')
+            .pipe(Object(rxjs_operators__WEBPACK_IMPORTED_MODULE_0__["map"])(deviceJSONs => {
             let devices = [];
             deviceJSONs.forEach(deviceJSON => {
                 devices.push(this.mapJSONToDevice(deviceJSON));
@@ -1163,26 +1160,26 @@ class DeviceService {
     }
     createDevice(device) {
         let deviceDTO = this.mapDeviceToJSON(device);
-        return this.http.post(_environments_environment__WEBPACK_IMPORTED_MODULE_0__["environment"].apiUrl + 'api/v1/devices/create', deviceDTO, { headers: { 'Content-Type': 'application/json' } })
-            .pipe(Object(rxjs_operators__WEBPACK_IMPORTED_MODULE_1__["map"])(deviceJSON => this.mapJSONToDevice(deviceJSON)));
+        return this.http.post('/api/v1/devices/create', deviceDTO, { headers: { 'Content-Type': 'application/json' } })
+            .pipe(Object(rxjs_operators__WEBPACK_IMPORTED_MODULE_0__["map"])(deviceJSON => this.mapJSONToDevice(deviceJSON)));
     }
     updateDevice(device) {
         let deviceDTO = this.mapDeviceToJSON(device);
-        return this.http.put(_environments_environment__WEBPACK_IMPORTED_MODULE_0__["environment"].apiUrl + 'api/v1/devices/update', deviceDTO, { headers: { 'Content-Type': 'application/json' } })
-            .pipe(Object(rxjs_operators__WEBPACK_IMPORTED_MODULE_1__["map"])(() => {
+        return this.http.put('/api/v1/devices/update', deviceDTO, { headers: { 'Content-Type': 'application/json' } })
+            .pipe(Object(rxjs_operators__WEBPACK_IMPORTED_MODULE_0__["map"])(() => {
             return device;
         }));
     }
     removeDevice(device) {
         let deviceDTO = this.mapDeviceToJSON(device);
-        return this.http.post(_environments_environment__WEBPACK_IMPORTED_MODULE_0__["environment"].apiUrl + 'api/v1/devices/delete', deviceDTO, { headers: { 'Content-Type': 'application/json' } })
-            .pipe(Object(rxjs_operators__WEBPACK_IMPORTED_MODULE_1__["map"])(() => {
+        return this.http.post('/api/v1/devices/delete', deviceDTO, { headers: { 'Content-Type': 'application/json' } })
+            .pipe(Object(rxjs_operators__WEBPACK_IMPORTED_MODULE_0__["map"])(() => {
             return device;
         }));
     }
     mapJSONToDevice(deviceJSON) {
         deviceJSON['verificationExpire'] = deviceJSON['verificationExpire'] === 0 ? null : new Date(deviceJSON['verificationExpire']);
-        let device = new _model_device__WEBPACK_IMPORTED_MODULE_2__["Device"]();
+        let device = new _model_device__WEBPACK_IMPORTED_MODULE_1__["Device"]();
         Object.assign(device, deviceJSON);
         return device;
     }
@@ -1193,8 +1190,8 @@ class DeviceService {
         return deviceDTO;
     }
 }
-DeviceService.ɵfac = function DeviceService_Factory(t) { return new (t || DeviceService)(_angular_core__WEBPACK_IMPORTED_MODULE_3__["ɵɵinject"](_angular_common_http__WEBPACK_IMPORTED_MODULE_4__["HttpClient"])); };
-DeviceService.ɵprov = _angular_core__WEBPACK_IMPORTED_MODULE_3__["ɵɵdefineInjectable"]({ token: DeviceService, factory: DeviceService.ɵfac, providedIn: 'root' });
+DeviceService.ɵfac = function DeviceService_Factory(t) { return new (t || DeviceService)(_angular_core__WEBPACK_IMPORTED_MODULE_2__["ɵɵinject"](_angular_common_http__WEBPACK_IMPORTED_MODULE_3__["HttpClient"])); };
+DeviceService.ɵprov = _angular_core__WEBPACK_IMPORTED_MODULE_2__["ɵɵdefineInjectable"]({ token: DeviceService, factory: DeviceService.ɵfac, providedIn: 'root' });
 
 
 /***/ }),
@@ -2857,11 +2854,9 @@ class Device {
 "use strict";
 __webpack_require__.r(__webpack_exports__);
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "PositionService", function() { return PositionService; });
-/* harmony import */ var _environments_environment__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ../../environments/environment */ "AytR");
-/* harmony import */ var rxjs_operators__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! rxjs/operators */ "kU1M");
-/* harmony import */ var _angular_core__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! @angular/core */ "fXoL");
-/* harmony import */ var _angular_common_http__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! @angular/common/http */ "tk/3");
-
+/* harmony import */ var rxjs_operators__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! rxjs/operators */ "kU1M");
+/* harmony import */ var _angular_core__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! @angular/core */ "fXoL");
+/* harmony import */ var _angular_common_http__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! @angular/common/http */ "tk/3");
 
 
 
@@ -2870,26 +2865,26 @@ class PositionService {
         this.http = http;
     }
     getAllPositions() {
-        return this.http.get(_environments_environment__WEBPACK_IMPORTED_MODULE_0__["environment"].apiUrl + 'api/v1/positions/');
+        return this.http.get('/api/v1/positions/');
     }
     createPosition(position) {
-        return this.http.post(_environments_environment__WEBPACK_IMPORTED_MODULE_0__["environment"].apiUrl + 'api/v1/positions/create', position, { headers: { 'Content-Type': 'application/json' } });
+        return this.http.post('/api/v1/positions/create', position, { headers: { 'Content-Type': 'application/json' } });
     }
     updatePosition(position) {
-        return this.http.put(_environments_environment__WEBPACK_IMPORTED_MODULE_0__["environment"].apiUrl + 'api/v1/positions/update', position, { headers: { 'Content-Type': 'application/json' } })
-            .pipe(Object(rxjs_operators__WEBPACK_IMPORTED_MODULE_1__["map"])(() => {
+        return this.http.put('/api/v1/positions/update', position, { headers: { 'Content-Type': 'application/json' } })
+            .pipe(Object(rxjs_operators__WEBPACK_IMPORTED_MODULE_0__["map"])(() => {
             return position;
         }));
     }
     removePosition(position) {
-        return this.http.post(_environments_environment__WEBPACK_IMPORTED_MODULE_0__["environment"].apiUrl + 'api/v1/positions/delete', position, { headers: { 'Content-Type': 'application/json' } })
-            .pipe(Object(rxjs_operators__WEBPACK_IMPORTED_MODULE_1__["map"])(() => {
+        return this.http.post('/api/v1/positions/delete', position, { headers: { 'Content-Type': 'application/json' } })
+            .pipe(Object(rxjs_operators__WEBPACK_IMPORTED_MODULE_0__["map"])(() => {
             return position;
         }));
     }
 }
-PositionService.ɵfac = function PositionService_Factory(t) { return new (t || PositionService)(_angular_core__WEBPACK_IMPORTED_MODULE_2__["ɵɵinject"](_angular_common_http__WEBPACK_IMPORTED_MODULE_3__["HttpClient"])); };
-PositionService.ɵprov = _angular_core__WEBPACK_IMPORTED_MODULE_2__["ɵɵdefineInjectable"]({ token: PositionService, factory: PositionService.ɵfac, providedIn: 'root' });
+PositionService.ɵfac = function PositionService_Factory(t) { return new (t || PositionService)(_angular_core__WEBPACK_IMPORTED_MODULE_1__["ɵɵinject"](_angular_common_http__WEBPACK_IMPORTED_MODULE_2__["HttpClient"])); };
+PositionService.ɵprov = _angular_core__WEBPACK_IMPORTED_MODULE_1__["ɵɵdefineInjectable"]({ token: PositionService, factory: PositionService.ɵfac, providedIn: 'root' });
 
 
 /***/ }),
@@ -2920,13 +2915,11 @@ class User {
 "use strict";
 __webpack_require__.r(__webpack_exports__);
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "RegisterDeviceService", function() { return RegisterDeviceService; });
-/* harmony import */ var _environments_environment__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ../../environments/environment */ "AytR");
-/* harmony import */ var rxjs_operators__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! rxjs/operators */ "kU1M");
-/* harmony import */ var _angular_core__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! @angular/core */ "fXoL");
-/* harmony import */ var _device_service__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ./device.service */ "BtSu");
-/* harmony import */ var _record_service__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ./record.service */ "oq9T");
-/* harmony import */ var _angular_common_http__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! @angular/common/http */ "tk/3");
-
+/* harmony import */ var rxjs_operators__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! rxjs/operators */ "kU1M");
+/* harmony import */ var _angular_core__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! @angular/core */ "fXoL");
+/* harmony import */ var _device_service__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ./device.service */ "BtSu");
+/* harmony import */ var _record_service__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ./record.service */ "oq9T");
+/* harmony import */ var _angular_common_http__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! @angular/common/http */ "tk/3");
 
 
 
@@ -2940,28 +2933,28 @@ class RegisterDeviceService {
     }
     registerDevices(devices) {
         let deviceDTOs = devices.map(x => this.deviceService.mapDeviceToJSON(x));
-        return this.http.post(_environments_environment__WEBPACK_IMPORTED_MODULE_0__["environment"].apiUrl + 'api/v1/register/', deviceDTOs);
+        return this.http.post('/api/v1/register/', deviceDTOs);
     }
     closeRecord(record) {
         let recordDTO = this.recordService.mapRecordToJSON(record);
-        return this.http.put(_environments_environment__WEBPACK_IMPORTED_MODULE_0__["environment"].apiUrl + 'api/v1/register/close', recordDTO)
-            .pipe(Object(rxjs_operators__WEBPACK_IMPORTED_MODULE_1__["map"])(recordDTO => this.recordService.mapJSONToRecord(recordDTO)));
+        return this.http.put('/api/v1/register/close', recordDTO)
+            .pipe(Object(rxjs_operators__WEBPACK_IMPORTED_MODULE_0__["map"])(recordDTO => this.recordService.mapJSONToRecord(recordDTO)));
     }
     closeAllRecords() {
-        return this.http.put(_environments_environment__WEBPACK_IMPORTED_MODULE_0__["environment"].apiUrl + 'api/v1/register/close-all', {})
-            .pipe(Object(rxjs_operators__WEBPACK_IMPORTED_MODULE_1__["map"])(() => true));
+        return this.http.put('/api/v1/register/close-all', {})
+            .pipe(Object(rxjs_operators__WEBPACK_IMPORTED_MODULE_0__["map"])(() => true));
     }
     getAllActiveRecords() {
-        return this.http.get(_environments_environment__WEBPACK_IMPORTED_MODULE_0__["environment"].apiUrl + 'api/v1/register/active-records')
-            .pipe(Object(rxjs_operators__WEBPACK_IMPORTED_MODULE_1__["map"])(recordDTOs => {
+        return this.http.get('/api/v1/register/active-records')
+            .pipe(Object(rxjs_operators__WEBPACK_IMPORTED_MODULE_0__["map"])(recordDTOs => {
             let records = [];
             recordDTOs.forEach(recordDTO => records.push(this.recordService.mapJSONToRecord(recordDTO)));
             return records;
         }));
     }
 }
-RegisterDeviceService.ɵfac = function RegisterDeviceService_Factory(t) { return new (t || RegisterDeviceService)(_angular_core__WEBPACK_IMPORTED_MODULE_2__["ɵɵinject"](_device_service__WEBPACK_IMPORTED_MODULE_3__["DeviceService"]), _angular_core__WEBPACK_IMPORTED_MODULE_2__["ɵɵinject"](_record_service__WEBPACK_IMPORTED_MODULE_4__["RecordService"]), _angular_core__WEBPACK_IMPORTED_MODULE_2__["ɵɵinject"](_angular_common_http__WEBPACK_IMPORTED_MODULE_5__["HttpClient"])); };
-RegisterDeviceService.ɵprov = _angular_core__WEBPACK_IMPORTED_MODULE_2__["ɵɵdefineInjectable"]({ token: RegisterDeviceService, factory: RegisterDeviceService.ɵfac, providedIn: 'root' });
+RegisterDeviceService.ɵfac = function RegisterDeviceService_Factory(t) { return new (t || RegisterDeviceService)(_angular_core__WEBPACK_IMPORTED_MODULE_1__["ɵɵinject"](_device_service__WEBPACK_IMPORTED_MODULE_2__["DeviceService"]), _angular_core__WEBPACK_IMPORTED_MODULE_1__["ɵɵinject"](_record_service__WEBPACK_IMPORTED_MODULE_3__["RecordService"]), _angular_core__WEBPACK_IMPORTED_MODULE_1__["ɵɵinject"](_angular_common_http__WEBPACK_IMPORTED_MODULE_4__["HttpClient"])); };
+RegisterDeviceService.ɵprov = _angular_core__WEBPACK_IMPORTED_MODULE_1__["ɵɵdefineInjectable"]({ token: RegisterDeviceService, factory: RegisterDeviceService.ɵfac, providedIn: 'root' });
 
 
 /***/ }),
@@ -3270,9 +3263,7 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _angular_common_http__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! @angular/common/http */ "tk/3");
 /* harmony import */ var _model_record__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ../model/record */ "LwJF");
 /* harmony import */ var rxjs_operators__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! rxjs/operators */ "kU1M");
-/* harmony import */ var _environments_environment__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ../../environments/environment */ "AytR");
-/* harmony import */ var _angular_core__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! @angular/core */ "fXoL");
-
+/* harmony import */ var _angular_core__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! @angular/core */ "fXoL");
 
 
 
@@ -3283,7 +3274,7 @@ class RecordService {
         this.http = http;
     }
     getAllRecords() {
-        return this.http.get(_environments_environment__WEBPACK_IMPORTED_MODULE_3__["environment"].apiUrl + 'api/v1/records/')
+        return this.http.get('/api/v1/records/')
             .pipe(Object(rxjs_operators__WEBPACK_IMPORTED_MODULE_2__["map"])(recordJSONs => {
             let records = [];
             recordJSONs.forEach(recordJSON => {
@@ -3294,14 +3285,14 @@ class RecordService {
     }
     createRecord(record) {
         let recordDTO = this.mapRecordToJSON(record);
-        return this.http.post(_environments_environment__WEBPACK_IMPORTED_MODULE_3__["environment"].apiUrl + 'api/v1/records/create', recordDTO, { headers: { 'Content-Type': 'application/json' } })
+        return this.http.post('/api/v1/records/create', recordDTO, { headers: { 'Content-Type': 'application/json' } })
             .pipe(Object(rxjs_operators__WEBPACK_IMPORTED_MODULE_2__["map"])(recordJSON => {
             return this.mapJSONToRecord(recordJSON);
         }));
     }
     updateRecord(record) {
         let recordDTO = this.mapRecordToJSON(record);
-        return this.http.put(_environments_environment__WEBPACK_IMPORTED_MODULE_3__["environment"].apiUrl + 'api/v1/records/update', recordDTO, { headers: { 'Content-Type': 'application/json' } })
+        return this.http.put('/api/v1/records/update', recordDTO, { headers: { 'Content-Type': 'application/json' } })
             .pipe(Object(rxjs_operators__WEBPACK_IMPORTED_MODULE_2__["map"])(() => {
             console.log(record);
             return record;
@@ -3310,7 +3301,7 @@ class RecordService {
     removeRecord(record) {
         console.log(record);
         let recordDTO = this.mapRecordToJSON(record);
-        return this.http.post(_environments_environment__WEBPACK_IMPORTED_MODULE_3__["environment"].apiUrl + 'api/v1/records/delete', recordDTO, { headers: { 'Content-Type': 'application/json' } })
+        return this.http.post('/api/v1/records/delete', recordDTO, { headers: { 'Content-Type': 'application/json' } })
             .pipe(Object(rxjs_operators__WEBPACK_IMPORTED_MODULE_2__["map"])(() => {
             return record;
         }));
@@ -3321,7 +3312,7 @@ class RecordService {
             .append('endDate', request.endDate)
             .append('employeeId', (_a = request.employee) === null || _a === void 0 ? void 0 : _a.id)
             .append('deviceId', (_b = request.device) === null || _b === void 0 ? void 0 : _b.id);
-        return this.http.get(_environments_environment__WEBPACK_IMPORTED_MODULE_3__["environment"].apiUrl + 'api/v1/records/filter', { params: params })
+        return this.http.get('/api/v1/records/filter', { params: params })
             .pipe(Object(rxjs_operators__WEBPACK_IMPORTED_MODULE_2__["map"])(recordDTOs => {
             let records = [];
             recordDTOs.forEach(recordDTO => {
@@ -3331,10 +3322,10 @@ class RecordService {
         }));
     }
     getEmployeesAndDevices() {
-        return this.http.get(_environments_environment__WEBPACK_IMPORTED_MODULE_3__["environment"].apiUrl + 'api/v1/records/employees-and-devices');
+        return this.http.get('/api/v1/records/employees-and-devices');
     }
     getActiveRecords() {
-        return this.http.get(_environments_environment__WEBPACK_IMPORTED_MODULE_3__["environment"].apiUrl + 'api/v1/records/active')
+        return this.http.get('/api/v1/records/active')
             .pipe(Object(rxjs_operators__WEBPACK_IMPORTED_MODULE_2__["map"])(recordJSONs => {
             let records = [];
             recordJSONs.forEach(recordJSON => {
@@ -3360,8 +3351,8 @@ class RecordService {
         return recordDTO;
     }
 }
-RecordService.ɵfac = function RecordService_Factory(t) { return new (t || RecordService)(_angular_core__WEBPACK_IMPORTED_MODULE_4__["ɵɵinject"](_angular_common_http__WEBPACK_IMPORTED_MODULE_0__["HttpClient"])); };
-RecordService.ɵprov = _angular_core__WEBPACK_IMPORTED_MODULE_4__["ɵɵdefineInjectable"]({ token: RecordService, factory: RecordService.ɵfac, providedIn: 'root' });
+RecordService.ɵfac = function RecordService_Factory(t) { return new (t || RecordService)(_angular_core__WEBPACK_IMPORTED_MODULE_3__["ɵɵinject"](_angular_common_http__WEBPACK_IMPORTED_MODULE_0__["HttpClient"])); };
+RecordService.ɵprov = _angular_core__WEBPACK_IMPORTED_MODULE_3__["ɵɵdefineInjectable"]({ token: RecordService, factory: RecordService.ɵfac, providedIn: 'root' });
 
 
 /***/ }),
@@ -3376,10 +3367,8 @@ RecordService.ɵprov = _angular_core__WEBPACK_IMPORTED_MODULE_4__["ɵɵdefineInj
 "use strict";
 __webpack_require__.r(__webpack_exports__);
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "EmployeeService", function() { return EmployeeService; });
-/* harmony import */ var _environments_environment__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ../../environments/environment */ "AytR");
-/* harmony import */ var _angular_core__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! @angular/core */ "fXoL");
-/* harmony import */ var _angular_common_http__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! @angular/common/http */ "tk/3");
-
+/* harmony import */ var _angular_core__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! @angular/core */ "fXoL");
+/* harmony import */ var _angular_common_http__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! @angular/common/http */ "tk/3");
 
 
 class EmployeeService {
@@ -3387,11 +3376,11 @@ class EmployeeService {
         this.http = http;
     }
     getAllEmployees() {
-        return this.http.get(_environments_environment__WEBPACK_IMPORTED_MODULE_0__["environment"].apiUrl + 'api/v1/employees/');
+        return this.http.get('/api/v1/employees/');
     }
 }
-EmployeeService.ɵfac = function EmployeeService_Factory(t) { return new (t || EmployeeService)(_angular_core__WEBPACK_IMPORTED_MODULE_1__["ɵɵinject"](_angular_common_http__WEBPACK_IMPORTED_MODULE_2__["HttpClient"])); };
-EmployeeService.ɵprov = _angular_core__WEBPACK_IMPORTED_MODULE_1__["ɵɵdefineInjectable"]({ token: EmployeeService, factory: EmployeeService.ɵfac, providedIn: 'root' });
+EmployeeService.ɵfac = function EmployeeService_Factory(t) { return new (t || EmployeeService)(_angular_core__WEBPACK_IMPORTED_MODULE_0__["ɵɵinject"](_angular_common_http__WEBPACK_IMPORTED_MODULE_1__["HttpClient"])); };
+EmployeeService.ɵprov = _angular_core__WEBPACK_IMPORTED_MODULE_0__["ɵɵdefineInjectable"]({ token: EmployeeService, factory: EmployeeService.ɵfac, providedIn: 'root' });
 
 
 /***/ }),
@@ -3406,11 +3395,9 @@ EmployeeService.ɵprov = _angular_core__WEBPACK_IMPORTED_MODULE_1__["ɵɵdefineI
 "use strict";
 __webpack_require__.r(__webpack_exports__);
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "UserService", function() { return UserService; });
-/* harmony import */ var _environments_environment__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ../../environments/environment */ "AytR");
-/* harmony import */ var rxjs_operators__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! rxjs/operators */ "kU1M");
-/* harmony import */ var _angular_core__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! @angular/core */ "fXoL");
-/* harmony import */ var _angular_common_http__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! @angular/common/http */ "tk/3");
-
+/* harmony import */ var rxjs_operators__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! rxjs/operators */ "kU1M");
+/* harmony import */ var _angular_core__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! @angular/core */ "fXoL");
+/* harmony import */ var _angular_common_http__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! @angular/common/http */ "tk/3");
 
 
 
@@ -3419,29 +3406,29 @@ class UserService {
         this.http = http;
     }
     getAllUsers() {
-        return this.http.get(_environments_environment__WEBPACK_IMPORTED_MODULE_0__["environment"].apiUrl + 'api/v1/users/');
+        return this.http.get('/api/v1/users/');
     }
     createUser(user) {
-        return this.http.post(_environments_environment__WEBPACK_IMPORTED_MODULE_0__["environment"].apiUrl + 'api/v1/users/create', user, { headers: { 'Content-Type': 'application/json' } });
+        return this.http.post('/api/v1/users/create', user, { headers: { 'Content-Type': 'application/json' } });
     }
     updateUser(user) {
-        return this.http.put(_environments_environment__WEBPACK_IMPORTED_MODULE_0__["environment"].apiUrl + 'api/v1/users/update', user, { headers: { 'Content-Type': 'application/json' } })
-            .pipe(Object(rxjs_operators__WEBPACK_IMPORTED_MODULE_1__["map"])(() => {
+        return this.http.put('/api/v1/users/update', user, { headers: { 'Content-Type': 'application/json' } })
+            .pipe(Object(rxjs_operators__WEBPACK_IMPORTED_MODULE_0__["map"])(() => {
             return user;
         }));
     }
     removeUser(user) {
-        return this.http.post(_environments_environment__WEBPACK_IMPORTED_MODULE_0__["environment"].apiUrl + 'api/v1/users/delete', user, { headers: { 'Content-Type': 'application/json' } })
-            .pipe(Object(rxjs_operators__WEBPACK_IMPORTED_MODULE_1__["map"])(() => {
+        return this.http.post('/api/v1/users/delete', user, { headers: { 'Content-Type': 'application/json' } })
+            .pipe(Object(rxjs_operators__WEBPACK_IMPORTED_MODULE_0__["map"])(() => {
             return user;
         }));
     }
     getAllAuthorities() {
-        return this.http.get(_environments_environment__WEBPACK_IMPORTED_MODULE_0__["environment"].apiUrl + 'api/v1/users/authorities');
+        return this.http.get('/api/v1/users/authorities');
     }
 }
-UserService.ɵfac = function UserService_Factory(t) { return new (t || UserService)(_angular_core__WEBPACK_IMPORTED_MODULE_2__["ɵɵinject"](_angular_common_http__WEBPACK_IMPORTED_MODULE_3__["HttpClient"])); };
-UserService.ɵprov = _angular_core__WEBPACK_IMPORTED_MODULE_2__["ɵɵdefineInjectable"]({ token: UserService, factory: UserService.ɵfac, providedIn: 'root' });
+UserService.ɵfac = function UserService_Factory(t) { return new (t || UserService)(_angular_core__WEBPACK_IMPORTED_MODULE_1__["ɵɵinject"](_angular_common_http__WEBPACK_IMPORTED_MODULE_2__["HttpClient"])); };
+UserService.ɵprov = _angular_core__WEBPACK_IMPORTED_MODULE_1__["ɵɵdefineInjectable"]({ token: UserService, factory: UserService.ɵfac, providedIn: 'root' });
 
 
 /***/ }),
@@ -4729,12 +4716,10 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "AuthService", function() { return AuthService; });
 /* harmony import */ var rxjs__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! rxjs */ "qCKp");
 /* harmony import */ var jwt_decode__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! jwt-decode */ "EjJx");
-/* harmony import */ var _environments_environment__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ../../../environments/environment */ "AytR");
-/* harmony import */ var _angular_core__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! @angular/core */ "fXoL");
-/* harmony import */ var _angular_common_http__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! @angular/common/http */ "tk/3");
-/* harmony import */ var _auth0_angular_jwt__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! @auth0/angular-jwt */ "Nm8O");
-/* harmony import */ var _angular_router__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! @angular/router */ "tyNb");
-
+/* harmony import */ var _angular_core__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! @angular/core */ "fXoL");
+/* harmony import */ var _angular_common_http__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! @angular/common/http */ "tk/3");
+/* harmony import */ var _auth0_angular_jwt__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! @auth0/angular-jwt */ "Nm8O");
+/* harmony import */ var _angular_router__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! @angular/router */ "tyNb");
 
 
 
@@ -4752,7 +4737,7 @@ class AuthService {
     authorize(user) {
         localStorage.removeItem('jwt');
         localStorage.removeItem('employee');
-        this.http.post(_environments_environment__WEBPACK_IMPORTED_MODULE_2__["environment"].apiUrl + 'api/v1/users/login', JSON.stringify(user), { headers: { 'Content-Type': 'application/json' }, withCredentials: true, observe: "response" })
+        this.http.post('/api/v1/users/login', JSON.stringify(user), { headers: { 'Content-Type': 'application/json' }, withCredentials: true, observe: "response" })
             .subscribe(response => {
             localStorage.setItem("jwt", response.headers.get("Authorization").split(" ")[1]);
             console.log('jwt added to local storage');
@@ -4799,8 +4784,8 @@ class AuthService {
         this.router.navigate(['login']);
     }
 }
-AuthService.ɵfac = function AuthService_Factory(t) { return new (t || AuthService)(_angular_core__WEBPACK_IMPORTED_MODULE_3__["ɵɵinject"](_angular_common_http__WEBPACK_IMPORTED_MODULE_4__["HttpClient"]), _angular_core__WEBPACK_IMPORTED_MODULE_3__["ɵɵinject"](_auth0_angular_jwt__WEBPACK_IMPORTED_MODULE_5__["JwtHelperService"]), _angular_core__WEBPACK_IMPORTED_MODULE_3__["ɵɵinject"](_angular_router__WEBPACK_IMPORTED_MODULE_6__["Router"])); };
-AuthService.ɵprov = _angular_core__WEBPACK_IMPORTED_MODULE_3__["ɵɵdefineInjectable"]({ token: AuthService, factory: AuthService.ɵfac, providedIn: 'root' });
+AuthService.ɵfac = function AuthService_Factory(t) { return new (t || AuthService)(_angular_core__WEBPACK_IMPORTED_MODULE_2__["ɵɵinject"](_angular_common_http__WEBPACK_IMPORTED_MODULE_3__["HttpClient"]), _angular_core__WEBPACK_IMPORTED_MODULE_2__["ɵɵinject"](_auth0_angular_jwt__WEBPACK_IMPORTED_MODULE_4__["JwtHelperService"]), _angular_core__WEBPACK_IMPORTED_MODULE_2__["ɵɵinject"](_angular_router__WEBPACK_IMPORTED_MODULE_5__["Router"])); };
+AuthService.ɵprov = _angular_core__WEBPACK_IMPORTED_MODULE_2__["ɵɵdefineInjectable"]({ token: AuthService, factory: AuthService.ɵfac, providedIn: 'root' });
 
 
 /***/ }),

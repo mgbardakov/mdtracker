@@ -13,16 +13,16 @@ export class PositionService {
   constructor(private http: HttpClient) { }
 
   getAllPositions(): Observable<Position[]> {
-    return this.http.get<Position[]>(environment.apiUrl + 'api/v1/positions/');
+    return this.http.get<Position[]>('/api/v1/positions/');
   }
 
   createPosition(position: Position): Observable<Position> {
-    return this.http.post<Position>(environment.apiUrl + 'api/v1/positions/create',
+    return this.http.post<Position>('/api/v1/positions/create',
       position, {headers: {'Content-Type': 'application/json'}});
   }
 
   updatePosition(position: Position): Observable<Position> {
-    return this.http.put(environment.apiUrl + 'api/v1/positions/update',
+    return this.http.put('/api/v1/positions/update',
       position, {headers: {'Content-Type': 'application/json'}})
       .pipe(map(() => {
         return position
@@ -30,7 +30,7 @@ export class PositionService {
   }
 
   removePosition(position: Position): Observable<Position> {
-    return this.http.post(environment.apiUrl + 'api/v1/positions/delete', position,
+    return this.http.post('/api/v1/positions/delete', position,
       {headers: {'Content-Type': 'application/json'}})
       .pipe(map(() => {
         return position

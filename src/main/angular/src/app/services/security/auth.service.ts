@@ -25,7 +25,7 @@ export class AuthService {
   authorize(user: User) {
     localStorage.removeItem('jwt');
     localStorage.removeItem('employee');
-    this.http.post(environment.apiUrl + 'api/v1/users/login', JSON.stringify(user),
+    this.http.post('/api/v1/users/login', JSON.stringify(user),
       {headers: {'Content-Type': 'application/json'}, withCredentials: true, observe: "response"})
       .subscribe(response => {
         localStorage.setItem("jwt", response.headers.get("Authorization").split(" ")[1])

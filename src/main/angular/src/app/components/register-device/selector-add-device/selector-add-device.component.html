@@ -4,12 +4,6 @@
       <mat-form-field appearance="fill">
         <mat-label>Приборы</mat-label>
         <mat-select [formControl]="devices" multiple>
-          <mat-select-trigger>
-            {{devices.value ? devices.value[0].name : ''}}
-            <span *ngIf="devices.value?.length > 1" class="example-additional-selection">
-        (+{{devices.value.length - 1}} {{devices.value?.length === 2 ? 'other' : 'others'}})
-      </span>
-          </mat-select-trigger>
           <mat-select-filter [placeholder]="'Поиск..'"
                              [noResultsMessage] = "'Нет результатов'"
                              [array]="deviceList"

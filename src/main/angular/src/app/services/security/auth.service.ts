@@ -1,4 +1,4 @@
-import { Injectable } from '@angular/core';
+import {Injectable, OnInit} from '@angular/core';
 import {HttpClient, HttpErrorResponse} from "@angular/common/http";
 import {User} from "../../model/user";
 import {JwtHelperService} from "@auth0/angular-jwt";
@@ -13,7 +13,7 @@ import {environment} from "../../../environments/environment";
 @Injectable({
   providedIn: 'root'
 })
-export class AuthService {
+export class AuthService implements OnInit{
 
   eventStream: Subject<Employee> = new Subject();
   errorStream: Subject<String> = new Subject();
@@ -22,12 +22,18 @@ export class AuthService {
               private jwtHelper: JwtHelperService,
               private router: Router) { }
 
+  ngOnInit(): void {
+  }
+
+
+
   authorize(user: User) {
     localStorage.removeItem('jwt');
     localStorage.removeItem('employee');
     this.http.post('/api/v1/users/login', JSON.stringify(user),
       {headers: {'Content-Type': 'application/json'}, withCredentials: true, observe: "response"})
       .subscribe(response => {
+        console.log("Мы сюда пришли?")
         localStorage.setItem("jwt", response.headers.get("Authorization").split(" ")[1])
         console.log('jwt added to local storage')
         let employee = JSON.parse(JSON.stringify(response.body));
@@ -54,9 +60,10 @@ export class AuthService {
   }
 
   private getErrorMessage(error: HttpErrorResponse): String {
+    console.log(error.status)
     switch (error.status) {
-      case 404: {
-        return "Пользователь не найден"
+      case 422: {
+        return "Неверный логин или пароль"
       }
       default: {
         return "Неизвестная ошибка"

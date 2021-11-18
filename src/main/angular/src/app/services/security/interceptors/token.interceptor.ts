@@ -7,7 +7,7 @@ import {
 } from '@angular/common/http';
 
 import {AuthService} from "../auth.service";
-import {Observable} from "rxjs";
+import {Observable, throwError} from "rxjs";
 import {catchError} from "rxjs/operators";
 
 
@@ -22,11 +22,13 @@ export class TokenInterceptor implements HttpInterceptor {
         }
       });
     }
-    return next.handle(request).pipe(
-      catchError(error => {
+    return next.handle(request)
+      .pipe(catchError(error => {
         if (error.status === 401) {
           this.auth.logout();
           return []
+        } else {
+          throw new HttpErrorResponse(error)
         }
       })
     );

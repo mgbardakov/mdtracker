@@ -32,7 +32,7 @@ public class AuthController {
         try {
             return authService.authorize(userDTO, resp).getEmployee();
         } catch (AuthenticationException e) {
-            throw new ResponseStatusException(HttpStatus.NOT_FOUND, "No such user");
+            throw new ResponseStatusException(HttpStatus.UNPROCESSABLE_ENTITY, "No such user");
         }
     }
 }

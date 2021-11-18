@@ -10,10 +10,12 @@ td , th {
 
 .mat-cell {
   padding: 8px 8px 8px 0;
+  font-size: small;
 }
 
 table {
-  width: 100%
+  width: 100%;
+  table-layout:fixed;
 }
 .container {
   margin-top: 2rem;
@@ -33,4 +35,10 @@ table {
 
 .hidden {
   display: none
+}
+
+@media only screen and (max-width : 480px) {
+  .container {
+    width: 95%;
+  }
 }

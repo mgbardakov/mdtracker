@@ -12,3 +12,12 @@ td , th {
 .mat-cell, mat-header-cell {
   padding: 8px 8px 8px 8px;
 }
+
+table
+{
+  table-layout:fixed;
+}
+
+table td.shrink {
+  white-space: nowrap
+}
